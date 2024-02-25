@@ -1,0 +1,5 @@
+query getCities {
+    getCities {
+        ...RegularCity
+    }
+}

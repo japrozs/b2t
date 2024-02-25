@@ -1,0 +1,10 @@
+fragment RegularHotel on Hotel {
+    id
+    code
+    name
+    body
+    cityId
+    createdAt
+    updatedAt
+    __typename
+}

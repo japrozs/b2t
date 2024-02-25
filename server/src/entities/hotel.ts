@@ -29,6 +29,10 @@ export class Hotel extends BaseEntity {
     @Column()
     body: string;
 
+    @Field()
+    @Column()
+    details: string;
+
     @Field(() => City)
     @ManyToOne(() => City, (city) => city.hotels)
     city: City;

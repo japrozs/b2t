@@ -3,6 +3,7 @@ fragment RegularHotel on Hotel {
     code
     name
     body
+    details
     cityId
     createdAt
     updatedAt

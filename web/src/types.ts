@@ -1,3 +1,70 @@
+export interface HotelDetailType {
+    Details: {
+        HotelCode: string;
+        HotelName: string;
+        HotelChain: string;
+        HotelStarRating: number;
+        HotelPhone: string;
+        HotelEmail: string;
+        HotelPostCode: string;
+        HotelWeb: string;
+        CityCode: string;
+        CountryCode: string;
+        HotelCity: string;
+        HotelAddress: string;
+        Description: string;
+        CheckInTime: string;
+        CheckOutTime: string;
+        GeoLocation: {
+            Latitude: string;
+            Longitude: string;
+        };
+        Images: {
+            Img: string[];
+        };
+        HotelFacilities: {
+            Facility: string[];
+        };
+        RoomFacilities: {
+            Facility: string[];
+        };
+        RoomTypes: {
+            RoomType: {
+                RoomTypeCode: number;
+                RoomType: string;
+                MaxOccAdt: number;
+                MaxOccPax: number;
+                MaxOccChd: number;
+                ACYN: boolean;
+                WindowYN: boolean;
+                WifiYN: boolean;
+                Images: {
+                    Img: string[];
+                };
+            }[];
+        };
+        Messages: {
+            Message: {
+                MessageShort: string;
+                MessageFull: string;
+                MealPlanId: number;
+                RoomId: number;
+                BookFromDate: number;
+                BookToDate: number;
+                TravelFromDate: number;
+                TravelToDate: number;
+                Currency: string;
+                MessageChargeBase: string;
+                Value: number;
+                MessageType: string;
+                AgeFrom: number;
+                AgeTo: number;
+                TaxInclusive: boolean;
+            }[];
+        };
+    }[];
+}
+
 export interface HotelItemType {
     Code: string;
     Name: string;
@@ -44,6 +111,51 @@ export interface HotelListType {
     }[];
 }
 
+export interface RoomDetailType {
+    RoomNo: number;
+    RoomType: string;
+    RoomTypeCode: number;
+    RoomTypeSupplierCode: string;
+    MealPlanSupplierCode: string;
+    RoomStatus: string;
+    BlackOut: {
+        Status: string;
+        Msg: string;
+    };
+    CurrCode: string;
+    ContractTokenId: string;
+    RoomConfigurationId: number;
+    RatePlanCode: string;
+    RatePlanId: number;
+    MealPlan: string;
+    MealPlanCode: string;
+    NumberOfMeals: number;
+    RoomNumber: number;
+    Rate: number;
+    RoomStatusDetails: {
+        Status: string[];
+    };
+    DiscountDetails: {};
+    CancellationPolicyDetails: {
+        Cancellation: {
+            FromDate: number;
+            FromTime: string;
+            ToDate: number;
+            NightToCharge: number;
+        }[];
+    };
+    PromotionalContract: string;
+    PackageYN: string;
+    NonRefundable: string;
+    DynamicYN: string;
+    TotalRate: number;
+    RateBeforeTax: number;
+    TotalDiscount: number;
+    RecommendedRetailPrice: number;
+    ContractLabel: string;
+    MealPlanCodeLong: number;
+}
+
 export interface HotelSearchItemType {
     SourceId: number;
     HotelId: number;
@@ -61,50 +173,7 @@ export interface HotelSearchItemType {
     City: string;
     RoomTypeDetails: {
         Rooms: {
-            Room: {
-                RoomNo: number;
-                RoomType: string;
-                RoomTypeCode: number;
-                RoomTypeSupplierCode: string;
-                MealPlanSupplierCode: string;
-                RoomStatus: string;
-                BlackOut: {
-                    Status: string;
-                    Msg: string;
-                };
-                CurrCode: string;
-                ContractTokenId: string;
-                RoomConfigurationId: number;
-                RatePlanCode: string;
-                RatePlanId: number;
-                MealPlan: string;
-                MealPlanCode: string;
-                NumberOfMeals: number;
-                RoomNumber: number;
-                Rate: number;
-                RoomStatusDetails: {
-                    Status: string[];
-                };
-                DiscountDetails: {};
-                CancellationPolicyDetails: {
-                    Cancellation: {
-                        FromDate: number;
-                        FromTime: string;
-                        ToDate: number;
-                        NightToCharge: number;
-                    }[];
-                };
-                PromotionalContract: string;
-                PackageYN: string;
-                NonRefundable: string;
-                DynamicYN: string;
-                TotalRate: number;
-                RateBeforeTax: number;
-                TotalDiscount: number;
-                RecommendedRetailPrice: number;
-                ContractLabel: string;
-                MealPlanCodeLong: number;
-            }[];
+            Room: RoomDetailType[];
         };
     };
     StartDate: number;

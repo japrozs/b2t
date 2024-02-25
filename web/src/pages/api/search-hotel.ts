@@ -32,6 +32,7 @@ export default function handler(
             },
             SearchCriteria: {
                 RoomConfiguration: {
+                    // TODO: use actual adults and children number
                     Room: [
                         {
                             Adult: [

@@ -36,6 +36,7 @@ export type Hotel = {
   cityId: Scalars['Float']['output'];
   code: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
+  details: Scalars['String']['output'];
   id: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
@@ -54,7 +55,7 @@ export type QueryGetCityArgs = {
 
 export type RegularCityFragment = { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string };
 
-export type RegularHotelFragment = { __typename: 'Hotel', id: number, code: string, name: string, body: string, cityId: number, createdAt: string, updatedAt: string };
+export type RegularHotelFragment = { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string };
 
 export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -66,7 +67,7 @@ export type GetCityQueryVariables = Exact<{
 }>;
 
 
-export type GetCityQuery = { __typename?: 'Query', getCity: { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string, hotels: Array<{ __typename: 'Hotel', id: number, code: string, name: string, body: string, cityId: number, createdAt: string, updatedAt: string }> } };
+export type GetCityQuery = { __typename?: 'Query', getCity: { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string, hotels: Array<{ __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string }> } };
 
 export const RegularCityFragmentDoc = gql`
     fragment RegularCity on City {
@@ -86,6 +87,7 @@ export const RegularHotelFragmentDoc = gql`
   code
   name
   body
+  details
   cityId
   createdAt
   updatedAt

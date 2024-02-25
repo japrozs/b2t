@@ -1604,7 +1604,7 @@ export const refreshDatabaseWithNewHotels = () => {
                 }
                 console.log(city, cityItem.HotelList.Hotel.length);
                 cityItem.HotelList.Hotel.forEach(
-                    async (hotel: HotelItemType) => {
+                    async (hotel: HotelItemType & { details?: any }) => {
                         let h = await Hotel.findOne({
                             where: {
                                 code: hotel.Code,
@@ -1615,6 +1615,7 @@ export const refreshDatabaseWithNewHotels = () => {
                             return;
                         }
                         console.log(hotel);
+
                         h = await Hotel.create({
                             code: hotel.Code,
                             name: hotel.Name,

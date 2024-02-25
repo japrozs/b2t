@@ -1,4 +1,5 @@
-import { HotelSearchItemType } from "@/types";
+import { GetCityQueryResult, RegularHotelFragment } from "@/generated/graphql";
+import { HotelDetailType, HotelSearchItemType } from "@/types";
 import React from "react";
 import { FaStar } from "react-icons/fa6";
 import {
@@ -7,23 +8,49 @@ import {
     IoIosCloseCircle,
 } from "react-icons/io";
 import { MdOutlineFastfood } from "react-icons/md";
+import { IoLocationOutline } from "react-icons/io5";
+import { getCheapestRoom } from "@/utils";
+import { Pill } from "../ui/pill";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
+    hotelStruct: RegularHotelFragment | undefined;
 }
 
-export const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
+export const HotelCard: React.FC<HotelCardProps> = ({ hotel, hotelStruct }) => {
+    console.log(
+        hotel.HotelName,
+        hotel.HotelCode,
+        hotel,
+        (JSON.parse(hotelStruct?.details || "{}") as HotelDetailType).Details[0]
+    );
     return (
         <div className="border border-gray-200  mb-5 p-5 flex items-start">
             <img
-                className="h-48"
-                src="https://foto.hrsstatic.com/fotos/0/2/269/213/80/000000/http%3A%2F%2Ffoto-origin.hrsstatic.com%2Ffoto%2F6%2F8%2F6%2F4%2F%2Fteaser_686447.jpg/WYT98yP7mJCpeMkikrasbQ%3D%3D/134%2C106/6/Holiday_Inn_Express_LONDON_-_EXCEL-London-Aussenansicht-3-686447.jpg"
+                className="w-auto h-48 object-cover"
+                src={
+                    (
+                        JSON.parse(
+                            hotelStruct?.details || "{}"
+                        ) as HotelDetailType
+                    ).Details[0].Images.Img[0] ||
+                    `https://previews.123rf.com/images/happyvector071/happyvector0711608/happyvector071160800591/62947847-abstract-creative-vector-design-layout-with-text-do-not-exist.jpg`
+                }
             />
-            <div className="px-5 w-full truncate line-clamp-1">
+            <div className="flex flex-col px-5 w-full truncate line-clamp-1 border-r border-gray-200 ">
                 <h1 className="libre text-2xl text-blue-main font-medium truncate text-ellipsis">
                     {hotel.HotelName}
                 </h1>
                 <div className="flex items-center mt-0.5 my-1">
+                    <p className="flex items-center text-sm text-gray-500 font-medium">
+                        <IoLocationOutline className="mr-1.5" />
+                        {(
+                            JSON.parse(
+                                hotelStruct?.details || "{}"
+                            ) as HotelDetailType
+                        ).Details[0].HotelAddress.split(",")[0] || hotel.Chain}
+                    </p>
+                    <span className="mx-2.5 text-gray-500">•</span>
                     {Array(hotel.StarRating)
                         .fill(0)
                         .map((_, idx: number) => (
@@ -32,47 +59,60 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
                                 className="text-sm text-yellow-500"
                             />
                         ))}
-                    <span className="mx-2.5 text-gray-500">•</span>
-                    <p className="text-sm text-gray-500 font-medium">
-                        {hotel.Chain}
-                    </p>
                 </div>
                 {/* TODO – the language here is VERY confusing... fix it */}
-                <div className="mt-2.5">
+                {/* TODO – make pills for the facilites like travala */}
+                <div className="mt-3 flex items-center">
                     {hotel.RoomTypeDetails.Rooms.Room[0].NonRefundable ===
                     "N" ? (
                         <div className="flex items-center">
-                            <IoIosCheckmarkCircle className="text-md mr-2 text-green-500" />
+                            <IoIosCloseCircle className="text-md mr-2 text-red-500" />
                             <p className="font-medium text-sm">
                                 Non-refundable
                             </p>
                         </div>
                     ) : (
                         <div className="flex items-center">
-                            <IoIosCloseCircle className="text-md mr-2 text-red-500" />
+                            <IoIosCheckmarkCircle className="text-md mr-2 text-green-500" />
                             <p className="font-medium text-sm">Refundable</p>
                         </div>
                     )}
-                    <div className="mt-1.5 flex items-center">
+                    <div className="ml-3 flex items-center">
                         <MdOutlineFastfood className="text-md mr-2 text-purple-500" />
                         <p className="font-medium text-sm">
                             {hotel.RoomTypeDetails.Rooms.Room[0].MealPlan}
                         </p>
                     </div>
                 </div>
+                {/* TODO – use icons like HRS if possible */}
+                <div className="mt-3.5 flex flex-wrap items-center">
+                    {(
+                        JSON.parse(
+                            hotelStruct?.details || "{}"
+                        ) as HotelDetailType
+                    ).Details[0].HotelFacilities.Facility.slice(0, 3).map(
+                        (fac: string, idx: number) => (
+                            <div key={idx} className="mr-1.5 mb-1.5">
+                                <Pill label={fac} />
+                            </div>
+                        )
+                    )}
+                </div>
             </div>
             <div className="self-end text-right min-w-36 flex flex-col">
                 <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
                     ${" "}
                     {Math.round(
-                        hotel.RoomTypeDetails.Rooms.Room[0]
+                        getCheapestRoom(hotel.RoomTypeDetails.Rooms.Room)
                             .RecommendedRetailPrice
                     )}
                 </p>
                 <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
                     ${" "}
                     {Math.round(
-                        1.06 * hotel.RoomTypeDetails.Rooms.Room[0].TotalRate
+                        1.06 *
+                            getCheapestRoom(hotel.RoomTypeDetails.Rooms.Room)
+                                .TotalRate
                     )}
                 </p>
                 <p className="text-sm text-gray-400 font-medium">

@@ -13,7 +13,8 @@ import { COOKIE_NAME, __prod__ } from "./constants";
 import { City } from "./entities/city";
 import { Hotel } from "./entities/hotel";
 import { CityResolver } from "./resolvers/city-resolver";
-// import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
+import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
+import { refreshHotelDetails } from "./utils/refresh-details";
 
 const main = async () => {
     const conn = await createConnection({
@@ -79,6 +80,7 @@ const main = async () => {
 
     // run this function every day instead
     // refreshDatabaseWithNewHotels();
+    // refreshHotelDetails();
 
     app.listen(parseInt(process.env.PORT), () => {
         console.log(`🚀 Server started on localhost:${process.env.PORT}`);

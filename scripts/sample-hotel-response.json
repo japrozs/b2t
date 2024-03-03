@@ -1,0 +1,118 @@
+{
+    "SourceId": 281,
+    "HotelId": 232234,
+    "HotelName": "Corus Hyde Park Hotel",
+    "PreferredStatus": "A",
+    "PropertyType": "Hotel",
+    "StarRating": 4,
+    "GeoLocation": {
+        "Longitude": "-0.179603",
+        "Latitude": "51.5117"
+    },
+    "Chain": "Hotelrez Hotels & Resorts",
+    "HotelCode": "281-232234",
+    "TimeZone": "Europe/London",
+    "City": "LON",
+    "RoomTypeDetails": {
+        "Rooms": {
+            "Room": [
+                {
+                    "RoomNo": 1,
+                    "RoomType": "Suite",
+                    "RoomTypeCode": 3816,
+                    "RoomTypeSupplierCode": "STE",
+                    "MealPlanSupplierCode": "RO",
+                    "RoomStatus": "OK",
+                    "BlackOut": {
+                        "Status": "",
+                        "Msg": ""
+                    },
+                    "CurrCode": "USD",
+                    "ContractTokenId": "21320",
+                    "RoomConfigurationId": 1,
+                    "RatePlanCode": "SIWTXRO",
+                    "RatePlanId": 21320,
+                    "MealPlan": "Room Only",
+                    "MealPlanCode": "28",
+                    "NumberOfMeals": 2,
+                    "RoomNumber": 1,
+                    "Rate": 966.17,
+                    "RoomStatusDetails": {
+                        "Status": ["OK", "OK", "OK"]
+                    },
+                    "DiscountDetails": {},
+                    "CancellationPolicyDetails": {
+                        "Cancellation": [
+                            {
+                                "FromDate": 20240224,
+                                "FromTime": "1400",
+                                "ToDate": 20240227,
+                                "NightToCharge": 1
+                            }
+                        ]
+                    },
+                    "PromotionalContract": "N",
+                    "PackageYN": "N",
+                    "NonRefundable": "N",
+                    "DynamicYN": "Y",
+                    "TotalRate": 966.17,
+                    "RateBeforeTax": 966.17,
+                    "TotalDiscount": 0,
+                    "RecommendedRetailPrice": 1207.71,
+                    "ContractLabel": "ROOM ONLY INC VAT - WIFI",
+                    "MealPlanCodeLong": 28
+                },
+                {
+                    "RoomNo": 1,
+                    "RoomType": "Executive Double Bedroom",
+                    "RoomTypeCode": 3809,
+                    "RoomTypeSupplierCode": "B1D1",
+                    "MealPlanSupplierCode": "RO",
+                    "RoomStatus": "OK",
+                    "BlackOut": {
+                        "Status": "",
+                        "Msg": ""
+                    },
+                    "CurrCode": "USD",
+                    "ContractTokenId": "21320",
+                    "RoomConfigurationId": 1,
+                    "RatePlanCode": "SIWTXRO",
+                    "RatePlanId": 21320,
+                    "MealPlan": "Room Only",
+                    "MealPlanCode": "28",
+                    "NumberOfMeals": 2,
+                    "RoomNumber": 1,
+                    "Rate": 639.33,
+                    "RoomStatusDetails": {
+                        "Status": ["OK", "OK", "OK"]
+                    },
+                    "DiscountDetails": {},
+                    "CancellationPolicyDetails": {
+                        "Cancellation": [
+                            {
+                                "FromDate": 20240224,
+                                "FromTime": "1400",
+                                "ToDate": 20240227,
+                                "NightToCharge": 1
+                            }
+                        ]
+                    },
+                    "PromotionalContract": "N",
+                    "PackageYN": "N",
+                    "NonRefundable": "N",
+                    "DynamicYN": "Y",
+                    "TotalRate": 639.33,
+                    "RateBeforeTax": 639.33,
+                    "TotalDiscount": 0,
+                    "RecommendedRetailPrice": 799.16,
+                    "ContractLabel": "ROOM ONLY INC VAT - WIFI",
+                    "MealPlanCodeLong": 28
+                }
+            ]
+        }
+    },
+    "StartDate": 20240224,
+    "EndDate": 20240227,
+    "Country": "GB",
+    "Restriction": ""
+}

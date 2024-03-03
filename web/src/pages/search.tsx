@@ -4,8 +4,13 @@ import {
     useGetCitiesQuery,
     useGetCityQuery,
 } from "@/generated/graphql";
-import { HotelItemType, HotelSearchItemType, HotelSearchResult } from "@/types";
-import { SearchHotelStruct, useSearchHotels } from "@/utils";
+import {
+    HotelItemType,
+    HotelSearchItemType,
+    HotelSearchResult,
+    RoomCfgType,
+} from "@/types";
+import { SearchHotelStruct, formatRoomCfg, useSearchHotels } from "@/utils";
 import Axios from "axios";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
@@ -29,9 +34,9 @@ const Search: React.FC<SearchProps> = ({ message }) => {
             city: router.query.city as string,
             in: router.query.in as string,
             out: router.query.out as string,
-            adults: parseInt(router.query.adults as string),
-            children: parseInt(router.query.children as string),
+            cfg: JSON.parse(router.query.cfg as string),
         };
+        console.log(struct);
         setStruct(struct);
     }, [router.isReady]);
 
@@ -43,11 +48,13 @@ const Search: React.FC<SearchProps> = ({ message }) => {
 
     console.log(data);
 
+    // TODO: show text saying no availabilities found if we get an error
     const { data: hotels, isLoading: hotelsLoading } =
         useSWR<HotelSearchResult>(
-            `/search-hotel?adults=${struct?.adults}&children=${
-                struct?.children
-            }&checkinDate=${struct?.in.replaceAll(
+            // TODO: pass the config struct instead of hard-coded values
+            `/search-hotel?cfg=${JSON.stringify(
+                struct?.cfg
+            )}&checkinDate=${struct?.in.replaceAll(
                 "-",
                 ""
             )}&checkoutDate=${struct?.out.replaceAll(
@@ -76,6 +83,7 @@ const Search: React.FC<SearchProps> = ({ message }) => {
                                     <HotelCard
                                         key={idx}
                                         hotel={hotel}
+                                        infoStruct={struct as SearchHotelStruct}
                                         hotelStruct={
                                             data?.getCity.hotels.filter(
                                                 (h: RegularHotelFragment) =>

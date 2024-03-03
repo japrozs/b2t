@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { HotelListType, RoomDetailType } from "./types";
+import { HotelListType, RoomCfgType, RoomDetailType } from "./types";
 import { useGetCitiesQuery, useGetCityQuery } from "./generated/graphql";
 
 export const formatAutoCompleteResults = (
@@ -17,8 +17,9 @@ export interface SearchHotelStruct {
     // country: string;
     in: string;
     out: string;
-    adults: number;
-    children: number;
+    // adults: number;
+    // children: number;
+    cfg: RoomCfgType;
 }
 
 export const useSearchHotels = async (struct: SearchHotelStruct) => {
@@ -38,4 +39,23 @@ export const getCheapestRoom = (rooms: RoomDetailType[]): RoomDetailType => {
         }
     });
     return room;
+};
+
+export const nightsBetween = (date1: any, date2: any) =>
+    Math.ceil(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
+
+export const formatRoomCfg = (cfg: RoomCfgType) => {
+    const ret = [];
+    for (let i = 0; i < cfg.rooms.length; i++) {
+        const room = {
+            Adult: Array(cfg.rooms[i].adults).fill({
+                Age: 25,
+            }),
+            Child: Array(cfg.rooms[i].children).fill({
+                Age: 11,
+            }),
+        };
+        ret.push(room);
+    }
+    return ret;
 };

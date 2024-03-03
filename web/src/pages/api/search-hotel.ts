@@ -1,3 +1,5 @@
+import { RoomCfgType } from "@/types";
+import { formatRoomCfg } from "@/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import request from "request";
 
@@ -10,14 +12,14 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<ResponseData>
 ) {
-    const { hotelCodes, checkinDate, checkoutDate, adults, children } =
-        req.query;
-    if (!hotelCodes || !checkinDate || !checkoutDate || !adults || !children) {
+    const { hotelCodes, checkinDate, checkoutDate, cfg } = req.query;
+    if (!hotelCodes || !checkinDate || !checkoutDate || !cfg) {
         res.status(400).json({
             error: "did not receive an option for one of the above values. hotelCodes, checkinDate, checkoutDate, adults, city, children",
             err_msg: ";)",
         });
     }
+    const roomCfg: RoomCfgType = JSON.parse(cfg as string);
     const options = {
         method: "POST",
         url: `https://api.iwtxconnect.com/hotel/api/v1/search`,
@@ -33,22 +35,24 @@ export default function handler(
             SearchCriteria: {
                 RoomConfiguration: {
                     // TODO: use actual adults and children number
-                    Room: [
-                        {
-                            Adult: [
-                                {
-                                    Age: 35,
-                                },
-                                {
-                                    Age: 35,
-                                },
-                            ],
-                        },
-                    ],
+                    Room: formatRoomCfg(roomCfg),
+                    // Room: [
+                    //     {
+                    //         Adult: [
+                    //             {
+                    //                 Age: 25,
+                    //             },
+                    //             {
+                    //                 Age: 25,
+                    //             },
+                    //         ],
+                    //     },
+                    // ],
                 },
                 StartDate: checkinDate,
                 EndDate: checkoutDate,
                 HotelCode: hotelCodes,
+                // THIS IS NATIONALITY OF TRAVELLER
                 Nationality: "LON",
                 GroupByRooms: "Y",
                 CancellationPolicy: "Y",

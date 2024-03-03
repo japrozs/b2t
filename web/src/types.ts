@@ -186,6 +186,11 @@ export interface HotelSearchResult {
     Hotels: {
         Hotel: HotelSearchItemType[];
     };
+    ErrorMessage?: {
+        Error: {
+            Messages: string[];
+        };
+    };
 }
 
 export interface AutoCompleteResultItem {
@@ -198,4 +203,11 @@ export interface AutoCompleteResultItem {
     RelatedAirport: string;
     ZoneId: string;
     Zone: string;
+}
+
+export interface RoomCfgType {
+    rooms: {
+        adults: number;
+        children: number;
+    }[];
 }

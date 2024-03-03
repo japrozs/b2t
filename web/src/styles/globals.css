@@ -18,6 +18,16 @@
     }
 }
 
+@font-face {
+    font-family: "blair-itc-bold";
+    src: url("/fonts/blair-itc-bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "blair-itc-medium";
+    src: url("/fonts/blair-itc-medium.otf") format("opentype");
+}
+
 body {
 }
 

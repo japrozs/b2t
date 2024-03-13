@@ -148,6 +148,8 @@ export class UserResolver {
         const hashedPassword = await argon2.hash(options.password);
         let user;
         try {
+            // TODO: SETUP A SYSTEM TO GET A PICTURE OF PAN CARD
+            //       THIS IS CURRENTY INCOMPLETE!!!! FINISH IT
             const result = await getConnection()
                 .createQueryBuilder()
                 .insert()

@@ -14,6 +14,8 @@ import { SearchHotelStruct, getCheapestRoom, nightsBetween } from "@/utils";
 import { Pill } from "../ui/pill";
 import { COMMISSION_RATE } from "@/constants";
 import { MdOutlineAttachMoney } from "react-icons/md";
+import { useRouter } from "next/router";
+import { useCheckoutStore } from "@/store";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
@@ -27,6 +29,9 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     infoStruct,
 }) => {
     const [open, setOpen] = useState(false);
+    const setHotel = useCheckoutStore((state) => state.setHotel);
+    const setRoomID = useCheckoutStore((state) => state.setRoomID);
+    const router = useRouter();
     console.log(
         hotel.HotelName,
         hotel.HotelCode,
@@ -85,7 +90,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             </div>
                         ) : (
                             <div className="flex items-center">
-                                <IoIosCheckmarkCircle className="text-md mr-2 text-green-500" />
+                                <IoIosCheckmarkCircle className="text-md mr-2 text-green-600" />
                                 <p className="font-medium text-sm">
                                     Refundable
                                 </p>
@@ -174,7 +179,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     </div>
                                 ) : (
                                     <div className="flex items-center">
-                                        <IoIosCheckmarkCircle className="text-md mr-2 text-green-500" />
+                                        <IoIosCheckmarkCircle className="text-md mr-2 text-green-600" />
                                         <p className="font-medium text-sm">
                                             Refundable
                                         </p>
@@ -184,7 +189,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     {room.MealPlan.toLowerCase() ===
                                     "breakfast" ? (
                                         <>
-                                            <IoIosCheckmarkCircle className="text-md mr-2 text-green-500" />
+                                            <IoIosCheckmarkCircle className="text-md mr-2 text-green-600" />
                                             <p className="font-medium text-sm">
                                                 {room.MealPlan}
                                             </p>
@@ -203,8 +208,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             {room.CancellationPolicyDetails.Cancellation
                                 .length > 0 ? (
                                 <div className="flex items-center my-2.5">
-                                    <MdOutlineAttachMoney className="text-md mr-2 text-green-500" />
-                                    <p className="font-medium text-sm text-green-500">
+                                    <MdOutlineAttachMoney className="text-md mr-2 text-green-600" />
+                                    <p className="font-medium text-sm text-green-600">
                                         Free cancellation before{" "}
                                         {moment(
                                             room.CancellationPolicyDetails.Cancellation[0].FromDate.toString(),
@@ -236,6 +241,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             <button
                                 style={{
                                     fontFamily: "blair-itc-medium",
+                                }}
+                                onClick={() => {
+                                    setHotel(hotel);
+                                    setRoomID(room.RoomTypeCode);
+                                    router.push(`/checkout`);
                                 }}
                                 className="transition mx-auto border border-blue-main p-1.5 mt-2  text-sm text-blue-main hover:bg-blue-main hover:text-white "
                             >

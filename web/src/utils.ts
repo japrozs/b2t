@@ -51,9 +51,12 @@ export const formatRoomCfg = (cfg: RoomCfgType) => {
             Adult: Array(cfg.rooms[i].adults).fill({
                 Age: 25,
             }),
-            Child: Array(cfg.rooms[i].children).fill({
-                Age: 11,
-            }),
+            // Child: Array(cfg.rooms[i].children).fill({
+            //     Age: 11,
+            // }),
+            Child: cfg.rooms[i].children.map((child: { age: number }) => ({
+                Age: child.age,
+            })),
         };
         ret.push(room);
     }

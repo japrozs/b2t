@@ -15,6 +15,7 @@ import { Hotel } from "./entities/hotel";
 import { CityResolver } from "./resolvers/city-resolver";
 import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
 import { refreshHotelDetails } from "./utils/refresh-details";
+import { User } from "./entities/user";
 
 const main = async () => {
     const conn = await createConnection({
@@ -23,9 +24,19 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [City, Hotel],
+        entities: [User, City, Hotel],
     });
     await conn.runMigrations();
+    // (await Hotel.find({ where: { details: "{}" } })).forEach((hotel: Hotel) => {
+    //     console.log({
+    //         code: hotel.code,
+    //         id: hotel.id,
+    //     });
+    // });
+
+    // hotels in BOMBAY
+    const city = await Hotel.find({ where: { cityId: 171 } });
+    console.log(city.length);
 
     const app = express();
 
@@ -79,6 +90,7 @@ const main = async () => {
     });
 
     // run this function every day instead
+    // THESE FIX ARE HIGHLY UNSTABLE AND NEED TO BE FIXED BEFORE SHIPPING TO PRODUCTION
     // refreshDatabaseWithNewHotels();
     // refreshHotelDetails();
 

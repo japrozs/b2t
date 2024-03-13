@@ -1,63 +1,61 @@
-import request from "request";
-import { City } from "../entities/city";
-import { Hotel } from "../entities/hotel";
+import axios from "axios";
 
-export interface CountryType {
-    name: string;
-    countryAlpha2: string;
-    countryAlpha3: string;
-    countryNum: string;
-}
+// export interface CountryType {
+//     name: string;
+//     countryAlpha2: string;
+//     countryAlpha3: string;
+//     countryNum: string;
+// }
 
-export interface HotelItemType {
-    Code: string;
-    Name: string;
-    StarRating: number;
-    ContractList: {
-        Contract: {
-            ContractTokenID: number;
-            ContractLabel: string;
-            PackageYN: string;
-            NonRefYN: string;
-            MealPlanList: {
-                MealPlanResponse: {
-                    Code: number;
-                    Name: string;
-                }[];
-            };
-            RoomTypeList: {
-                RoomType: {
-                    Code: number;
-                    Name: string;
-                }[];
-            };
-        }[];
-    };
-    GeoLocation: {
-        Latitude: string;
-        Longitude: string;
-    };
-}
+// export interface HotelItemType {
+//     Code: string;
+//     Name: string;
+//     StarRating: number;
+//     ContractList: {
+//         Contract: {
+//             ContractTokenID: number;
+//             ContractLabel: string;
+//             PackageYN: string;
+//             NonRefYN: string;
+//             MealPlanList: {
+//                 MealPlanResponse: {
+//                     Code: number;
+//                     Name: string;
+//                 }[];
+//             };
+//             RoomTypeList: {
+//                 RoomType: {
+//                     Code: number;
+//                     Name: string;
+//                 }[];
+//             };
+//         }[];
+//     };
+//     GeoLocation: {
+//         Latitude: string;
+//         Longitude: string;
+//     };
+// }
 
-export interface CityItemType {
-    Code: string;
-    HotelList: {
-        Hotel: HotelItemType[];
-    };
-    Name: string;
-}
+// export interface CityItemType {
+//     Code: string;
+//     HotelList: {
+//         Hotel: HotelItemType[];
+//     };
+//     Name: string;
+// }
 
-export interface HotelListType {
-    Count: number;
-    Total: number;
-    CountryList: {
-        CityList: CityItemType[];
-        Code: string;
-        Name: string;
-    }[];
-}
+// export interface HotelListType {
+//     Count: number;
+//     Total: number;
+//     CountryList: {
+//         CityList: CityItemType[];
+//         Code: string;
+//         Name: string;
+//     }[];
+// }
 
-const countryList: CountryType[] = [
+const countryList = [
     {
         name: "Afghanistan	",
         countryAlpha2: "AF",
@@ -1554,82 +1552,87 @@ const countryList: CountryType[] = [
     },
 ];
 
-export const refreshDatabaseWithNewHotels = () => {
-    // let hotelCount = 0;
-    // countryList.forEach((country: CountryType, idx: number) => {
-    //     if (country.countryAlpha2 === "GB") {
-    //         console.log(idx, country);
-    //     }
-    // });
-    for (let i = 0; i < countryList.length; i++) {
-        setTimeout(() => {
-            const country: CountryType = countryList[i];
-            console.log(`index : ${i}, country : ${country}`);
-            const options = {
-                method: "POST",
-                // page numbers only go up until 2
-                url: `https://api.iwtxconnect.com/api/v1/hotellist?pageSize=500&RoomConfigurationId=1&pageNumber=4&countryCode=${country.countryAlpha2}`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    Profile: {
-                        Password: "D3V_1234",
-                        Code: "DEV_IWTX",
-                        TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
-                    },
-                }),
-            };
-            request(options, async (error: any, response: any) => {
-                if (error) {
-                    console.log(error);
-                }
+const hotels = {};
 
-                const struct: HotelListType = JSON.parse(response.body);
-                if (struct.CountryList.length === 0) {
-                    return;
-                }
-                const country = struct.CountryList[0];
-                country.CityList.forEach(async (cityItem: CityItemType) => {
-                    let city = await City.findOne({
-                        where: {
-                            code: cityItem.Code,
-                        },
-                    });
-                    if (!city) {
-                        city = await City.create({
-                            code: cityItem.Code,
-                            name: cityItem.Name,
-                            countryCode: country.Code,
-                            countryName: country.Name,
-                        }).save();
-                    }
-                    console.log(city, cityItem.HotelList.Hotel.length);
-                    cityItem.HotelList.Hotel.forEach(
-                        async (hotel: HotelItemType & { details?: any }) => {
-                            let h = await Hotel.findOne({
-                                where: {
-                                    code: hotel.Code,
-                                },
-                            });
-                            if (h) {
-                                console.log("hotel already exists");
-                                return;
-                            }
-                            console.log(hotel);
+const main = async () => {
+    countryList.forEach((c, i) => {
+        if (c.countryAlpha2 === "IN") {
+            console.log(c, i);
+        }
+    });
+    // for (let i = 0; i < countryList.length; i++) {
+    // for (let i = 2; i < 3; i++) {
+    //     setTimeout(() => {
+    //         const country = countryList[i];
+    //         console.log(
+    //             `Getting hotels for (${country.countryAlpha2}) ${country.name}`
+    //         );
+    //         axios
+    //             .request({
+    //                 method: "post",
+    //                 maxBodyLength: Infinity,
+    //                 url: `https://api.iwtxconnect.com/api/v1/hotellist?pageSize=500&countryCode=${country.countryAlpha2}&RoomConfigurationId=1&pageNumber=1`,
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 data: JSON.stringify({
+    //                     Profile: {
+    //                         Password: "D3V_1234",
+    //                         Code: "DEV_IWTX",
+    //                         TokenNumber:
+    //                             "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+    //                     },
+    //                 }),
+    //             })
+    //             .then((response) => {
+    //                 const struct = response.data;
+    //                 // console.log(JSON.stringify(struct))
+    //                 if (struct.CountryList.length === 0) {
+    //                     return;
+    //                 }
 
-                            h = await Hotel.create({
-                                code: hotel.Code,
-                                name: hotel.Name,
-                                cityId: city?.id,
-                                body: JSON.stringify(hotel) || "{}",
-                                details: "{}",
-                            }).save();
-                        }
-                    );
-                });
-                // console.log(JSON.parse(response.body));
-            });
-        }, i * 500);
-    }
+    //                 const country = struct.CountryList[0];
+    //                 country.CityList.forEach(async (cityItem) => {
+    //                     let city = await City.findOne({
+    //                         where: {
+    //                             code: cityItem.Code,
+    //                         },
+    //                     });
+    //                     if (!hotel[cityItem.code]) {
+    //                         hotel[cityItem.code] = [];
+    //                     }
+    //                     console.log(city, cityItem.HotelList.Hotel.length);
+    //                     cityItem.HotelList.Hotel.forEach(
+    //                         async (
+    //                             hotel: HotelItemType & { details?: any }
+    //                         ) => {
+    //                             let h = await Hotel.findOne({
+    //                                 where: {
+    //                                     code: hotel.Code,
+    //                                 },
+    //                             });
+    //                             if (h) {
+    //                                 console.log("hotel already exists");
+    //                                 return;
+    //                             }
+    //                             console.log(hotel);
+
+    //                             h = await Hotel.create({
+    //                                 code: hotel.Code,
+    //                                 name: hotel.Name,
+    //                                 cityId: city?.id,
+    //                                 body: JSON.stringify(hotel) || "{}",
+    //                                 details: "{}",
+    //                             }).save();
+    //                         }
+    //                     );
+    //                 });
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     }, i * 1500);
+    // }
 };
+
+main().catch((err) => console.log(err));

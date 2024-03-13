@@ -208,6 +208,8 @@ export interface AutoCompleteResultItem {
 export interface RoomCfgType {
     rooms: {
         adults: number;
-        children: number;
+        children: {
+            age: number;
+        }[];
     }[];
 }

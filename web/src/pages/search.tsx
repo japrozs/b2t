@@ -4,6 +4,7 @@ import {
     useGetCitiesQuery,
     useGetCityQuery,
 } from "@/generated/graphql";
+import { StoreState, useCheckoutStore } from "@/store";
 import {
     HotelItemType,
     HotelSearchItemType,
@@ -16,6 +17,7 @@ import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
+import { useStore } from "zustand";
 
 interface SearchProps {
     message: string;
@@ -36,7 +38,7 @@ const Search: React.FC<SearchProps> = ({ message }) => {
             out: router.query.out as string,
             cfg: JSON.parse(router.query.cfg as string),
         };
-        console.log(struct);
+        // console.log(struct);
         setStruct(struct);
     }, [router.isReady]);
 
@@ -46,8 +48,11 @@ const Search: React.FC<SearchProps> = ({ message }) => {
         },
     });
 
-    console.log(data);
-
+    // console.log(data);
+    console.log(
+        "hotelcodes :: ",
+        data?.getCity.hotels.map((hotel) => hotel.code).join(", ")
+    );
     // TODO: show text saying no availabilities found if we get an error
     const { data: hotels, isLoading: hotelsLoading } =
         useSWR<HotelSearchResult>(
@@ -64,7 +69,7 @@ const Search: React.FC<SearchProps> = ({ message }) => {
                 .map((hotel) => hotel.code)
                 .join(",")}&city=${struct?.city}`
         );
-    console.log(hotels);
+    // console.log(hotels);
 
     return (
         <>

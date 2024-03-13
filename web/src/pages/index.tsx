@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { RoomCfgType } from "@/types";
@@ -11,15 +11,24 @@ export default function Home() {
     const [checkoutDate, setCheckoutDate] = useState(
         new Date().toISOString().split("T")[0]
     );
+    const [ages, setAges] = useState([]);
     const [roomConfig, setRoomConfig] = useState<RoomCfgType>({
         rooms: [
             {
                 adults: 1,
-                children: 1,
+                children: [
+                    {
+                        age: 6,
+                    },
+                ],
             },
         ],
     });
     const router = useRouter();
+
+    useEffect(() => {
+        console.log("roomCfg :: ", roomConfig);
+    }, [roomConfig]);
 
     return (
         <div>
@@ -75,7 +84,7 @@ export default function Home() {
                                         if (
                                             room.adults != 0 &&
                                             !(
-                                                room.children == 0 &&
+                                                room.children.length == 0 &&
                                                 room.adults == 1
                                             )
                                         ) {
@@ -88,20 +97,22 @@ export default function Home() {
                                     }}
                                     className={`${
                                         room.adults === 0 ||
-                                        (room.children === 0 &&
+                                        (room.children.length === 0 &&
                                             room.adults === 1)
                                             ? "cursor-not-allowed text-gray-500"
-                                            : "text-blue-600"
-                                    } cursor-pointer`}
+                                            : "text-blue-600 cursor-pointer"
+                                    }`}
                                 />
-                                <p className="select-none text-xl font-semibold">
+                                <p className=" text-xl font-semibold">
                                     {room.adults}
                                 </p>
                                 <FaPlus
                                     onClick={() => {
                                         if (
-                                            room.adults + room.children + 1 <=
-                                            9
+                                            room.adults +
+                                                room.children.length +
+                                                1 <=
+                                            4
                                         ) {
                                             const roomCpy = [
                                                 ...roomConfig.rooms,
@@ -111,19 +122,20 @@ export default function Home() {
                                         }
                                     }}
                                     className={`${
-                                        room.adults + room.children + 1 <= 9
-                                            ? "text-blue-600"
+                                        room.adults +
+                                            room.children.length +
+                                            1 <=
+                                        4
+                                            ? "text-blue-600 cursor-pointer"
                                             : "cursor-not-allowed text-gray-500"
-                                    } cursor-pointer`}
+                                    }`}
                                 />
                             </div>
                         </div>
                         <div className="mt-4 flex items-center">
                             <div>
-                                <p className="select-none text-md font-medium">
-                                    Children
-                                </p>
-                                <p className="select-none text-xs text-gray-400">
+                                <p className=" text-md font-medium">Children</p>
+                                <p className=" text-xs text-gray-400">
                                     Age 2 - 12
                                 </p>
                             </div>
@@ -131,50 +143,105 @@ export default function Home() {
                                 <FaMinus
                                     onClick={() => {
                                         if (
-                                            room.children != 0 &&
+                                            room.children.length != 0 &&
                                             !(
-                                                room.children == 1 &&
+                                                room.children.length == 1 &&
                                                 room.adults == 0
                                             )
                                         ) {
                                             const roomCpy = [
                                                 ...roomConfig.rooms,
                                             ];
-                                            roomCpy[idx].children -= 1;
+                                            // roomCpy[idx].children -= 1;
+                                            roomCpy[idx].children.pop();
                                             setRoomConfig({ rooms: roomCpy });
                                         }
                                     }}
                                     className={`${
-                                        room.children === 0 ||
-                                        (room.children === 1 &&
+                                        room.children.length === 0 ||
+                                        (room.children.length === 1 &&
                                             room.adults === 0)
                                             ? "cursor-not-allowed text-gray-500"
-                                            : "text-blue-600"
-                                    } cursor-pointer`}
+                                            : "text-blue-600 cursor-pointer"
+                                    }`}
                                 />
-                                <p className="select-none text-xl font-semibold">
-                                    {room.children}
+                                <p className=" text-xl font-semibold">
+                                    {room.children.length}
                                 </p>
                                 <FaPlus
                                     onClick={() => {
                                         if (
-                                            room.adults + room.children + 1 <=
-                                            9
+                                            room.adults +
+                                                room.children.length +
+                                                1 <=
+                                            4
                                         ) {
                                             const roomCpy = [
                                                 ...roomConfig.rooms,
                                             ];
-                                            roomCpy[idx].children += 1;
+                                            // roomCpy[idx].children += 1;
+                                            roomCpy[idx].children.push({
+                                                age: 6,
+                                            });
                                             setRoomConfig({ rooms: roomCpy });
                                         }
                                     }}
                                     className={`${
-                                        room.adults + room.children + 1 <= 9
-                                            ? "text-blue-600"
+                                        room.adults +
+                                            room.children.length +
+                                            1 <=
+                                        4
+                                            ? "text-blue-600 cursor-pointer"
                                             : "cursor-not-allowed text-gray-500"
-                                    } cursor-pointer`}
+                                    }`}
                                 />
                             </div>
+                        </div>
+                        <div className="my-5">
+                            {room.children.map(
+                                (child: { age: number }, i: number) => (
+                                    <div
+                                        key={i}
+                                        className="my-1 flex items-center"
+                                    >
+                                        <p className=" text-md font-medium">
+                                            Child {i + 1} age
+                                        </p>
+                                        <input
+                                            className="ml-auto my-0.5 border border-gray-200 w-20 rounded-md text-sm py-1 px-2"
+                                            value={child.age}
+                                            type="number"
+                                            onChange={(e) => {
+                                                if (
+                                                    parseInt(e.target.value) <
+                                                        1 ||
+                                                    parseInt(e.target.value) >
+                                                        12
+                                                ) {
+                                                    return;
+                                                }
+                                                console.log(
+                                                    "old roomConfig :: ",
+                                                    roomConfig
+                                                );
+                                                const roomCpy = [
+                                                    ...roomConfig.rooms,
+                                                ];
+                                                roomCpy[idx].children[i].age =
+                                                    parseInt(e.target.value);
+                                                setRoomConfig({
+                                                    rooms: roomCpy,
+                                                });
+                                                console.log(
+                                                    "new roomConfig :: ",
+                                                    roomConfig
+                                                );
+                                            }}
+                                            placeholder={`child ${i + 1} age`}
+                                        />
+                                    </div>
+                                )
+                            )}
                         </div>
                         {idx != 0 && (
                             <button
@@ -197,7 +264,7 @@ export default function Home() {
                     const roomCpy = [...roomConfig.rooms];
                     roomCpy.push({
                         adults: 1,
-                        children: 0,
+                        children: [{ age: 5 }],
                     });
                     setRoomConfig({ rooms: roomCpy });
                 }}

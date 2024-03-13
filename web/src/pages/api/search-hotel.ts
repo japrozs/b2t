@@ -13,7 +13,7 @@ export default function handler(
     res: NextApiResponse<ResponseData>
 ) {
     const { hotelCodes, checkinDate, checkoutDate, cfg } = req.query;
-    if (!hotelCodes || !checkinDate || !checkoutDate || !cfg) {
+    if (!hotelCodes || !checkinDate || !checkoutDate || cfg === undefined) {
         res.status(400).json({
             error: "did not receive an option for one of the above values. hotelCodes, checkinDate, checkoutDate, adults, city, children",
             err_msg: ";)",

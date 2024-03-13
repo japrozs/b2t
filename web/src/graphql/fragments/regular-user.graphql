@@ -1,0 +1,19 @@
+fragment RegularUser on User {
+    id
+    firstName
+    lastName
+    companyName
+    number
+    PANNumber
+    PANName
+    GSTNumber
+    address
+    country
+    state
+    city
+    pinCode
+    email
+    createdAt
+    updatedAt
+    __typename
+}

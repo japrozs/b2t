@@ -12,6 +12,7 @@ import {
     RoomCfgType,
 } from "@/types";
 import { SearchHotelStruct, formatRoomCfg, useSearchHotels } from "@/utils";
+import { useIsAuth } from "@/utils/use-is-auth";
 import Axios from "axios";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
@@ -24,6 +25,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ message }) => {
+    useIsAuth();
     const router = useRouter();
     const [struct, setStruct] = useState<SearchHotelStruct | undefined>(
         undefined

@@ -16,6 +16,7 @@ import { CityResolver } from "./resolvers/city-resolver";
 import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
 import { refreshHotelDetails } from "./utils/refresh-details";
 import { User } from "./entities/user";
+import { UserResolver } from "./resolvers/user-resolver";
 
 const main = async () => {
     const conn = await createConnection({
@@ -72,7 +73,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [CityResolver],
+            resolvers: [CityResolver, UserResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({

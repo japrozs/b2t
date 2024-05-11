@@ -207,6 +207,7 @@ export interface AutoCompleteResultItem {
 
 export interface RoomCfgType {
     rooms: {
+        // FIX: why are adults and children passed differently...
         adults: number;
         children: {
             age: number;

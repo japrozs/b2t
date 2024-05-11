@@ -1,6 +1,5 @@
-import { TIMEOUT } from "dns";
-import { Hotel } from "../entities/hotel";
 import request from "request";
+import { Hotel } from "../entities/hotel";
 
 const makeRequest = async (code: string, id: number) => {
     try {

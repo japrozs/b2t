@@ -1,6 +1,13 @@
 import useSWR from "swr";
-import { HotelListType, RoomCfgType, RoomDetailType } from "./types";
+import {
+    HotelListType,
+    HotelSearchItemType,
+    RoomCfgType,
+    RoomDetailType,
+} from "./types";
 import { useGetCitiesQuery, useGetCityQuery } from "./generated/graphql";
+import request from "request";
+import axios from "axios";
 
 export const formatAutoCompleteResults = (
     struct: { d: string } | undefined
@@ -19,6 +26,12 @@ export interface SearchHotelStruct {
     out: string;
     // adults: number;
     // children: number;
+    cfg: RoomCfgType;
+}
+
+export interface DetailStruct {
+    hotel: HotelSearchItemType;
+    room: RoomDetailType;
     cfg: RoomCfgType;
 }
 
@@ -62,3 +75,108 @@ export const formatRoomCfg = (cfg: RoomCfgType) => {
     }
     return ret;
 };
+
+export const IS_EMPTY = (...structs: object[]) => {
+    structs.forEach((struct: object) => {
+        if (Object.keys(struct).length === 0) return true;
+    });
+    return false;
+};
+
+export const formatCfg = (cfg: RoomCfgType, room: RoomDetailType) => {
+    const formattedRoomCfg = formatRoomCfg(cfg);
+    formattedRoomCfg.forEach((cfg) => {
+        (cfg as any).RoomTypeCode = room.RoomTypeCode;
+        (cfg as any).MealPlanCode = parseInt(room.MealPlanCode);
+        (cfg as any).ContractTokenId = parseInt(room.ContractTokenId);
+        (cfg as any).RoomConfigurationId = room.RoomConfigurationId;
+    });
+    return formattedRoomCfg;
+};
+
+// export const validateAvailability = (
+//     hotel: HotelSearchItemType,
+//     room: RoomDetailType,
+//     cfg: RoomCfgType
+// ) => {
+//     const formattedRoomCfg = formatRoomCfg(cfg);
+//     formattedRoomCfg.forEach((cfg) => {
+//         (cfg as any).RoomTypeCode = room.RoomTypeCode;
+//         (cfg as any).MealPlanCode = parseInt(room.MealPlanCode);
+//         (cfg as any).ContractTokenId = parseInt(room.ContractTokenId);
+//         (cfg as any).RoomConfigurationId = room.RoomConfigurationId;
+//     });
+//     axios
+//         .post(
+//             `https://api.iwtxconnect.com/hotel/availability`,
+//             JSON.stringify({
+//                 OutputFormat: "JSON",
+//                 Profile: {
+//                     Password: process.env.NEXT_PUBLIC_API_PASSWORD,
+//                     Code: process.env.NEXT_PUBLIC_API_CODE,
+//                     TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+//                 },
+//                 SearchCriteria: {
+//                     RoomConfiguration: {
+//                         Room: formattedRoomCfg,
+//                     },
+//                     StartDate: hotel.StartDate,
+//                     EndDate: hotel.EndDate,
+//                     HotelCode: hotel.HotelCode,
+//                     City: "LON",
+//                     // THIS IS NATIONALITY OF TRAVELLER
+//                     Nationality: "LON",
+//                     IncludeRateDetails: "Y",
+//                     CancellationPolicy: "Y",
+//                 },
+//             }),
+//             {
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                 },
+//             }
+//         )
+//         .then((response) => {
+//             console.log(response);
+//         })
+//         .catch((e) => {
+//             console.log("error :: ", e);
+//         });
+//     // const options = {
+//     //     method: "POST",
+//     //     url: `https://api.iwtxconnect.com/hotel/api/v1/search`,
+//     //     headers: {
+//     //         "Content-Type": "application/json",
+//     //     },
+//     //     body: JSON.stringify({
+//     //         Profile: {
+//     //             Password: process.env.NEXT_PUBLIC_API_PASSWORD,
+//     //             Code: process.env.NEXT_PUBLIC_API_CODE,
+//     //             TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+//     //         },
+//     //         SearchCriteria: {
+//     //             RoomConfiguration: {
+//     //                 Room: formattedRoomCfg,
+//     //             },
+//     //             StartDate: hotel.StartDate,
+//     //             EndDate: hotel.EndDate,
+//     //             HotelCode: hotel.HotelCode,
+//     //             City: "LON",
+//     //             // THIS IS NATIONALITY OF TRAVELLER
+//     //             Nationality: "LON",
+//     //             IncludeRateDetails: "Y",
+//     //             CancellationPolicy: "Y",
+//     //         },
+//     //     }),
+//     // };
+
+//     // request(options, function (error: Error, response: any) {
+//     //     if (error) {
+//     //         console.log({
+//     //             error: "Could not get hotel list",
+//     //             err_msg: error.message,
+//     //         });
+//     //     }
+//     //     console.log(JSON.parse(response.body));
+//     // });
+// };

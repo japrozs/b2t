@@ -1,3 +1,4 @@
+import { CheckoutStoreProvider } from "@/store-provider";
 import "@/styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Axios from "axios";
@@ -31,7 +32,9 @@ export default function App({ Component, pageProps }: AppProps) {
                     dedupingInterval: 10000,
                 }}
             >
-                <Component {...pageProps} />
+                <CheckoutStoreProvider>
+                    <Component {...pageProps} />
+                </CheckoutStoreProvider>
             </SWRConfig>
         </ApolloProvider>
     );

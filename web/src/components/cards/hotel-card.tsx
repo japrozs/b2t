@@ -1,5 +1,5 @@
 import { GetCityQueryResult, RegularHotelFragment } from "@/generated/graphql";
-import { HotelDetailType, HotelSearchItemType } from "@/types";
+import { HotelDetailType, HotelSearchItemType, RoomCfgType } from "@/types";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import {
@@ -15,22 +15,23 @@ import { Pill } from "../ui/pill";
 import { COMMISSION_RATE } from "@/constants";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { useRouter } from "next/router";
-import { useCheckoutStore } from "@/store";
+import { useCheckoutStore } from "@/store-provider";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
     hotelStruct: RegularHotelFragment | undefined;
     infoStruct: SearchHotelStruct;
+    cfg: RoomCfgType;
 }
 
 export const HotelCard: React.FC<HotelCardProps> = ({
     hotel,
     hotelStruct,
     infoStruct,
+    cfg,
 }) => {
     const [open, setOpen] = useState(false);
-    const setHotel = useCheckoutStore((state) => state.setHotel);
-    const setRoomID = useCheckoutStore((state) => state.setRoomID);
+    const { setHotel, setRoom, setCfg } = useCheckoutStore((state) => state);
     const router = useRouter();
     console.log(
         hotel.HotelName,
@@ -243,9 +244,16 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     fontFamily: "blair-itc-medium",
                                 }}
                                 onClick={() => {
+                                    console.log(
+                                        "hotel :: ",
+                                        hotel,
+                                        "roomId : ",
+                                        room.RoomTypeCode
+                                    );
                                     setHotel(hotel);
-                                    setRoomID(room.RoomTypeCode);
-                                    router.push(`/checkout`);
+                                    setRoom(room);
+                                    setCfg(cfg);
+                                    router.push("/app/checkout");
                                 }}
                                 className="transition mx-auto border border-blue-main p-1.5 mt-2  text-sm text-blue-main hover:bg-blue-main hover:text-white "
                             >

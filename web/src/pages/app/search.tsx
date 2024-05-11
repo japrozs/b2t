@@ -4,7 +4,7 @@ import {
     useGetCitiesQuery,
     useGetCityQuery,
 } from "@/generated/graphql";
-import { StoreState, useCheckoutStore } from "@/store";
+import { StoreState } from "@/store";
 import {
     HotelItemType,
     HotelSearchItemType,
@@ -90,6 +90,11 @@ const Search: React.FC<SearchProps> = ({ message }) => {
                                     <HotelCard
                                         key={idx}
                                         hotel={hotel}
+                                        cfg={
+                                            JSON.parse(
+                                                router.query.cfg as string
+                                            ) as RoomCfgType
+                                        }
                                         infoStruct={struct as SearchHotelStruct}
                                         hotelStruct={
                                             data?.getCity.hotels.filter(

@@ -1,5 +1,3 @@
-import { RoomCfgType } from "@/types";
-import { formatRoomCfg } from "@/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 import request from "request";
 
@@ -10,16 +8,15 @@ type ResponseData = {
 
 export default function handler(
     req: NextApiRequest,
-    res: NextApiResponse<ResponseData>
+    res: NextApiResponse<ResponseData | {}>
 ) {
-    const { hotelCodes, checkinDate, checkoutDate, cfg } = req.query;
-    if (!hotelCodes || !checkinDate || !checkoutDate || cfg === undefined) {
+    const { startDate, endDate, hotelCode, cfg } = req.query;
+    if (!hotelCode || !startDate || !endDate || cfg === undefined) {
         res.status(400).json({
-            error: "did not receive an option for one of the above values. hotelCodes, checkinDate, checkoutDate, adults, city, children",
+            error: "did not receive an option for one of the above values. hotelCode, startDate, endDate or cfg",
             err_msg: ";)",
         });
     }
-    const roomCfg: RoomCfgType = JSON.parse((cfg as string) || "{}");
     const options = {
         method: "POST",
         url: `https://api.iwtxconnect.com/hotel/api/v1/search`,
@@ -27,6 +24,7 @@ export default function handler(
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
+            OutputFormat: "JSON",
             Profile: {
                 Password: process.env.NEXT_PUBLIC_API_PASSWORD,
                 Code: process.env.NEXT_PUBLIC_API_CODE,
@@ -34,27 +32,15 @@ export default function handler(
             },
             SearchCriteria: {
                 RoomConfiguration: {
-                    // TODO: use actual adults and children number
-                    Room: formatRoomCfg(roomCfg),
-                    // Room: [
-                    //     {
-                    //         Adult: [
-                    //             {
-                    //                 Age: 25,
-                    //             },
-                    //             {
-                    //                 Age: 25,
-                    //             },
-                    //         ],
-                    //     },
-                    // ],
+                    Room: JSON.parse((cfg as string) || "{}"),
                 },
-                StartDate: checkinDate,
-                EndDate: checkoutDate,
-                HotelCode: hotelCodes,
+                StartDate: startDate,
+                EndDate: endDate,
+                HotelCode: hotelCode,
+                City: "LON",
                 // THIS IS NATIONALITY OF TRAVELLER
                 Nationality: "LON",
-                GroupByRooms: "Y",
+                IncludeRateDetails: "Y",
                 CancellationPolicy: "Y",
             },
         }),

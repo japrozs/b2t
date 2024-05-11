@@ -1,23 +1,64 @@
-import { create } from "zustand";
-import { RegularHotelFragment } from "./generated/graphql";
-import { HotelSearchItemType } from "./types";
+import { createStore } from "zustand/vanilla";
+import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "./types";
 
-export interface StoreState {
+export type StoreState = {
     hotel: HotelSearchItemType | {};
-    roomId: number;
+    room: RoomDetailType | {};
+    cfg: RoomCfgType | {};
+};
+
+export interface StoreActions {
     setHotel: (hotel: HotelSearchItemType) => void;
-    setRoomID: (id: number) => void;
+    setRoom: (r: RoomDetailType) => void;
+    setCfg: (c: RoomCfgType) => void;
 }
 
-export const useCheckoutStore = create<StoreState>()((set) => ({
+export type CheckoutStore = StoreState & StoreActions;
+
+export const initCheckoutStore = (): StoreState => {
+    return { hotel: {}, room: {}, cfg: { rooms: [] } };
+};
+
+export const defaultInitState: StoreState = {
     hotel: {},
-    roomId: -1,
-    setHotel: (hotel: HotelSearchItemType) =>
-        set({
-            hotel,
-        }),
-    setRoomID: (id: number) =>
-        set({
-            roomId: id,
-        }),
-}));
+    room: {},
+    cfg: {},
+};
+
+export const createCheckoutStore = (
+    initState: StoreState = defaultInitState
+) => {
+    return createStore<CheckoutStore>()((set) => ({
+        ...initState,
+        setHotel: (hotel: HotelSearchItemType) =>
+            set({
+                hotel,
+            }),
+        setRoom: (r: RoomDetailType) =>
+            set({
+                room: r,
+            }),
+        setCfg: (c: RoomCfgType) =>
+            set({
+                cfg: c,
+            }),
+    }));
+};
+
+// export const useCheckoutStore = create<StoreState>()((set) => ({
+//     hotel: {},
+//     room: {},
+//     cfg: {},
+//     setHotel: (hotel: HotelSearchItemType) =>
+//         set({
+//             hotel,
+//         }),
+//     setRoom: (r: RoomDetailType) =>
+//         set({
+//             room: r,
+//         }),
+//     setCfg: (c: RoomCfgType) =>
+//         set({
+//             cfg: c,
+//         }),
+// }));

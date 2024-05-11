@@ -1,12 +1,12 @@
 "use client";
 
-import { type ReactNode, createContext, useRef, useContext } from "react";
-import { type StoreApi, useStore } from "zustand";
+import { createContext, useContext, useRef, type ReactNode } from "react";
+import { useStore, type StoreApi } from "zustand";
 
 import {
-    type CheckoutStore,
     createCheckoutStore,
     initCheckoutStore,
+    type CheckoutStore,
 } from "./store";
 
 export const CheckoutStoreContext =

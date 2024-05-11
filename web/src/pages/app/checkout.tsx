@@ -1,11 +1,9 @@
 // import { useCheckoutStore } from "@/store";
-import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
-import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import React, { useEffect, useState } from "react";
-import { DetailStruct, IS_EMPTY, formatCfg, formatRoomCfg } from "../../utils";
 import { useCheckoutStore } from "@/store-provider";
+import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
+import React from "react";
 import useSWR from "swr";
+import { IS_EMPTY, formatCfg } from "../../utils";
 
 interface CheckoutProps {}
 

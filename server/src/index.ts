@@ -12,10 +12,8 @@ import { createConnection } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { City } from "./entities/city";
 import { Hotel } from "./entities/hotel";
-import { CityResolver } from "./resolvers/city-resolver";
-import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
-import { refreshHotelDetails } from "./utils/refresh-details";
 import { User } from "./entities/user";
+import { CityResolver } from "./resolvers/city-resolver";
 import { UserResolver } from "./resolvers/user-resolver";
 
 const main = async () => {

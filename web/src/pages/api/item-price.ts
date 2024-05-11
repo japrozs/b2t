@@ -1,10 +1,5 @@
-import { useGetCitiesQuery, useGetCityQuery } from "@/generated/graphql";
-import { useCheckoutStore } from "@/store";
-import { RoomCfgType } from "@/types";
-import { formatRoomCfg } from "@/utils";
-import { QueryResult } from "@apollo/client";
+import { useGetCityQuery } from "@/generated/graphql";
 import type { NextApiRequest, NextApiResponse } from "next";
-import request from "request";
 
 type ResponseData = {
     error: string;
@@ -13,7 +8,7 @@ type ResponseData = {
 
 export default function handler(
     req: NextApiRequest,
-    res: NextApiResponse<ResponseData>
+    res: NextApiResponse<ResponseData | {}>
 ) {
     const city = useGetCityQuery({
         variables: {

@@ -1,8 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { FaMinus, FaPlus } from "react-icons/fa6";
-import { RoomCfgType } from "@/types";
-
 export default function Home() {
     return (
         <>

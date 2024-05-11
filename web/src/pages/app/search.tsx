@@ -1,24 +1,11 @@
 import { HotelCard } from "@/components/cards/hotel-card";
-import {
-    RegularHotelFragment,
-    useGetCitiesQuery,
-    useGetCityQuery,
-} from "@/generated/graphql";
-import { StoreState } from "@/store";
-import {
-    HotelItemType,
-    HotelSearchItemType,
-    HotelSearchResult,
-    RoomCfgType,
-} from "@/types";
-import { SearchHotelStruct, formatRoomCfg, useSearchHotels } from "@/utils";
+import { RegularHotelFragment, useGetCityQuery } from "@/generated/graphql";
+import { HotelSearchItemType, HotelSearchResult, RoomCfgType } from "@/types";
+import { SearchHotelStruct } from "@/utils";
 import { useIsAuth } from "@/utils/use-is-auth";
-import Axios from "axios";
-import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useStore } from "zustand";
 
 interface SearchProps {
     message: string;

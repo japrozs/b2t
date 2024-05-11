@@ -1,11 +1,15 @@
+import { isAuth } from "src/middleware/is-auth";
+import { Arg, Query, UseMiddleware } from "type-graphql";
 import { City } from "../entities/city";
-import { Arg, Query } from "type-graphql";
 
 export class CityResolver {
+    @UseMiddleware(isAuth)
     @Query(() => City)
     async getCity(@Arg("code", () => String) code: string) {
         return City.findOne({ where: { code }, relations: ["hotels"] });
     }
+
+    @UseMiddleware(isAuth)
     @Query(() => [City])
     async getCities() {
         return City.find({});

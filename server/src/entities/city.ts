@@ -1,12 +1,12 @@
 import { Field, ObjectType } from "type-graphql";
 import {
+    BaseEntity,
     Column,
     CreateDateColumn,
-    BaseEntity,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
-    OneToMany,
 } from "typeorm";
 import { Hotel } from "./hotel";
 

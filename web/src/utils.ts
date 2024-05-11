@@ -1,13 +1,5 @@
-import useSWR from "swr";
-import {
-    HotelListType,
-    HotelSearchItemType,
-    RoomCfgType,
-    RoomDetailType,
-} from "./types";
-import { useGetCitiesQuery, useGetCityQuery } from "./generated/graphql";
-import request from "request";
-import axios from "axios";
+import { useGetCitiesQuery } from "./generated/graphql";
+import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "./types";
 
 export const formatAutoCompleteResults = (
     struct: { d: string } | undefined

@@ -1,21 +1,16 @@
-import { GetCityQueryResult, RegularHotelFragment } from "@/generated/graphql";
+import { COMMISSION_RATE } from "@/constants";
+import { RegularHotelFragment } from "@/generated/graphql";
+import { useCheckoutStore } from "@/store-provider";
 import { HotelDetailType, HotelSearchItemType, RoomCfgType } from "@/types";
+import { SearchHotelStruct, getCheapestRoom, nightsBetween } from "@/utils";
+import moment from "moment";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa6";
-import {
-    IoIosCheckmark,
-    IoIosCheckmarkCircle,
-    IoIosCloseCircle,
-} from "react-icons/io";
-import moment from "moment";
-import { MdOutlineFastfood } from "react-icons/md";
+import { IoIosCheckmarkCircle, IoIosCloseCircle } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
-import { SearchHotelStruct, getCheapestRoom, nightsBetween } from "@/utils";
+import { MdOutlineAttachMoney, MdOutlineFastfood } from "react-icons/md";
 import { Pill } from "../ui/pill";
-import { COMMISSION_RATE } from "@/constants";
-import { MdOutlineAttachMoney } from "react-icons/md";
-import { useRouter } from "next/router";
-import { useCheckoutStore } from "@/store-provider";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;

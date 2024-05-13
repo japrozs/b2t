@@ -1,8 +1,8 @@
 // import { Meta } from "@/components/shared/meta";
-import { Button } from "@/components/ui/button";
-import { InputField } from "@/components/ui/input-field";
-import { useRegisterMutation } from "@/generated/graphql";
-import { toErrorMap } from "@/utils/to-error-map";
+import { Button } from "../components/ui/button";
+import { InputField } from "../components/ui/input-field";
+import { useRegisterMutation } from "../generated/graphql";
+import { toErrorMap } from "../utils/to-error-map";
 import { useApolloClient } from "@apollo/client";
 import { Form, Formik } from "formik";
 import Head from "next/head";
@@ -28,7 +28,7 @@ const Signup: React.FC<SignupProps> = ({}) => {
                 <div className="px-6 py-5 z-10">
                     <Link href="/">
                         <Image
-                            src="https://raw.githubusercontent.com/japrozs/noble/master/web/public/logo.svg?token=GHSAT0AAAAAACO4RIN6GQXJGIMUNOFSDUMSZPRCYFQ"
+                            src="/logo.svg"
                             className="h-8 w-auto"
                             height={20}
                             width={20}

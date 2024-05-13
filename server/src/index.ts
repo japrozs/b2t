@@ -15,6 +15,9 @@ import { Hotel } from "./entities/hotel";
 import { User } from "./entities/user";
 import { CityResolver } from "./resolvers/city-resolver";
 import { UserResolver } from "./resolvers/user-resolver";
+import { expressIsAuth } from "./middleware/is-auth";
+import { searchHotel } from "./routes/search-hotel";
+import bodyParser from "body-parser";
 
 const main = async () => {
     const conn = await createConnection({
@@ -48,6 +51,7 @@ const main = async () => {
             credentials: true,
         })
     );
+    app.use(bodyParser.json());
 
     app.use(
         session({
@@ -92,6 +96,9 @@ const main = async () => {
     // THESE FIX ARE HIGHLY UNSTABLE AND NEED TO BE FIXED BEFORE SHIPPING TO PRODUCTION
     // refreshDatabaseWithNewHotels();
     // refreshHotelDetails();
+
+    // app.post("/api/search-hotel", expressIsAuth, (req, res) => {
+    app.post("/api/search-hotel", searchHotel);
 
     app.listen(parseInt(process.env.PORT), () => {
         console.log(`🚀 Server started on localhost:${process.env.PORT}`);

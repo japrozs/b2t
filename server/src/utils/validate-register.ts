@@ -53,6 +53,7 @@ export const validateRegister = (options: UserInput) => {
             },
         ];
     }
+    // TODO: same check coded twice
     if (options.password.length <= 6) {
         return [
             {

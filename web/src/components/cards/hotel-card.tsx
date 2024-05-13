@@ -1,6 +1,6 @@
 import { COMMISSION_RATE } from "@/constants";
 import { RegularHotelFragment } from "@/generated/graphql";
-import { useCheckoutStore } from "@/store-provider";
+import { useCheckoutStore } from "../../store/provider";
 import { HotelDetailType, HotelSearchItemType, RoomCfgType } from "@/types";
 import { SearchHotelStruct, getCheapestRoom, nightsBetween } from "@/utils";
 import moment from "moment";
@@ -14,17 +14,10 @@ import { Pill } from "../ui/pill";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
-    hotelStruct: RegularHotelFragment | undefined;
-    infoStruct: SearchHotelStruct;
     cfg: RoomCfgType;
 }
 
-export const HotelCard: React.FC<HotelCardProps> = ({
-    hotel,
-    hotelStruct,
-    infoStruct,
-    cfg,
-}) => {
+export const HotelCard: React.FC<HotelCardProps> = ({ hotel, cfg }) => {
     const [open, setOpen] = useState(false);
     const { setHotel, setRoom, setCfg } = useCheckoutStore((state) => state);
     const router = useRouter();
@@ -32,7 +25,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
         hotel.HotelName,
         hotel.HotelCode,
         hotel,
-        (JSON.parse(hotelStruct?.details || "{}") as HotelDetailType).Details[0]
+        hotel.details.Details[0]
     );
     return (
         <div className="border border-gray-200 mb-5 ">
@@ -40,11 +33,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                 <img
                     className="w-auto h-48 object-cover"
                     src={
-                        (
-                            JSON.parse(
-                                hotelStruct?.details || "{}"
-                            ) as HotelDetailType
-                        ).Details[0].Images.Img[0] ||
+                        hotel.details.Details[0].Images.Img[0] ||
                         `https://previews.123rf.com/images/happyvector071/happyvector0711608/happyvector071160800591/62947847-abstract-creative-vector-design-layout-with-text-do-not-exist.jpg`
                     }
                 />
@@ -55,11 +44,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     <div className="flex items-center mt-0.5 my-1">
                         <p className="flex items-center text-sm text-gray-500 font-medium">
                             <IoLocationOutline className="mr-1.5" />
-                            {(
-                                JSON.parse(
-                                    hotelStruct?.details || "{}"
-                                ) as HotelDetailType
-                            ).Details[0].HotelAddress.split(",")
+                            {hotel.details.Details[0].HotelAddress.split(",")
                                 .slice(0, 2)
                                 .join(", ") || hotel.Chain}
                         </p>
@@ -103,25 +88,22 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     {/* Show modal with hotel content full message */}
                     {/* show modal with all the pills when hovering on the facilities button */}
                     <div className="mt-3.5 flex flex-wrap items-center">
-                        {(
-                            JSON.parse(
-                                hotelStruct?.details || "{}"
-                            ) as HotelDetailType
-                        ).Details[0].HotelFacilities.Facility.slice(0, 3).map(
-                            (fac: string, idx: number) => (
-                                <div key={idx} className="mr-1.5 mb-1.5">
-                                    <Pill label={fac} />
-                                </div>
-                            )
-                        )}
+                        {hotel.details.Details[0].HotelFacilities.Facility.slice(
+                            0,
+                            3
+                        ).map((fac: string, idx: number) => (
+                            <div key={idx} className="mr-1.5 mb-1.5">
+                                <Pill label={fac} />
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div className="self-end text-right min-w-36 flex flex-col">
                     <p className="text-sm text-gray-400 font-medium">
                         Total for{" "}
                         {nightsBetween(
-                            new Date(infoStruct.in),
-                            new Date(infoStruct.out)
+                            new Date(hotel.StartDate),
+                            new Date(hotel.EndDate)
                         )}{" "}
                         nights
                     </p>

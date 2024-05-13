@@ -1,16 +1,16 @@
-import { CheckoutStoreProvider } from "@/store-provider";
-import "@/styles/globals.css";
+import "../styles/globals.css";
+import { CheckoutStoreProvider } from "../store/provider";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import Axios from "axios";
+import Axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 
-Axios.defaults.baseURL = "http://localhost:3000/api/";
+Axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api/`;
 Axios.defaults.withCredentials = true;
 
-const fetcher = async (url: string) => {
+const fetcher = async (options: object): Promise<AxiosResponse<any, any>> => {
     try {
-        const res = await Axios.get(url);
+        const res = await Axios(options);
         return res.data;
     } catch (err: any) {
         throw err.response.data;
@@ -23,6 +23,7 @@ const client = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
+// TODO: add spinny small loader bar at the top of page
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <ApolloProvider client={client}>

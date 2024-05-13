@@ -137,6 +137,7 @@ export interface RoomDetailType {
     };
     DiscountDetails: {};
     CancellationPolicyDetails: {
+        // time is in local time of the location
         Cancellation: {
             FromDate: number;
             FromTime: string;
@@ -162,6 +163,7 @@ export interface HotelSearchItemType {
     HotelName: string;
     PreferredStatus: string;
     PropertyType: string;
+    details: HotelDetailType;
     StarRating: number;
     GeoLocation: {
         Longitude: string;

@@ -1,0 +1,10 @@
+fragment RegularCity on City {
+    id
+    code
+    name
+    countryName
+    countryCode
+    createdAt
+    updatedAt
+    __typename
+}

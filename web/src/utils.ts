@@ -1,4 +1,5 @@
-import { useGetCitiesQuery } from "./generated/graphql";
+import axios from "axios";
+import { useGetAllCitiesQuery } from "./generated/graphql";
 import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "./types";
 
 export const formatAutoCompleteResults = (
@@ -28,7 +29,7 @@ export interface DetailStruct {
 }
 
 export const useSearchHotels = async (struct: SearchHotelStruct) => {
-    const { data: city, loading } = useGetCitiesQuery();
+    const { data: city, loading } = useGetAllCitiesQuery();
     while (!loading) {}
     console.log(city);
     return city;
@@ -86,89 +87,43 @@ export const formatCfg = (cfg: RoomCfgType, room: RoomDetailType) => {
     return formattedRoomCfg;
 };
 
-// export const validateAvailability = (
-//     hotel: HotelSearchItemType,
-//     room: RoomDetailType,
-//     cfg: RoomCfgType
-// ) => {
-//     const formattedRoomCfg = formatRoomCfg(cfg);
-//     formattedRoomCfg.forEach((cfg) => {
-//         (cfg as any).RoomTypeCode = room.RoomTypeCode;
-//         (cfg as any).MealPlanCode = parseInt(room.MealPlanCode);
-//         (cfg as any).ContractTokenId = parseInt(room.ContractTokenId);
-//         (cfg as any).RoomConfigurationId = room.RoomConfigurationId;
-//     });
-//     axios
-//         .post(
-//             `https://api.iwtxconnect.com/hotel/availability`,
-//             JSON.stringify({
-//                 OutputFormat: "JSON",
-//                 Profile: {
-//                     Password: process.env.NEXT_PUBLIC_API_PASSWORD,
-//                     Code: process.env.NEXT_PUBLIC_API_CODE,
-//                     TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
-//                 },
-//                 SearchCriteria: {
-//                     RoomConfiguration: {
-//                         Room: formattedRoomCfg,
-//                     },
-//                     StartDate: hotel.StartDate,
-//                     EndDate: hotel.EndDate,
-//                     HotelCode: hotel.HotelCode,
-//                     City: "LON",
-//                     // THIS IS NATIONALITY OF TRAVELLER
-//                     Nationality: "LON",
-//                     IncludeRateDetails: "Y",
-//                     CancellationPolicy: "Y",
-//                 },
-//             }),
-//             {
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                 },
-//             }
-//         )
-//         .then((response) => {
-//             console.log(response);
-//         })
-//         .catch((e) => {
-//             console.log("error :: ", e);
-//         });
-//     // const options = {
-//     //     method: "POST",
-//     //     url: `https://api.iwtxconnect.com/hotel/api/v1/search`,
-//     //     headers: {
-//     //         "Content-Type": "application/json",
-//     //     },
-//     //     body: JSON.stringify({
-//     //         Profile: {
-//     //             Password: process.env.NEXT_PUBLIC_API_PASSWORD,
-//     //             Code: process.env.NEXT_PUBLIC_API_CODE,
-//     //             TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
-//     //         },
-//     //         SearchCriteria: {
-//     //             RoomConfiguration: {
-//     //                 Room: formattedRoomCfg,
-//     //             },
-//     //             StartDate: hotel.StartDate,
-//     //             EndDate: hotel.EndDate,
-//     //             HotelCode: hotel.HotelCode,
-//     //             City: "LON",
-//     //             // THIS IS NATIONALITY OF TRAVELLER
-//     //             Nationality: "LON",
-//     //             IncludeRateDetails: "Y",
-//     //             CancellationPolicy: "Y",
-//     //         },
-//     //     }),
-//     // };
-
-//     // request(options, function (error: Error, response: any) {
-//     //     if (error) {
-//     //         console.log({
-//     //             error: "Could not get hotel list",
-//     //             err_msg: error.message,
-//     //         });
-//     //     }
-//     //     console.log(JSON.parse(response.body));
-//     // });
-// };
+export const validateAvailability = (
+    hotel: HotelSearchItemType,
+    room: RoomDetailType,
+    cfg: RoomCfgType
+) => {
+    const formattedRoomCfg = formatRoomCfg(cfg);
+    formattedRoomCfg.forEach((cfg) => {
+        (cfg as any).RoomTypeCode = room.RoomTypeCode;
+        (cfg as any).MealPlanCode = parseInt(room.MealPlanCode);
+        (cfg as any).ContractTokenId = parseInt(room.ContractTokenId);
+        (cfg as any).RoomConfigurationId = room.RoomConfigurationId;
+    });
+    axios
+        .post("/proxy?url=https://api.iwtxconnect.com/hotel/api/v1/search", {
+            OutputFormat: "JSON",
+            Profile: {
+                Password: process.env.NEXT_PUBLIC_API_PASSWORD,
+                Code: process.env.NEXT_PUBLIC_API_CODE,
+                TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+            },
+            SearchCriteria: {
+                RoomConfiguration: {
+                    Room: formattedRoomCfg,
+                },
+                StartDate: hotel.StartDate,
+                EndDate: hotel.EndDate,
+                HotelCode: hotel.HotelCode,
+                City: "LON",
+                Nationality: "LON",
+                IncludeRateDetails: "Y",
+                CancellationPolicy: "Y",
+            },
+        })
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+        });
+};

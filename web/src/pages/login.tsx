@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { InputField } from "@/components/ui/input-field";
+import { Button } from "../components/ui/button";
+import { InputField } from "../components/ui/input-field";
 import { useLoginMutation } from "@/generated/graphql";
-import { toErrorMap } from "@/utils/to-error-map";
-import { useIsAuth } from "@/utils/use-is-auth";
+import { toErrorMap } from "../utils/to-error-map";
+import { useIsAuth } from "../utils/use-is-auth";
 import { useApolloClient } from "@apollo/client";
 import { Form, Formik } from "formik";
 import Head from "next/head";

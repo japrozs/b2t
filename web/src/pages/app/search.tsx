@@ -1,23 +1,30 @@
 import { HotelCard } from "@/components/cards/hotel-card";
-import { RegularHotelFragment, useGetCityQuery } from "@/generated/graphql";
-import { HotelSearchItemType, HotelSearchResult, RoomCfgType } from "@/types";
+import {
+    HotelDetailType,
+    HotelSearchItemType,
+    HotelSearchResult,
+    RoomCfgType,
+} from "@/types";
 import { SearchHotelStruct } from "@/utils";
 import { useIsAuth } from "@/utils/use-is-auth";
+import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
 
-interface SearchProps {
-    message: string;
-}
+interface SearchProps {}
 
-const Search: React.FC<SearchProps> = ({ message }) => {
+const Search: React.FC<SearchProps> = ({}) => {
     useIsAuth();
     const router = useRouter();
     const [struct, setStruct] = useState<SearchHotelStruct | undefined>(
         undefined
     );
-
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [hotels, setHotels] = useState<HotelSearchResult>({
+        Hotels: {
+            Hotel: [],
+        },
+    });
     useEffect(() => {
         if (!router.isReady) return;
 
@@ -27,43 +34,35 @@ const Search: React.FC<SearchProps> = ({ message }) => {
             out: router.query.out as string,
             cfg: JSON.parse(router.query.cfg as string),
         };
-        // console.log(struct);
         setStruct(struct);
     }, [router.isReady]);
 
-    const { data, loading } = useGetCityQuery({
-        variables: {
-            code: struct?.city || "",
-        },
-    });
+    useEffect(() => {
+        if (!struct) {
+            return;
+        }
 
-    // console.log(data);
-    console.log(
-        "hotelcodes :: ",
-        data?.getCity.hotels.map((hotel) => hotel.code).join(", ")
-    );
-    // TODO: show text saying no availabilities found if we get an error
-    const { data: hotels, isLoading: hotelsLoading } =
-        useSWR<HotelSearchResult>(
-            // TODO: pass the config struct instead of hard-coded values
-            `/search-hotel?cfg=${JSON.stringify(
-                struct?.cfg
-            )}&checkinDate=${struct?.in.replaceAll(
-                "-",
-                ""
-            )}&checkoutDate=${struct?.out.replaceAll(
-                "-",
-                ""
-            )}&hotelCodes=${data?.getCity.hotels
-                .map((hotel) => hotel.code)
-                .join(",")}&city=${struct?.city}`
-        );
-    // console.log(hotels);
-
+        axios
+            .post("/search-hotel", {
+                city: struct.city,
+                startDate: struct.in,
+                endDate: struct.out,
+                cfg: JSON.stringify(struct.cfg),
+            })
+            .then((response) => {
+                if (JSON.stringify(response.data) !== JSON.stringify(hotels)) {
+                    setHotels(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+        setIsLoading(false);
+    }, [struct]);
     return (
-        <>
-            {loading || hotelsLoading ? (
-                <p>loading....</p>
+        <div>
+            {isLoading ? (
+                <p>loading...</p>
             ) : (
                 <div>
                     <div className="flex items-start max-w-6xl mx-auto">
@@ -72,23 +71,12 @@ const Search: React.FC<SearchProps> = ({ message }) => {
                         </div>
                         {/* https://foto.hrsstatic.com/fotos/0/2/269/213/80/000000/http%3A%2F%2Ffoto-origin.hrsstatic.com%2Ffoto%2F6%2F8%2F6%2F4%2F%2Fteaser_686447.jpg/WYT98yP7mJCpeMkikrasbQ%3D%3D/134%2C106/6/Holiday_Inn_Express_LONDON_-_EXCEL-London-Aussenansicht-3-686447.jpg */}
                         <div className="w-9/12 p-2.5">
-                            {hotels?.Hotels.Hotel.map(
+                            {hotels.Hotels.Hotel.map(
                                 (hotel: HotelSearchItemType, idx: number) => (
                                     <HotelCard
                                         key={idx}
                                         hotel={hotel}
-                                        cfg={
-                                            JSON.parse(
-                                                router.query.cfg as string
-                                            ) as RoomCfgType
-                                        }
-                                        infoStruct={struct as SearchHotelStruct}
-                                        hotelStruct={
-                                            data?.getCity.hotels.filter(
-                                                (h: RegularHotelFragment) =>
-                                                    h.code === hotel.HotelCode
-                                            )[0]
-                                        }
+                                        cfg={struct?.cfg as RoomCfgType}
                                     />
                                 )
                             )}
@@ -96,7 +84,7 @@ const Search: React.FC<SearchProps> = ({ message }) => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

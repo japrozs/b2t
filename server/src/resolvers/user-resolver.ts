@@ -43,12 +43,12 @@ export class UserResolver {
         @Arg("newPassword") newPassword: string,
         @Ctx() { redis, req }: Context
     ): Promise<UserResponse> {
-        if (newPassword.length <= 2) {
+        if (newPassword.length <= 6) {
             return {
                 errors: [
                     {
                         field: "newPassword",
-                        message: "length must be greater than 2",
+                        message: "length must be greater than 6",
                     },
                 ],
             };

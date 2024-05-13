@@ -81,7 +81,7 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getCities: Array<City>;
+  getAllCities: Array<City>;
   getCity: City;
   me?: Maybe<User>;
 };
@@ -165,10 +165,10 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string } | null } };
 
-export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCitiesQuery = { __typename?: 'Query', getCities: Array<{ __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string }> };
+export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string }> };
 
 export type GetCityQueryVariables = Exact<{
   code: Scalars['String']['input'];
@@ -342,45 +342,45 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const GetCitiesDocument = gql`
-    query getCities {
-  getCities {
+export const GetAllCitiesDocument = gql`
+    query getAllCities {
+  getAllCities {
     ...RegularCity
   }
 }
     ${RegularCityFragmentDoc}`;
 
 /**
- * __useGetCitiesQuery__
+ * __useGetAllCitiesQuery__
  *
- * To run a query within a React component, call `useGetCitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCitiesQuery({
+ * const { data, loading, error } = useGetAllCitiesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+export function useGetAllCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCitiesQuery, GetAllCitiesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+        return Apollo.useQuery<GetAllCitiesQuery, GetAllCitiesQueryVariables>(GetAllCitiesDocument, options);
       }
-export function useGetCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+export function useGetAllCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCitiesQuery, GetAllCitiesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+          return Apollo.useLazyQuery<GetAllCitiesQuery, GetAllCitiesQueryVariables>(GetAllCitiesDocument, options);
         }
-export function useGetCitiesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCitiesQuery, GetCitiesQueryVariables>) {
+export function useGetAllCitiesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAllCitiesQuery, GetAllCitiesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCitiesQuery, GetCitiesQueryVariables>(GetCitiesDocument, options);
+          return Apollo.useSuspenseQuery<GetAllCitiesQuery, GetAllCitiesQueryVariables>(GetAllCitiesDocument, options);
         }
-export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
-export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
-export type GetCitiesSuspenseQueryHookResult = ReturnType<typeof useGetCitiesSuspenseQuery>;
-export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
+export type GetAllCitiesQueryHookResult = ReturnType<typeof useGetAllCitiesQuery>;
+export type GetAllCitiesLazyQueryHookResult = ReturnType<typeof useGetAllCitiesLazyQuery>;
+export type GetAllCitiesSuspenseQueryHookResult = ReturnType<typeof useGetAllCitiesSuspenseQuery>;
+export type GetAllCitiesQueryResult = Apollo.QueryResult<GetAllCitiesQuery, GetAllCitiesQueryVariables>;
 export const GetCityDocument = gql`
     query getCity($code: String!) {
   getCity(code: $code) {

@@ -1,5 +1,0 @@
-query getCities {
-    getCities {
-        ...RegularCity
-    }
-}

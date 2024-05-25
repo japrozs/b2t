@@ -1,8 +1,0 @@
-query getCity($code: String!) {
-    getCity(code: $code) {
-        ...RegularCity
-        hotels {
-            ...RegularHotel
-        }
-    }
-}

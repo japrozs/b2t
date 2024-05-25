@@ -38,7 +38,8 @@
         "querystring": "^0.2.1",
         "request": "^2.88.2",
         "type-graphql": "^1.1.1",
-        "typeorm": "^0.2.38"
+        "typeorm": "^0.2.38",
+        "zod": "^3.23.8"
     },
     "devDependencies": {
         "@types/connect-redis": "^0.0.17",

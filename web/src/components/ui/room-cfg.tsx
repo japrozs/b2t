@@ -196,8 +196,10 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                             <button
                                 className="bg-red-500 flex self-center ml-auto mr-0 mt-4 rounded-md py-2 px-3 text-white font-medium text-xs"
                                 onClick={() => {
+                                    // TODO: this removes all rooms
                                     const roomCpy = [...roomConfig.rooms];
-                                    roomCpy.splice(1, idx);
+                                    console.log(roomCpy, idx);
+                                    roomCpy.splice(idx, 1);
                                     setRoomConfig({ rooms: roomCpy });
                                 }}
                             >

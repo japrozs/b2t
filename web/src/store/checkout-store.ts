@@ -1,4 +1,5 @@
 import { createStore } from "zustand/vanilla";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "../types";
 
 export type StoreState = {
@@ -28,37 +29,27 @@ export const defaultInitState: StoreState = {
 export const createCheckoutStore = (
     initState: StoreState = defaultInitState
 ) => {
-    return createStore<CheckoutStore>()((set) => ({
-        ...initState,
-        setHotel: (hotel: HotelSearchItemType) =>
-            set({
-                hotel,
+    return createStore<CheckoutStore>()(
+        persist(
+            (set) => ({
+                ...initState,
+                setHotel: (hotel: HotelSearchItemType) =>
+                    set({
+                        hotel,
+                    }),
+                setRoom: (r: RoomDetailType) =>
+                    set({
+                        room: r,
+                    }),
+                setCfg: (c: RoomCfgType) =>
+                    set({
+                        cfg: c,
+                    }),
             }),
-        setRoom: (r: RoomDetailType) =>
-            set({
-                room: r,
-            }),
-        setCfg: (c: RoomCfgType) =>
-            set({
-                cfg: c,
-            }),
-    }));
+            {
+                name: "checkout-store",
+                storage: createJSONStorage(() => localStorage),
+            }
+        )
+    );
 };
-
-// export const useCheckoutStore = create<StoreState>()((set) => ({
-//     hotel: {},
-//     room: {},
-//     cfg: {},
-//     setHotel: (hotel: HotelSearchItemType) =>
-//         set({
-//             hotel,
-//         }),
-//     setRoom: (r: RoomDetailType) =>
-//         set({
-//             room: r,
-//         }),
-//     setCfg: (c: RoomCfgType) =>
-//         set({
-//             cfg: c,
-//         }),
-// }));

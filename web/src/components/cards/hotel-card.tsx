@@ -21,12 +21,12 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, cfg }) => {
     const [open, setOpen] = useState(false);
     const { setHotel, setRoom, setCfg } = useCheckoutStore((state) => state);
     const router = useRouter();
-    console.log(
-        hotel.HotelName,
-        hotel.HotelCode,
-        hotel,
-        hotel.details.Details[0]
-    );
+    // console.log(
+    //     hotel.HotelName,
+    //     hotel.HotelCode,
+    //     hotel,
+    //     hotel.details.Details[0]
+    // );
     return (
         <div className="border border-gray-200 mb-5 ">
             <div className="p-5 flex items-start">

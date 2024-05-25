@@ -87,43 +87,30 @@ export const formatCfg = (cfg: RoomCfgType, room: RoomDetailType) => {
     return formattedRoomCfg;
 };
 
-export const validateAvailability = (
-    hotel: HotelSearchItemType,
-    room: RoomDetailType,
-    cfg: RoomCfgType
-) => {
-    const formattedRoomCfg = formatRoomCfg(cfg);
-    formattedRoomCfg.forEach((cfg) => {
-        (cfg as any).RoomTypeCode = room.RoomTypeCode;
-        (cfg as any).MealPlanCode = parseInt(room.MealPlanCode);
-        (cfg as any).ContractTokenId = parseInt(room.ContractTokenId);
-        (cfg as any).RoomConfigurationId = room.RoomConfigurationId;
-    });
-    axios
-        .post("/proxy?url=https://api.iwtxconnect.com/hotel/api/v1/search", {
-            OutputFormat: "JSON",
-            Profile: {
-                Password: process.env.NEXT_PUBLIC_API_PASSWORD,
-                Code: process.env.NEXT_PUBLIC_API_CODE,
-                TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
-            },
-            SearchCriteria: {
-                RoomConfiguration: {
-                    Room: formattedRoomCfg,
-                },
-                StartDate: hotel.StartDate,
-                EndDate: hotel.EndDate,
-                HotelCode: hotel.HotelCode,
-                City: "LON",
-                Nationality: "LON",
-                IncludeRateDetails: "Y",
-                CancellationPolicy: "Y",
-            },
-        })
-        .then((response) => {
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-        });
+export const parseDate = (str: string): Date => {
+    if (!/^(\d){8}$/.test(str)) return new Date();
+    var y = parseInt(str.substring(0, 4)),
+        m = parseInt(str.substring(4, 2)),
+        d = parseInt(str.substring(6, 2));
+    return new Date(y, m, d);
 };
+
+// interface CheckoutInfoDataType {
+//     title: string;
+//     firstName: string;
+//     lastName: string;
+//     age: string;
+//     nationality: string;
+//     gender: string;
+// }
+// interface CheckoutInfoType {
+//     adultsData: CheckoutInfoDataType[];
+//     childrenData: CheckoutInfoDataType[];
+// }
+
+// export const mergeInfoAndConfig = (
+//     info: CheckoutInfoType,
+//     cfg: RoomCfgType
+// ) => {
+//     return info;
+// };

@@ -50,7 +50,7 @@ const makeRequest = async (code: string, id: number) => {
 
 export const refreshHotelDetails = async () => {
     const hotels = await Hotel.find({});
-    const codes = [];
+    // const codes = [];
     for (let i = 0; i < hotels.length; i++) {
         setTimeout(() => {
             const hotel = hotels[i];

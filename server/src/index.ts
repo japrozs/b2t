@@ -18,6 +18,11 @@ import { UserResolver } from "./resolvers/user-resolver";
 import { expressIsAuth } from "./middleware/is-auth";
 import { searchHotel } from "./routes/search-hotel";
 import bodyParser from "body-parser";
+import { checkAvailability } from "./routes/check-availability";
+import { createBooking } from "./routes/create-booking";
+import { Booking } from "./entities/booking";
+import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
+import { refreshHotelDetails } from "./utils/refresh-details";
 
 const main = async () => {
     const conn = await createConnection({
@@ -26,7 +31,7 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [User, City, Hotel],
+        entities: [User, City, Hotel, Booking],
     });
     await conn.runMigrations();
     // (await Hotel.find({ where: { details: "{}" } })).forEach((hotel: Hotel) => {
@@ -97,8 +102,10 @@ const main = async () => {
     // refreshDatabaseWithNewHotels();
     // refreshHotelDetails();
 
-    // app.post("/api/search-hotel", expressIsAuth, (req, res) => {
+    // TODO: add expressAuth middleware for these routes
     app.post("/api/search-hotel", searchHotel);
+    app.post("/api/check-availability", checkAvailability);
+    app.post("/api/create-booking", createBooking);
 
     app.listen(parseInt(process.env.PORT), () => {
         console.log(`🚀 Server started on localhost:${process.env.PORT}`);

@@ -3,7 +3,9 @@ import { CheckoutStoreProvider } from "../store/provider";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import Axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import type { AppProps } from "next/app";
+import NextTransitionBar from "next-transition-bar";
 import { SWRConfig } from "swr";
+import { Toaster } from "sonner";
 
 Axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api/`;
 Axios.defaults.withCredentials = true;
@@ -34,7 +36,9 @@ export default function App({ Component, pageProps }: AppProps) {
                 }}
             >
                 <CheckoutStoreProvider>
+                    <NextTransitionBar color={"#35E0A1"} showSpinner={false} />
                     <Component {...pageProps} />
+                    <Toaster />
                 </CheckoutStoreProvider>
             </SWRConfig>
         </ApolloProvider>

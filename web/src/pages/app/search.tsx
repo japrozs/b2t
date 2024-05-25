@@ -1,4 +1,5 @@
 import { HotelCard } from "@/components/cards/hotel-card";
+import { Spinner } from "@/components/shared/spinner";
 import {
     HotelDetailType,
     HotelSearchItemType,
@@ -13,19 +14,21 @@ import React, { useEffect, useState } from "react";
 
 interface SearchProps {}
 
+// TODo: allow not to pick dates before today
 const Search: React.FC<SearchProps> = ({}) => {
     useIsAuth();
     const router = useRouter();
     const [struct, setStruct] = useState<SearchHotelStruct | undefined>(
         undefined
     );
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hotels, setHotels] = useState<HotelSearchResult>({
         Hotels: {
             Hotel: [],
         },
     });
     useEffect(() => {
+        setIsLoading(true);
         if (!router.isReady) return;
 
         const struct: SearchHotelStruct = {
@@ -61,8 +64,11 @@ const Search: React.FC<SearchProps> = ({}) => {
     }, [struct]);
     return (
         <div>
-            {isLoading ? (
-                <p>loading...</p>
+            {/* TODO: stop spinner and show error when there is a search error */}
+            {isLoading || hotels.Hotels.Hotel.length === 0 ? (
+                <div className="h-screen">
+                    <Spinner />
+                </div>
             ) : (
                 <div>
                     <div className="flex items-start max-w-6xl mx-auto">

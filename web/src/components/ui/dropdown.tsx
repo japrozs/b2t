@@ -54,6 +54,7 @@ export const DropDown: React.FC<DropDownProps> = ({
                 className={`w-full ml-auto mr-0 text-sm transition-all cursor-pointer outline-none text-gray-500 font-medium bg-white py-1.5 px-2 border rounded-md hover:bg-gray-50`}
                 name="sort_by"
                 id="sort_by"
+                value={state}
                 onChange={(e) => {
                     setState(e.target.value);
                 }}
@@ -62,7 +63,7 @@ export const DropDown: React.FC<DropDownProps> = ({
                     Choose Airline
                 </option> */}
                 {Object.keys(options).map((key, idx) => (
-                    <option key={idx} value={key} selected={key == state}>
+                    <option key={idx} value={key}>
                         {options[key]}
                     </option>
                 ))}

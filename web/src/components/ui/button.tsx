@@ -48,7 +48,7 @@ export const Button: React.FC<ButtonProps> = ({
                     ? `${
                           color
                               ? color
-                              : "bg-primary-color border-blue-400 text-white"
+                              : "bg-primary-color border-primary-color text-black"
                       } hover:opacity-90`
                     : "bg-white border-gray-300 hover:bg-gray-50"
             } focus:ring-2 ${

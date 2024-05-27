@@ -114,3 +114,75 @@ export const parseDate = (str: string): Date => {
 // ) => {
 //     return info;
 // };
+
+export const sortAndFilterHotels = (
+    hotels: HotelSearchItemType[],
+    schema: {
+        price: boolean;
+        priceSortOrder: string;
+        ratings: boolean;
+        ratingSortOrder: string;
+        query: string;
+    }
+): HotelSearchItemType[] => {
+    console.log(schema);
+    let cpy: HotelSearchItemType[] = [...hotels];
+    if (schema.price) {
+        if (schema.priceSortOrder === "H2L") {
+            cpy = cpy.sort(
+                (a, b) =>
+                    Math.min(
+                        ...b.RoomTypeDetails.Rooms.Room.map(
+                            (room) => room.TotalRate
+                        )
+                    ) -
+                    Math.min(
+                        ...a.RoomTypeDetails.Rooms.Room.map(
+                            (room) => room.TotalRate
+                        )
+                    )
+            );
+        } else {
+            cpy = cpy.sort(
+                (a, b) =>
+                    Math.min(
+                        ...a.RoomTypeDetails.Rooms.Room.map(
+                            (room) => room.TotalRate
+                        )
+                    ) -
+                    Math.min(
+                        ...b.RoomTypeDetails.Rooms.Room.map(
+                            (room) => room.TotalRate
+                        )
+                    )
+            );
+        }
+    }
+    if (schema.ratings) {
+        if (schema.ratingSortOrder === "H2L") {
+            cpy = cpy.sort((a, b) => b.StarRating - a.StarRating);
+        } else {
+            cpy = cpy.sort((a, b) => a.StarRating - b.StarRating);
+        }
+    }
+
+    cpy = cpy.filter((hotel: HotelSearchItemType) => {
+        return hotel.HotelName.trim()
+            .replaceAll("-", "")
+            .replaceAll(".", "")
+            .split(" ")
+            .join("")
+            .toLowerCase()
+            .includes(
+                schema.query
+                    .trim()
+                    .replaceAll("-", "")
+                    .replaceAll(".", "")
+                    .split(" ")
+                    .join("")
+                    .toLowerCase()
+            );
+    });
+
+    return cpy;
+};

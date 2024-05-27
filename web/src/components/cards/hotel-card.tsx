@@ -1,8 +1,6 @@
 import { COMMISSION_RATE } from "@/constants";
-import { RegularHotelFragment } from "@/generated/graphql";
-import { useCheckoutStore } from "../../store/provider";
-import { HotelDetailType, HotelSearchItemType, RoomCfgType } from "@/types";
-import { SearchHotelStruct, getCheapestRoom, nightsBetween } from "@/utils";
+import { HotelSearchItemType, RoomCfgType } from "@/types";
+import { getCheapestRoom, nightsBetween } from "@/utils";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -10,14 +8,24 @@ import { FaStar } from "react-icons/fa6";
 import { IoIosCheckmarkCircle, IoIosCloseCircle } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineAttachMoney, MdOutlineFastfood } from "react-icons/md";
+import { useCheckoutStore } from "../../store/provider";
 import { Pill } from "../ui/pill";
+import { MdAlternateEmail } from "react-icons/md";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
     cfg: RoomCfgType;
+    showPricePerNightPerRoom?: boolean;
 }
 
-export const HotelCard: React.FC<HotelCardProps> = ({ hotel, cfg }) => {
+// TODO: find a way to incorporate two prices (online rate and our rates) into hotel card
+// TODO: display search query at the top and modification
+
+export const HotelCard: React.FC<HotelCardProps> = ({
+    hotel,
+    cfg,
+    showPricePerNightPerRoom,
+}) => {
     const [open, setOpen] = useState(false);
     const { setHotel, setRoom, setCfg } = useCheckoutStore((state) => state);
     const router = useRouter();
@@ -39,6 +47,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, cfg }) => {
                 />
                 <div className="flex flex-col px-5 w-full truncate line-clamp-1 border-r border-gray-200 ">
                     <h1 className="libre text-2xl text-blue-main font-medium truncate text-ellipsis">
+                        {/* show full hotel name on hover */}
                         {hotel.HotelName}
                     </h1>
                     <div className="flex items-center mt-0.5 my-1">
@@ -58,6 +67,14 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, cfg }) => {
                                 />
                             ))}
                     </div>
+                    {hotel.details.Details[0].HotelEmail && (
+                        <div className="flex items-center">
+                            <MdAlternateEmail className="text-gray-400 mr-2" />
+                            <p className="transition-all text-sm text-blue-500 menlo hover:underline">
+                                {hotel.details.Details[0].HotelEmail}
+                            </p>
+                        </div>
+                    )}
                     {/* TODO – the language here is VERY confusing... fix it */}
                     {/* TODO – make pills for the facilites like travala */}
                     <div className="mt-3 flex items-center">
@@ -93,36 +110,76 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, cfg }) => {
                             3
                         ).map((fac: string, idx: number) => (
                             <div key={idx} className="mr-1.5 mb-1.5">
-                                <Pill label={fac} />
+                                <Pill colored label={fac} />
                             </div>
                         ))}
                     </div>
                 </div>
                 <div className="self-end text-right min-w-36 flex flex-col">
-                    <p className="text-sm text-gray-400 font-medium">
-                        Total for{" "}
-                        {nightsBetween(
-                            new Date(hotel.StartDate),
-                            new Date(hotel.EndDate)
-                        )}{" "}
-                        nights
-                    </p>
-                    <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
-                        ${" "}
-                        {Math.round(
-                            getCheapestRoom(hotel.RoomTypeDetails.Rooms.Room)
-                                .RecommendedRetailPrice
-                        )}
-                    </p>
-                    <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
-                        ${" "}
-                        {Math.round(
-                            COMMISSION_RATE *
-                                getCheapestRoom(
-                                    hotel.RoomTypeDetails.Rooms.Room
-                                ).TotalRate
-                        )}
-                    </p>
+                    {showPricePerNightPerRoom ? (
+                        <>
+                            <p className="text-sm text-gray-400 font-medium">
+                                Price per night/room
+                            </p>
+                            <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
+                                ${" "}
+                                {/* this is the TotalRate * COMMISSION_RATE */}
+                                {Math.round(
+                                    (COMMISSION_RATE *
+                                        getCheapestRoom(
+                                            hotel.RoomTypeDetails.Rooms.Room
+                                        ).TotalRate) /
+                                        (nightsBetween(
+                                            new Date(hotel.StartDate),
+                                            new Date(hotel.EndDate)
+                                        ) *
+                                            cfg.rooms.length)
+                                )}
+                            </p>
+                            <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
+                                ${" "}
+                                {/* This is the recommended price from IOLX */}
+                                {Math.round(
+                                    getCheapestRoom(
+                                        hotel.RoomTypeDetails.Rooms.Room
+                                    ).RecommendedRetailPrice /
+                                        (nightsBetween(
+                                            new Date(hotel.StartDate),
+                                            new Date(hotel.EndDate)
+                                        ) *
+                                            cfg.rooms.length)
+                                )}
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <p className="text-sm text-gray-400 font-medium">
+                                Total for{" "}
+                                {nightsBetween(
+                                    new Date(hotel.StartDate),
+                                    new Date(hotel.EndDate)
+                                )}{" "}
+                                nights
+                            </p>
+                            <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
+                                ${" "}
+                                {Math.round(
+                                    COMMISSION_RATE *
+                                        getCheapestRoom(
+                                            hotel.RoomTypeDetails.Rooms.Room
+                                        ).TotalRate
+                                )}
+                            </p>
+                            <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
+                                ${" "}
+                                {Math.round(
+                                    getCheapestRoom(
+                                        hotel.RoomTypeDetails.Rooms.Room
+                                    ).RecommendedRetailPrice
+                                )}
+                            </p>
+                        </>
+                    )}
                     <p className="text-sm text-gray-400 font-medium">
                         Including taxes and fees
                     </p>

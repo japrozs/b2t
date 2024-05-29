@@ -22,6 +22,10 @@ const config: Config = {
             fontSize: {
                 tiny: "0.89rem",
                 smol: "0.95rem",
+                md: "0.9375rem",
+            },
+            lineHeight: {
+                md: "1.375rem",
             },
         },
     },

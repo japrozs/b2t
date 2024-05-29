@@ -186,3 +186,30 @@ export const sortAndFilterHotels = (
 
     return cpy;
 };
+
+export const getFacilitiesMap = (hotels: HotelSearchItemType[]) => {
+    const facilitiesMap: Record<string, number> = {};
+
+    hotels.forEach((hotel) => {
+        const facilities = hotel.details.Details.flatMap(
+            (detail) => detail.HotelFacilities.Facility
+        );
+
+        facilities.forEach((facility) => {
+            if (facilitiesMap[facility]) {
+                facilitiesMap[facility]++;
+            } else {
+                facilitiesMap[facility] = 1;
+            }
+        });
+    });
+
+    const sortedFacilitiesMap = Object.entries(facilitiesMap)
+        .sort((a, b) => b[1] - a[1])
+        .reduce((obj: any, [key, value]) => {
+            obj[key] = value;
+            return obj;
+        }, {});
+
+    return sortedFacilitiesMap;
+};

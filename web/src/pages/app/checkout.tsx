@@ -260,6 +260,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                         COMMISSION_RATE
                                 )}
                             </p>
+                            {/* TODO: change this  */}
                             <p className="text-center text-xs px-2 text-gray-500 font-medium">
                                 By making your booking you agree to the{" "}
                                 <span className="underline font-semibold text-gray-700">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DropDown } from "./dropdown";
+import { countryList } from "@/utils/cities";
 
 interface PersonDetailsProps {
     personType: "Adult" | "Child";
@@ -39,6 +40,7 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
             <p className="text-md font-medium mb-1">
                 {personType} {personIndex + 1} details
             </p>
+            {/* TODO: add labels to these inputs (its ambigous) */}
             <div className="flex items-center space-x-5">
                 {/* <input
                     className="w-min border border-gray-200 rounded-md text-sm py-1 px-2"
@@ -84,13 +86,19 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                     type="number"
                     placeholder="Age"
                 />
-                <input
+                {/* <input
                     className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
                     value={nationality}
                     onChange={(e) => {
                         setNationality(e.target.value);
                     }}
                     placeholder="Nationality"
+                /> */}
+                <DropDown
+                    options={countryList}
+                    label="Nationality"
+                    state={nationality}
+                    setState={setNationality}
                 />
                 {/* <input
                     className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"

@@ -10,7 +10,11 @@ import {
     HotelSearchResult,
     RoomCfgType,
 } from "@/types";
-import { SearchHotelStruct, sortAndFilterHotels } from "@/utils";
+import {
+    SearchHotelStruct,
+    getFacilitiesMap,
+    sortAndFilterHotels,
+} from "@/utils";
 import { useIsAuth } from "@/utils/use-is-auth";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -85,6 +89,8 @@ const Search: React.FC<SearchProps> = ({}) => {
         structCpy.city = searchCity;
         setStruct(structCpy as SearchHotelStruct);
     }, [searchCity]);
+
+    console.log(getFacilitiesMap(hotels.Hotels.Hotel));
     return (
         <div>
             {isLoading || hotels.Hotels.Hotel.length === 0 ? (
@@ -121,7 +127,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                     hotel results for you based on your search.
                                 </p>
                                 <hr className="bg-gray-900 my-4" />
-                                <p className="font-semibold text-sm">
+                                {/* <p className="font-semibold text-md">
                                     Price display
                                 </p>
                                 <div className="mt-2 flex flex-wrap space-x-2.5 items-center">
@@ -147,9 +153,10 @@ const Search: React.FC<SearchProps> = ({}) => {
                                             setShowTotalPrice(true);
                                         }}
                                     />
-                                </div>
+                                </div> 
                                 <hr className="bg-gray-900 my-4" />
-                                <p className="font-semibold text-sm">
+                                */}
+                                <p className="font-semibold text-base">
                                     Filter by hotel/chain
                                 </p>
                                 <input
@@ -160,6 +167,29 @@ const Search: React.FC<SearchProps> = ({}) => {
                                     className={`font-medium w-full text-gray-700 shadow-sm transition-all text-smol border placeholder-gray-300 py-1 px-3 mt-2 mb-1.5 bg-white rounded-md outline-none focus:ring-2 focus:ring-border-blue-100`}
                                     placeholder={"Schrute Farms"}
                                 />
+                                <hr className="bg-gray-900 my-4" />
+                                <p className="font-semibold text-base mb-2">
+                                    Popular filters
+                                </p>
+                                {Object.entries(
+                                    getFacilitiesMap(hotels.Hotels.Hotel)
+                                ).map(([key, value], idx: number) => (
+                                    <div
+                                        key={idx}
+                                        className="my-4 flex items-center"
+                                    >
+                                        <p className="text-md font-medium text-gray-700">
+                                            {key}
+                                        </p>
+                                        <p className="bg-green-100 border border-green-500 text-green-700 font-medium text-xs px-1.5 py-0.5 ml-2.5 rounded-full">
+                                            {value as string}
+                                        </p>
+                                        <input
+                                            className="ml-auto mr-0 fill-purple-500"
+                                            type="checkbox"
+                                        />
+                                    </div>
+                                ))}
                             </div>
                             {/* https://foto.hrsstatic.com/fotos/0/2/269/213/80/000000/http%3A%2F%2Ffoto-origin.hrsstatic.com%2Ffoto%2F6%2F8%2F6%2F4%2F%2Fteaser_686447.jpg/WYT98yP7mJCpeMkikrasbQ%3D%3D/134%2C106/6/Holiday_Inn_Express_LONDON_-_EXCEL-London-Aussenansicht-3-686447.jpg */}
                             <div className="w-9/12 p-2.5">
@@ -197,32 +227,64 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         setCity={setSearchCity}
                                     />
                                 </div>
-                                <div className="my-4 flex items-center space-x-3">
-                                    <p className="font-medium text-sm">
-                                        Sort by:{" "}
-                                    </p>
-                                    <SearchPill
-                                        label="Price"
-                                        options={{
-                                            H2L: "(High to Low)",
-                                            L2H: "(Low to High)",
-                                        }}
-                                        optionState={sortByPriceOrder}
-                                        optionSetState={setSortByPriceOrder}
-                                        state={sortByPrice}
-                                        setState={setSortByPrice}
-                                    />
-                                    <SearchPill
-                                        options={{
-                                            H2L: "(High to Low)",
-                                            L2H: "(Low to High)",
-                                        }}
-                                        label="Rating"
-                                        optionState={sortByRatingOrder}
-                                        optionSetState={setSortByRatingOrder}
-                                        state={sortByRating}
-                                        setState={setSortByRating}
-                                    />
+                                <div className="my-4 flex items-center">
+                                    <div className="flex items-center space-x-3">
+                                        <p className="font-medium text-sm">
+                                            Sort by:{" "}
+                                        </p>
+                                        <SearchPill
+                                            label="Price"
+                                            options={{
+                                                H2L: "(High to Low)",
+                                                L2H: "(Low to High)",
+                                            }}
+                                            optionState={sortByPriceOrder}
+                                            optionSetState={setSortByPriceOrder}
+                                            state={sortByPrice}
+                                            setState={setSortByPrice}
+                                        />
+                                        <SearchPill
+                                            options={{
+                                                H2L: "(High to Low)",
+                                                L2H: "(Low to High)",
+                                            }}
+                                            label="Rating"
+                                            optionState={sortByRatingOrder}
+                                            optionSetState={
+                                                setSortByRatingOrder
+                                            }
+                                            state={sortByRating}
+                                            setState={setSortByRating}
+                                        />
+                                    </div>
+                                    <div className="ml-auto mr-0 flex flex-wrap space-x-2.5 items-center">
+                                        <Pill
+                                            colored={showPricePerNightPerRoom}
+                                            className="cursor-pointer"
+                                            bgAndBorderColor="border-pink-500 bg-pink-200"
+                                            textColor="text-pink-700"
+                                            label="Price per night/room"
+                                            onClick={() => {
+                                                setShowPricePerNightPerRoom(
+                                                    true
+                                                );
+                                                setShowTotalPrice(false);
+                                            }}
+                                        />
+                                        <Pill
+                                            colored={showTotalPrice}
+                                            className="cursor-pointer"
+                                            bgAndBorderColor="border-pink-500 bg-pink-200"
+                                            textColor="text-pink-700"
+                                            label="Total price"
+                                            onClick={() => {
+                                                setShowPricePerNightPerRoom(
+                                                    false
+                                                );
+                                                setShowTotalPrice(true);
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                                 {sortAndFilterHotels(hotels.Hotels.Hotel, {
                                     price: sortByPrice,

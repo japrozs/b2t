@@ -1498,6 +1498,6 @@ const l = [
 console.log("{");
 for (let i = 0; i < l.length; i++) {
     const el = l[i];
-    console.log(`\"${el.countryAlpha2}\" : \"${el.name.trim()}\",`);
+    console.log(`\"${el.countryAlpha3}\" : \"${el.name.trim()}\",`);
 }
 console.log("}");

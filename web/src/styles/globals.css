@@ -50,3 +50,31 @@ body {
         text-wrap: balance;
     }
 }
+
+.datepicker-input {
+    background-color: white !important;
+    color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 90%;
+    border: 1px solid rgb(209 213 219) !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 5px;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    /* padding-top: 0.54rem;
+    padding-bottom: 0.54rem; */
+}
+
+/* 
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+option {
+    font-family: "Menlo" !important;
+} */

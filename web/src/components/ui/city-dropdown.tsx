@@ -4,11 +4,15 @@ import { DropDown } from "./dropdown";
 
 interface CityDropdownProps {
     city: string;
+    label?: string;
+    fullWidth?: boolean;
     setCity: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const CityDropdown: React.FC<CityDropdownProps> = ({
     city,
+    label,
+    fullWidth,
     setCity,
 }) => {
     const { data, loading } = useGetAllCitiesQuery();
@@ -31,9 +35,9 @@ export const CityDropdown: React.FC<CityDropdownProps> = ({
             {!loading && (
                 <DropDown
                     options={formattedCities}
-                    label="City"
+                    label={label}
                     state={city}
-                    maxWidth
+                    maxWidth={fullWidth ? false : true}
                     setState={setCity}
                 />
             )}

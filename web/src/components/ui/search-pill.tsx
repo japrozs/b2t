@@ -34,7 +34,7 @@ export const SearchPill: React.FC<SearchPillProps> = ({
                     state
                         ? "text-purple-900"
                         : "text-gray-600 group-hover:text-gray-800"
-                }`}
+                } pr-1.5`}
             >
                 {label}
             </p>

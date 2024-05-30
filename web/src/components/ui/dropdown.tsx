@@ -4,7 +4,7 @@ import { AiOutlineQuestionCircle } from "react-icons/ai";
 interface DropDownProps {
     state: string;
     setState: React.Dispatch<React.SetStateAction<string>>;
-    label: string;
+    label?: string;
     maxWidth?: boolean;
     hoverText?: string;
     options: {
@@ -29,9 +29,9 @@ export const DropDown: React.FC<DropDownProps> = ({
         >
             <label
                 htmlFor="cars"
-                className={`w-full flex items-center text-sm ml-1.5 text-gray-800 mr-2`}
+                className={`w-full flex items-center text-md font-semibold mb-1 ml-1.5 text-gray-800 mr-2`}
             >
-                {/* {label} */}
+                {label}
                 {hoverText && hoverText.trim().length !== 0 && (
                     <div className="has-tooltip">
                         <span className="transition-all tooltip rounded shadow-lg p-1.5 border border-gray-300 bg-gray-100 text-dark-compliment -mt-8">

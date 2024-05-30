@@ -2,23 +2,26 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoMdMenu } from "react-icons/io";
-import { Logo } from "./logo";
+import { Logo } from "../ui/logo";
 import { NAVBAR_COLORS } from "@/theme";
+import useRandomColor from "@/utils/use-random-color";
 
-interface NavbarProps {}
+interface NavbarProps {
+    sticky?: boolean;
+}
 
-export const Navbar: React.FC<NavbarProps> = ({}) => {
-    const [themeColors, setThemeColors] = useState<string[]>([]);
-    useEffect(() => {
-        const idx = Math.floor(Math.random() * NAVBAR_COLORS.length);
-        setThemeColors(NAVBAR_COLORS[idx]);
-    });
+export const Navbar: React.FC<NavbarProps> = ({ sticky }) => {
+    const themeColors = useRandomColor();
     return (
         <div
             style={{
                 backgroundColor: themeColors[1],
+                // borderBottomWidth: 1,
+                // borderBottomColor: themeColors[0],
             }}
-            className={`px-4 py-2 flex items-center`}
+            className={`${
+                sticky && "sticky top-0 z-10"
+            } px-4 py-2 flex items-center`}
         >
             <div className="flex items-center w-full max-w-[76rem] mx-auto">
                 <Link href="/app/">

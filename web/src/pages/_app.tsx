@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 }}
             >
                 <CheckoutStoreProvider>
-                    <NextTransitionBar color={"#35E0A1"} showSpinner={false} />
+                    <NextTransitionBar color={"#007AFF"} showSpinner={false} />
                     <Component {...pageProps} />
                     <Toaster />
                 </CheckoutStoreProvider>

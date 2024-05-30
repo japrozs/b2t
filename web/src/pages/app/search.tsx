@@ -1,7 +1,7 @@
 import { HotelCard } from "@/components/cards/hotel-card";
 import { Spinner } from "@/components/shared/spinner";
 import { CityDropdown } from "@/components/ui/city-dropdown";
-import { Navbar } from "@/components/ui/navbar";
+import { Navbar } from "@/components/shared/navbar";
 import { Pill } from "@/components/ui/pill";
 import { SearchPill } from "@/components/ui/search-pill";
 import {
@@ -101,7 +101,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                 <>
                     {/* TODO: stop spinner and show error when there is a search error */}
                     <div>
-                        <Navbar />
+                        <Navbar sticky />
                         <div className="mt-5 space-x-5 flex items-start max-w-[76rem] mx-auto">
                             {/* <div className="w-3/12 m-2.5 mx-0 py-3 px-4 bg-gray-50 rounded"> */}
                             <div className="w-3/12 m-2.5 mx-0 ">

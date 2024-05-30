@@ -213,3 +213,10 @@ export const getFacilitiesMap = (hotels: HotelSearchItemType[]) => {
 
     return sortedFacilitiesMap;
 };
+
+export const FORMAT_GRAMMAR = (val: number, str: string) => {
+    if (val != 1) {
+        return `${val} ${str}s`;
+    }
+    return `${val} ${str}`;
+};

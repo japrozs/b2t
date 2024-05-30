@@ -27,9 +27,14 @@ const Search: React.FC<SearchProps> = ({}) => {
     useIsAuth();
     const router = useRouter();
     const [searchCity, setSearchCity] = useState("");
-    const [struct, setStruct] = useState<SearchHotelStruct | undefined>(
-        undefined
-    );
+    const [struct, setStruct] = useState<SearchHotelStruct>({
+        city: "",
+        in: "",
+        out: "",
+        cfg: {
+            rooms: [],
+        },
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hotels, setHotels] = useState<HotelSearchResult>({
         Hotels: {
@@ -44,42 +49,38 @@ const Search: React.FC<SearchProps> = ({}) => {
     const [showPricePerNightPerRoom, setShowPricePerNightPerRoom] =
         useState(false);
     const [filterQuery, setFilterQuery] = useState("");
+
     useEffect(() => {
-        setIsLoading(true);
         if (!router.isReady) return;
 
+        const query = router.query;
         const struct: SearchHotelStruct = {
-            city: router.query.city as string,
-            in: router.query.in as string,
-            out: router.query.out as string,
-            cfg: JSON.parse(router.query.cfg as string),
+            city: (query.city as string) || "",
+            in: (query.in as string) || "",
+            out: (query.out as string) || "",
+            cfg: JSON.parse((query.cfg as string) || "[]"),
         };
-        setSearchCity(router.query.city as string);
+
+        setSearchCity(struct.city);
         setStruct(struct);
+        fetchHotels(struct);
     }, [router.isReady]);
 
-    useEffect(() => {
-        if (!struct) {
-            return;
-        }
-
-        axios
-            .post("/search-hotel", {
+    const fetchHotels = async (struct: SearchHotelStruct) => {
+        setIsLoading(true);
+        try {
+            const response = await axios.post("/search-hotel", {
                 city: struct.city,
                 startDate: struct.in,
                 endDate: struct.out,
                 cfg: JSON.stringify(struct.cfg),
-            })
-            .then((response) => {
-                if (JSON.stringify(response.data) !== JSON.stringify(hotels)) {
-                    setHotels(response.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
             });
+            setHotels(response.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
         setIsLoading(false);
-    }, [struct]);
+    };
 
     useEffect(() => {
         if (searchCity === struct?.city) {
@@ -87,12 +88,15 @@ const Search: React.FC<SearchProps> = ({}) => {
         }
         const structCpy = { ...struct };
         structCpy.city = searchCity;
-        setStruct(structCpy as SearchHotelStruct);
+        setStruct(structCpy);
+        fetchHotels(structCpy);
     }, [searchCity]);
 
     console.log(getFacilitiesMap(hotels.Hotels.Hotel));
     return (
         <div>
+            {/* STICKY OR NOT? – <Navbar sticky /> */}
+            <Navbar />
             {isLoading || hotels.Hotels.Hotel.length === 0 ? (
                 <div className="h-screen">
                     <Spinner />
@@ -101,8 +105,8 @@ const Search: React.FC<SearchProps> = ({}) => {
                 <>
                     {/* TODO: stop spinner and show error when there is a search error */}
                     <div>
-                        <Navbar sticky />
                         <div className="mt-5 space-x-5 flex items-start max-w-[76rem] mx-auto">
+                            {/* Rest of the component... */}
                             {/* <div className="w-3/12 m-2.5 mx-0 py-3 px-4 bg-gray-50 rounded"> */}
                             <div className="w-3/12 m-2.5 mx-0 ">
                                 <p className="text-2xl font-semibold">
@@ -178,10 +182,10 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         key={idx}
                                         className="my-4 flex items-center"
                                     >
-                                        <p className="text-md font-medium text-gray-700">
+                                        <p className="text-md font-medium text-gray-700 break-normal">
                                             {key}
                                         </p>
-                                        <p className="bg-green-100 border border-green-500 text-green-700 font-medium text-xs px-1.5 py-0.5 ml-2.5 rounded-full">
+                                        <p className="mx-1 bg-green-100 border border-green-500 text-green-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
                                             {value as string}
                                         </p>
                                         <input

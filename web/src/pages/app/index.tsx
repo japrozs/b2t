@@ -10,6 +10,8 @@ import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FORMAT_GRAMMAR, nightsBetween } from "@/utils";
+import { RoomCfgModal } from "@/components/modals/room-cfg-modal";
+import { toast } from "sonner";
 
 interface AppHomePageProps {}
 
@@ -18,8 +20,10 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
     const [city, setCity] = useState("LON");
     const [logout] = useLogoutMutation();
     const [value, setValue] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: new Date().toISOString().split("T")[0],
+        endDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0],
     });
     const client = useApolloClient();
     const [checkinDate, setCheckinDate] = useState(
@@ -28,6 +32,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
     const [checkoutDate, setCheckoutDate] = useState(
         new Date().toISOString().split("T")[0]
     );
+    const [open, setOpen] = useState(false);
     const [roomConfig, setRoomConfig] = useState<RoomCfgType>({
         rooms: [
             {
@@ -58,7 +63,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
             <main
                 className="bg-cover bg-center bg-no-repeat"
                 style={{
-                    backgroundImage: `url("/img/cave.jpg")`,
+                    backgroundImage: `url("/img/tokyo.jpg")`,
                     height: "550px",
                 }}
             >
@@ -67,7 +72,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                         <p className="text-4xl font-semibold text-white drop-shadow-md mb-5">
                             Find hotels for your next trip
                         </p>
-                        <div className="bg-white rounded-xl p-4 max-w-md">
+                        <div className="bg-white rounded-xl p-4 max-w-sm">
                             <CityDropdown
                                 fullWidth
                                 label="City"
@@ -82,8 +87,15 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                 <Datepicker
                                     primaryColor="blue"
                                     value={value}
+                                    separator=" – "
                                     placeholder="DD-MM-YYYY to DD-MM-YYYY"
                                     displayFormat="DD-MM-YYYY"
+                                    // disabledDates={[
+                                    //     {
+                                    //         startDate: "2024-05-30",
+                                    //         endDate: "2024-05-30",
+                                    //     },
+                                    // ]}
                                     // asSingle={true}
                                     inputClassName={
                                         "outline-nonefocus:ring-2  datepicker-input"
@@ -93,6 +105,12 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                         new Date(Date.now())
                                     }
                                     onChange={(val: any) => {
+                                        if (val.startDate === val.endDate) {
+                                            toast.error(
+                                                "A stay of at least 1 night is required"
+                                            );
+                                            return;
+                                        }
                                         console.log("val :: ", val);
                                         setValue(val);
                                     }}
@@ -105,7 +123,12 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                         )}
                                     </p>
                                     <p className="text-sm text-gray-700 font-medium">
-                                        nights
+                                        {nightsBetween(
+                                            new Date(value.startDate),
+                                            new Date(value.endDate)
+                                        ) === 1
+                                            ? "night"
+                                            : "nights"}
                                     </p>
                                 </div>
                             </div>
@@ -113,12 +136,18 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                             <p className="text-gray-800 text-md font-semibold">
                                 Rooms & persons
                             </p>
-                            <p className="text-black cursor-pointer py-1.5 text-lg font-semibold">
+                            <p
+                                onClick={() => setOpen(true)}
+                                className="text-black cursor-pointer py-1.5 text-lg font-semibold"
+                            >
                                 {FORMAT_GRAMMAR(
-                                    roomConfig.rooms.flatMap(
-                                        (room) =>
-                                            room.adults + room.children.length
-                                    )[0],
+                                    roomConfig.rooms
+                                        .flatMap(
+                                            (room) =>
+                                                room.adults +
+                                                room.children.length
+                                        )
+                                        .reduce((a, b) => a + b),
                                     "person"
                                 )}{" "}
                                 –{" "}
@@ -143,9 +172,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                             </button>
                         </div>
                     </div>
-                    <div className="w-full bg-purple-500">
-                        <p>b</p>
-                    </div>
+                    <div className="items-start w-full">{/* <p>b</p> */}</div>
                 </div>
             </main>
             <div className="max-w-[76rem] mx-auto mb-10">
@@ -194,6 +221,12 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                     setRoomConfig={setRoomConfig}
                 />
             </div>
+            <RoomCfgModal
+                open={open}
+                setOpen={setOpen}
+                roomConfig={roomConfig}
+                setRoomConfig={setRoomConfig}
+            />
             <Footer />
         </div>
     );

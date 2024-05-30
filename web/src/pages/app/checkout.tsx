@@ -229,11 +229,13 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                         Room & persons
                                     </p>
                                     <p className="text-sm text-purple-500 font-semibold">
-                                        {(cfg as RoomCfgType).rooms.flatMap(
-                                            (room) =>
-                                                room.adults +
-                                                room.children.length
-                                        )}{" "}
+                                        {(cfg as RoomCfgType).rooms
+                                            .flatMap(
+                                                (room) =>
+                                                    room.adults +
+                                                    room.children.length
+                                            )
+                                            .reduce((a, b) => a + b)}{" "}
                                         persons (
                                         {(cfg as RoomCfgType).rooms.length}{" "}
                                         rooms)

@@ -1,6 +1,6 @@
 import { COMMISSION_RATE } from "@/constants";
 import { HotelSearchItemType, RoomCfgType } from "@/types";
-import { getCheapestRoom, nightsBetween } from "@/utils";
+import { FORMAT_GRAMMAR, getCheapestRoom, nightsBetween } from "@/utils";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -155,11 +155,13 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         <>
                             <p className="text-sm text-gray-400 font-medium">
                                 Total for{" "}
-                                {nightsBetween(
-                                    new Date(hotel.StartDate),
-                                    new Date(hotel.EndDate)
-                                )}{" "}
-                                nights
+                                {FORMAT_GRAMMAR(
+                                    nightsBetween(
+                                        new Date(hotel.StartDate),
+                                        new Date(hotel.EndDate)
+                                    ),
+                                    "night"
+                                )}
                             </p>
                             <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
                                 ${" "}

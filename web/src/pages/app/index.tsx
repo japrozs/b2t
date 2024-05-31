@@ -18,69 +18,16 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 
 interface AppHomePageProps {}
 
-const categories = [
-    {
-        name: "Recent",
-        posts: [
-            {
-                id: 1,
-                title: "Does drinking coffee make you smarter?",
-                date: "5h ago",
-                commentCount: 5,
-                shareCount: 2,
-            },
-            {
-                id: 2,
-                title: "So you've bought coffee... now what?",
-                date: "2h ago",
-                commentCount: 3,
-                shareCount: 2,
-            },
-        ],
-    },
-    {
-        name: "Popular",
-        posts: [
-            {
-                id: 1,
-                title: "Is tech making coffee better or worse?",
-                date: "Jan 7",
-                commentCount: 29,
-                shareCount: 16,
-            },
-            {
-                id: 2,
-                title: "The most innovative things happening in coffee",
-                date: "Mar 19",
-                commentCount: 24,
-                shareCount: 12,
-            },
-        ],
-    },
-    {
-        name: "Trending",
-        posts: [
-            {
-                id: 1,
-                title: "Ask Me Anything: 10 answers to your questions about coffee",
-                date: "2d ago",
-                commentCount: 9,
-                shareCount: 5,
-            },
-            {
-                id: 2,
-                title: "The worst advice we've ever heard about coffee",
-                date: "4d ago",
-                commentCount: 1,
-                shareCount: 2,
-            },
-        ],
-    },
-];
-
 const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
     useIsAuth();
-    const [city, setCity] = useState("LON");
+    const [city, setCity] = useState<{
+        value: string;
+        label: string;
+    }>({
+        value: "LON",
+        label: "(LON) London",
+    });
+    // const [city, setCity] = useState("LON");
     const [logout] = useLogoutMutation();
     const [value, setValue] = useState({
         startDate: new Date().toISOString().split("T")[0],
@@ -144,7 +91,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                 setCity={setCity}
                             />
                             <hr className="border-gray-200 mt-5 mb-2" />
-                            <p className="text-gray-800 text-md font-semibold">
+                            <p className="text-gray-600 text-sm font-medium">
                                 Dates
                             </p>
                             <div className="flex items-center">
@@ -197,7 +144,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                 </div>
                             </div>
                             <hr className="border-gray-200 mt-5 mb-2" />
-                            <p className="text-gray-800 text-md font-semibold">
+                            <p className="text-gray-600 text-sm font-medium">
                                 Rooms & persons
                             </p>
                             <p
@@ -223,11 +170,13 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                             <button
                                 onClick={() => {
                                     router.push(
-                                        `/app/search?city=${city}&in=${
+                                        `/app/search?city=${city.value}&in=${
                                             value.startDate
                                         }&out=${
                                             value.endDate
-                                        }&cfg=${JSON.stringify(roomConfig)}`
+                                        }&cfg=${JSON.stringify(
+                                            roomConfig
+                                        )}&name=${city.label}`
                                     );
                                 }}
                                 className="transition-all mt-2.5 bg-blue-600 w-full text-center py-2 rounded-lg text-white font-medium drop-shadow-sm hover:bg-opacity-95"
@@ -253,7 +202,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                 }}
                 className="bg-cover bg-center bg-no-repeat max-w-6xl rounded-lg p-10 mx-auto mt-12 mb-0"
             >
-                <p className="text-5xl mb-6  text-center text-purple-900 spoof-bold">
+                <p className="text-5xl mb-6 font-bold text-center text-purple-900 g-sans">
                     Book a trip
                     <br />
                     within minutes
@@ -483,7 +432,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                     </div>
                 </div>
             </div>
-            <div className="bg-[#050f2c] px-10 py-16">
+            <div className="bg-[#050f2c] px-10 py-20">
                 <div className="max-w-6xl mx-auto flex items-center space-x-8">
                     <div className="w-1/4">
                         <img
@@ -492,21 +441,29 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                         />
                     </div>
                     <div className="w-2/4">
-                        <p className="text-5xl font-normal text-white text-center spoof-bold">
+                        <p className="text-6xl text-white text-center g-sans font-bold">
                             You <span className="text-[#8E43E7]">deserve</span>
                             <br />
                             that{" "}
                             <span className="text-[#00AEEF]">vacation!</span>
                         </p>
-                        <p className="max-w-xl mx-auto text-center text-blue-50 font-medium mt-4">
+                        <p className="max-w-xl mx-auto text-base text-center text-blue-50 font-medium mt-4">
                             Escape the everyday and immerse yourself in a world
                             of relaxation and adventure. Discover our exclusive
                             offers and start planning your dream getaway today.
                             Because you’ve earned it!
                         </p>
-                        <button className="transition-all mt-10 bg-[#00395D] text-[#00AEEF] flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
-                            Book your dream getaway
-                        </button>
+                        <a
+                            href={`/app/search?city=LON&in=${
+                                value.startDate
+                            }&out=${value.endDate}&cfg=${JSON.stringify(
+                                roomConfig
+                            )}`}
+                        >
+                            <button className="transition-all mt-10 bg-[#00395D] text-[#00AEEF] flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
+                                Book your dream getaway
+                            </button>
+                        </a>
                     </div>
                     <div className="w-1/4">
                         <img
@@ -517,7 +474,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                 </div>
             </div>
             {/* TODO – change this copy pasted content */}
-            <div className="bg-gray-50 p-10">
+            <div className="bg-gray-50 p-10 px-5">
                 <div className="max-w-6xl mx-auto text-gray-800">
                     <p className="text-2xl font-semibold">
                         Find the perfect hotel for your trip with HRS!

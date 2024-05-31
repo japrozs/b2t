@@ -214,9 +214,45 @@ export const getFacilitiesMap = (hotels: HotelSearchItemType[]) => {
     return sortedFacilitiesMap;
 };
 
-export const FORMAT_GRAMMAR = (val: number, str: string) => {
+export const FORMAT_GRAMMAR = (val: number, str: string, plural?: string) => {
     if (val != 1) {
-        return `${val} ${str}s`;
+        return `${val} ${plural || `${str}s`}`;
     }
     return `${val} ${str}`;
+};
+
+type PersonDetailType = {
+    age: string;
+    firstName: string;
+    gender: string;
+    lastName: string;
+    nationality: string;
+    title: string;
+}[][];
+
+export const submitButtonDisabledFn = (
+    childrenData: PersonDetailType,
+    adultsData: PersonDetailType
+): boolean => {
+    const hasInvalidChild = childrenData.some((room) =>
+        room.some(
+            (detail) =>
+                detail.age.length === 0 ||
+                detail.firstName.length === 0 ||
+                detail.lastName.length === 0
+        )
+    );
+
+    const hasInvalidAdult = adultsData.some((room) =>
+        room.some(
+            (detail) =>
+                detail.age.length === 0 ||
+                detail.firstName.length === 0 ||
+                detail.lastName.length === 0
+        )
+    );
+
+    console.log(childrenData, adultsData);
+
+    return hasInvalidChild || hasInvalidAdult;
 };

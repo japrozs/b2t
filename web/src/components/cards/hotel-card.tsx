@@ -46,7 +46,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     }
                 />
                 <div className="flex flex-col px-5 w-full truncate line-clamp-1 border-r border-gray-200 ">
-                    <h1 className="libre text-2xl text-blue-main font-medium truncate text-ellipsis">
+                    <h1 className="g-sans text-2xl text-blue-main truncate text-ellipsis">
+                        {/* <h1 className="libre text-2xl text-blue-main font-medium truncate text-ellipsis"> */}
                         {/* show full hotel name on hover */}
                         {hotel.HotelName}
                     </h1>
@@ -188,6 +189,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     <button
                         style={{
                             fontFamily: "blair-itc-medium",
+                            // fontFamily: "google-sans",
                         }}
                         onClick={() => setOpen(!open)}
                         className="transition mx-auto border border-blue-main p-1.5 mt-2  text-sm text-blue-main hover:bg-blue-main hover:text-white "
@@ -264,12 +266,47 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             )}
                         </div>
                         <div className="self-end text-right min-w-36 flex flex-col">
-                            <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
-                                $ {Math.round(room.RecommendedRetailPrice)}
-                            </p>
-                            <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
-                                $ {Math.round(COMMISSION_RATE * room.TotalRate)}
-                            </p>
+                            {showPricePerNightPerRoom ? (
+                                <>
+                                    <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
+                                        ${" "}
+                                        {Math.round(
+                                            (COMMISSION_RATE * room.TotalRate) /
+                                                (nightsBetween(
+                                                    new Date(hotel.StartDate),
+                                                    new Date(hotel.EndDate)
+                                                ) *
+                                                    cfg.rooms.length)
+                                        )}
+                                    </p>
+                                    <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
+                                        ${" "}
+                                        {Math.round(
+                                            room.RecommendedRetailPrice /
+                                                (nightsBetween(
+                                                    new Date(hotel.StartDate),
+                                                    new Date(hotel.EndDate)
+                                                ) *
+                                                    cfg.rooms.length)
+                                        )}
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
+                                        ${" "}
+                                        {Math.round(
+                                            COMMISSION_RATE * room.TotalRate
+                                        )}
+                                    </p>
+                                    <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
+                                        ${" "}
+                                        {Math.round(
+                                            room.RecommendedRetailPrice
+                                        )}
+                                    </p>
+                                </>
+                            )}
                             <p className="text-sm text-gray-400 font-medium">
                                 Including taxes and fees
                             </p>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DropDown } from "./dropdown";
-import { countryList } from "@/utils/cities";
+import { countryList } from "@/utils/countries";
+import { RoomDetailType } from "@/types";
 
 interface PersonDetailsProps {
     personType: "Adult" | "Child";
@@ -16,12 +17,12 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
     personIndex,
     onDataChange,
 }) => {
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState("Mr");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [age, setAge] = useState("");
-    const [nationality, setNationality] = useState("");
-    const [gender, setGender] = useState("");
+    const [nationality, setNationality] = useState("LON");
+    const [gender, setGender] = useState("M");
 
     useEffect(() => {
         const data = {
@@ -55,7 +56,7 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                         Miss: "Miss",
                         Ms: "Ms",
                     }}
-                    label="Title"
+                    // label="Title"
                     state={title}
                     setState={setTitle}
                 />
@@ -83,6 +84,18 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                     onChange={(e) => {
                         setAge(e.target.value);
                     }}
+                    onKeyPress={(event) => {
+                        const charCode = event.which
+                            ? event.which
+                            : event.keyCode;
+                        if (
+                            charCode !== 46 &&
+                            charCode > 31 &&
+                            (charCode < 48 || charCode > 57)
+                        ) {
+                            event.preventDefault();
+                        }
+                    }}
                     type="number"
                     placeholder="Age"
                 />
@@ -96,7 +109,7 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                 /> */}
                 <DropDown
                     options={countryList}
-                    label="Nationality"
+                    // label="Nationality"
                     state={nationality}
                     setState={setNationality}
                 />
@@ -113,7 +126,7 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                         M: "Male",
                         F: "Female",
                     }}
-                    label="Gender"
+                    // label="Gender"
                     state={gender}
                     setState={setGender}
                 />

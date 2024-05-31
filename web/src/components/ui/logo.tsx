@@ -21,7 +21,7 @@ export const Logo: React.FC<LogoProps> = ({ monogram, ...props }) => {
                         cy="47"
                         r="43.5"
                         stroke="currentColor"
-                        stroke-width="7"
+                        strokeWidth="7"
                     />
                     <path d="M43 20H51V92H43V20Z" fill="currentColor" />
                     <path

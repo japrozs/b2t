@@ -26,7 +26,13 @@ interface SearchProps {}
 const Search: React.FC<SearchProps> = ({}) => {
     useIsAuth();
     const router = useRouter();
-    const [searchCity, setSearchCity] = useState("");
+    const [searchCity, setSearchCity] = useState<{
+        value: string;
+        label: string;
+    }>({
+        value: "",
+        label: "",
+    });
     const [struct, setStruct] = useState<SearchHotelStruct>({
         city: "",
         in: "",
@@ -61,7 +67,10 @@ const Search: React.FC<SearchProps> = ({}) => {
             cfg: JSON.parse((query.cfg as string) || "[]"),
         };
 
-        setSearchCity(struct.city);
+        setSearchCity({
+            value: struct.city,
+            label: (query.name as string) || "",
+        });
         setStruct(struct);
         fetchHotels(struct);
     }, [router.isReady]);
@@ -83,11 +92,11 @@ const Search: React.FC<SearchProps> = ({}) => {
     };
 
     useEffect(() => {
-        if (searchCity === struct?.city) {
+        if (searchCity.value === struct?.city) {
             return;
         }
         const structCpy = { ...struct };
-        structCpy.city = searchCity;
+        structCpy.city = searchCity.value;
         setStruct(structCpy);
         fetchHotels(structCpy);
     }, [searchCity]);

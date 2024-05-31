@@ -62,7 +62,7 @@ export const checkAvailability = async (req: Request, res: Response) => {
                 res.status(200).json(result);
             })
             .catch((error: AxiosError) => {
-                console.log(error.response?.data);
+                console.log("error :: ", error.response);
                 res.status(200).json({
                     Hotels: {
                         Hotel: [],

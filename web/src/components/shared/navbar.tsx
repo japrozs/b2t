@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ sticky }) => {
             }}
             className={`${
                 sticky && "sticky top-0 z-10"
-            } px-4 py-2 flex items-center`}
+            } py-2 flex items-center`}
         >
             <div className="flex items-center w-full max-w-[76rem] mx-auto">
                 <Link href="/app/">

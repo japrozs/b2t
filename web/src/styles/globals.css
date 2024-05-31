@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Quattrocento:wght@400;700&display=swap");
 @import url("https://rsms.me/inter/inter.css");
 @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Quattrocento:wght@400;700&display=swap");
+@import url("https://fonts.cdnfonts.com/css/spoof-trial");
 
 @tailwind base;
 @tailwind components;
@@ -25,6 +26,12 @@
 }
 
 @font-face {
+    font-family: "spoof";
+    font-weight: normal;
+    src: url("/fonts/spoof.ttf") format("truetype");
+}
+
+@font-face {
     font-family: "blair-itc-bold";
     src: url("/fonts/blair-itc-bold.otf") format("opentype");
 }
@@ -34,11 +41,20 @@
     src: url("/fonts/blair-itc-medium.otf") format("opentype");
 }
 
+@font-face {
+    font-family: "spoof-bold";
+    src: url("/fonts/spoof/SpoofTrial-Bold.otf") format("opentype");
+}
+
 body {
 }
 
 .libre {
     font-family: "Libre Baskerville";
+}
+
+.spoof-bold {
+    font-family: "spoof-bold", sans-serif;
 }
 
 .quat {

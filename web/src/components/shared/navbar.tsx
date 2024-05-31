@@ -33,6 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({ sticky }) => {
                     />
                 </Link>
                 <div className="flex items-center ml-auto mr-0">
+                    {/* TODO – make this show a meny with profile, account settings and logout */}
                     <IoMdMenu
                         style={{
                             color: themeColors[0],

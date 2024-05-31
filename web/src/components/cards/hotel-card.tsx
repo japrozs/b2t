@@ -39,7 +39,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
         <div className="border border-gray-200 mb-5 ">
             <div className="p-5 flex items-start">
                 <img
-                    className="w-auto h-48 object-cover"
+                    className="w-48 h-48 object-cover"
                     src={
                         hotel.details.Details[0].Images.Img[0] ||
                         `https://previews.123rf.com/images/happyvector071/happyvector0711608/happyvector071160800591/62947847-abstract-creative-vector-design-layout-with-text-do-not-exist.jpg`

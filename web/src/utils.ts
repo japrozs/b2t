@@ -89,9 +89,9 @@ export const formatCfg = (cfg: RoomCfgType, room: RoomDetailType) => {
 
 export const parseDate = (str: string): Date => {
     if (!/^(\d){8}$/.test(str)) return new Date();
-    var y = parseInt(str.substring(0, 4)),
-        m = parseInt(str.substring(4, 2)),
-        d = parseInt(str.substring(6, 2));
+    const y = Math.floor(parseInt(str) / 10000);
+    const m = Math.floor((parseInt(str) % 10000) / 100) - 1; // Months are zero-based in JavaScript
+    const d = parseInt(str) % 100;
     return new Date(y, m, d);
 };
 

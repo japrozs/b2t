@@ -36,6 +36,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
     // TODO: find a way to persist these between page refreshes
     const { hotel, room, cfg } = useCheckoutStore((state) => state);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [createBookingLoading, setCreateBookingLoading] = useState(false);
     const [latestHotel, setLatestHotel] = useState<HotelSearchResult>({
         Hotels: {
             Hotel: [],
@@ -76,7 +77,9 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
         console.log(childrenData, adultsData);
     };
 
-    const createBooking = async () => {
+    const createBooking = () => {
+        setCreateBookingLoading(true);
+        console.log("create.booking.loading – ", createBookingLoading);
         axios
             .post("/create-booking", {
                 startDate: (hotel as HotelSearchItemType).StartDate,
@@ -97,9 +100,11 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                 } else {
                     toast.error("An error occured with your booking.");
                 }
+                setCreateBookingLoading(false);
             })
             .catch((error) => {
                 console.error("Error creating booking:", error);
+                setCreateBookingLoading(false);
             });
     };
 
@@ -137,6 +142,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
             });
         setIsLoading(false);
     }, [hotel, room, cfg]);
+
     return (
         <div>
             <Navbar />
@@ -386,15 +392,17 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                             </div>
                             <hr className="mb-4" />
                             <button
-                                disabled={submitButtonDisabledFn(
-                                    childrenData,
-                                    adultsData
-                                )}
+                                disabled={
+                                    submitButtonDisabledFn(
+                                        childrenData,
+                                        adultsData
+                                    ) || createBookingLoading
+                                }
                                 className={`flex g-sans items-center ml-auto mr-0 mb-7 ${
                                     submitButtonDisabledFn(
                                         childrenData,
                                         adultsData
-                                    )
+                                    ) || createBookingLoading
                                         ? "cursor-not-allowed bg-gray-200 text-gray-400"
                                         : "bg-[#00395D] text-[#00AEEF] hover:bg-opacity-[0.98]"
                                 } rounded-md py-2 px-10 font-medium text-md w-full justify-center`}

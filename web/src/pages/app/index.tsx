@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Logo } from "@/components/ui/logo";
 import useRandomColor from "@/utils/use-random-color";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { LuMoon } from "react-icons/lu";
 
 interface AppHomePageProps {}
 
@@ -127,19 +128,18 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                     }}
                                 />
                                 <div className="w-max px-4 text-center">
-                                    <p className="text-blue-500 text-lg font-semibold">
-                                        {nightsBetween(
-                                            new Date(value.startDate),
-                                            new Date(value.endDate)
+                                    <LuMoon className="text-gray-800 mx-auto text-lg" />
+                                    {/* <p className="text-blue-500 text-lg font-semibold">
+                                        
+                                    </p> */}
+                                    <p className="text-xs mt-1 text-gray-700 font-semibold whitespace-nowrap">
+                                        {FORMAT_GRAMMAR(
+                                            nightsBetween(
+                                                new Date(value.startDate),
+                                                new Date(value.endDate)
+                                            ),
+                                            "night"
                                         )}
-                                    </p>
-                                    <p className="text-sm text-gray-700 font-medium">
-                                        {nightsBetween(
-                                            new Date(value.startDate),
-                                            new Date(value.endDate)
-                                        ) === 1
-                                            ? "night"
-                                            : "nights"}
                                     </p>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                             </p>
                             <p
                                 onClick={() => setOpen(true)}
-                                className="text-black cursor-pointer py-1.5 text-lg font-semibold"
+                                className="text-black g-sans cursor-pointer py-1.5 text-lg font-medium"
                             >
                                 {FORMAT_GRAMMAR(
                                     roomConfig.rooms

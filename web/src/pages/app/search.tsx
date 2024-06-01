@@ -106,14 +106,16 @@ const Search: React.FC<SearchProps> = ({}) => {
         <div>
             {/* STICKY OR NOT? – <Navbar sticky /> */}
             <Navbar />
-            {isLoading || hotels.Hotels.Hotel.length === 0 ? (
+            {isLoading ||
+            (hotels.Hotels.Hotel.length === 0 &&
+                hotels.ErrorMessage?.Error.Messages.length === 0) ? (
                 <div className="h-screen">
                     <Spinner />
                 </div>
             ) : (
                 <>
-                    {/* TODO: stop spinner and show error when there is a search error */}
                     <div>
+                        {/* TODO: stop spinner and show error when there is a search error */}
                         <div className="mt-5 space-x-5 flex items-start max-w-[76rem] mx-auto">
                             {/* Rest of the component... */}
                             {/* <div className="w-3/12 m-2.5 mx-0 py-3 px-4 bg-gray-50 rounded"> */}
@@ -299,26 +301,47 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         />
                                     </div>
                                 </div>
-                                {sortAndFilterHotels(hotels.Hotels.Hotel, {
-                                    price: sortByPrice,
-                                    priceSortOrder: sortByPriceOrder,
-                                    ratings: sortByRating,
-                                    ratingSortOrder: sortByRatingOrder,
-                                    query: filterQuery,
-                                }).map(
-                                    (
-                                        hotel: HotelSearchItemType,
-                                        idx: number
-                                    ) => (
-                                        <HotelCard
-                                            key={idx}
-                                            hotel={hotel}
-                                            cfg={struct?.cfg as RoomCfgType}
-                                            showPricePerNightPerRoom={
-                                                showPricePerNightPerRoom
+                                {!hotels.ErrorMessage ? (
+                                    <>
+                                        {sortAndFilterHotels(
+                                            hotels.Hotels.Hotel,
+                                            {
+                                                price: sortByPrice,
+                                                priceSortOrder:
+                                                    sortByPriceOrder,
+                                                ratings: sortByRating,
+                                                ratingSortOrder:
+                                                    sortByRatingOrder,
+                                                query: filterQuery,
                                             }
-                                        />
-                                    )
+                                        ).map(
+                                            (
+                                                hotel: HotelSearchItemType,
+                                                idx: number
+                                            ) => (
+                                                <HotelCard
+                                                    key={idx}
+                                                    hotel={hotel}
+                                                    cfg={
+                                                        struct?.cfg as RoomCfgType
+                                                    }
+                                                    showPricePerNightPerRoom={
+                                                        showPricePerNightPerRoom
+                                                    }
+                                                />
+                                            )
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        <p>
+                                            an error occured –{" "}
+                                            {
+                                                hotels.ErrorMessage?.Error
+                                                    .Messages[0]
+                                            }
+                                        </p>
+                                    </>
                                 )}
                             </div>
                         </div>

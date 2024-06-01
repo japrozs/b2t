@@ -13,6 +13,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
 }) => {
     return (
         <>
+            {/* TODO – make this look better please */}
             {roomConfig.rooms.map(
                 (room: RoomCfgType["rooms"][0], idx: number) => (
                     <div

@@ -42,40 +42,46 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                 {personType} {personIndex + 1} details
             </p>
             {/* TODO: add labels to these inputs (its ambigous) */}
-            <div className="flex items-center space-x-5">
+            <div className="flex items-center">
                 {/* <input
                     className="w-min border border-gray-200 rounded-md text-sm py-1 px-2"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Mr, Mrs, Miss, Ms"
                 /> */}
-                <DropDown
-                    options={{
-                        Mr: "Mr",
-                        Mrs: "Mrs",
-                        Miss: "Miss",
-                        Ms: "Ms",
-                    }}
-                    // label="Title"
-                    state={title}
-                    setState={setTitle}
-                />
-                <input
-                    className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
-                    value={firstName}
-                    onChange={(e) => {
-                        setFirstName(e.target.value);
-                    }}
-                    placeholder="First name"
-                />
-                <input
-                    className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
-                    value={lastName}
-                    onChange={(e) => {
-                        setLastName(e.target.value);
-                    }}
-                    placeholder="Last name"
-                />
+                <div className="w-full">
+                    <DropDown
+                        options={{
+                            Mr: "Mr",
+                            Mrs: "Mrs",
+                            Miss: "Miss",
+                            Ms: "Ms",
+                        }}
+                        // label="Title"
+                        state={title}
+                        setState={setTitle}
+                    />
+                </div>
+                <div className="w-full pl-6">
+                    <input
+                        className="border w-full border-gray-200 rounded-md text-sm py-1 px-2"
+                        value={firstName}
+                        onChange={(e) => {
+                            setFirstName(e.target.value);
+                        }}
+                        placeholder="First name"
+                    />
+                </div>
+                <div className="w-full pl-6">
+                    <input
+                        className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
+                        value={lastName}
+                        onChange={(e) => {
+                            setLastName(e.target.value);
+                        }}
+                        placeholder="Last name"
+                    />
+                </div>
             </div>
             <div className="flex items-center space-x-5 mt-1.5">
                 <input

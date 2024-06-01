@@ -11,6 +11,7 @@ import {
     RoomCfgType,
 } from "@/types";
 import {
+    FORMAT_GRAMMAR,
     SearchHotelStruct,
     getFacilitiesMap,
     sortAndFilterHotels,
@@ -19,6 +20,9 @@ import { useIsAuth } from "@/utils/use-is-auth";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { use, useEffect, useState } from "react";
+import Datepicker from "react-tailwindcss-datepicker";
+import { toast } from "sonner";
+import { RoomCfgModal } from "@/components/modals/room-cfg-modal";
 
 interface SearchProps {}
 
@@ -32,6 +36,25 @@ const Search: React.FC<SearchProps> = ({}) => {
     }>({
         value: "",
         label: "",
+    });
+    const [open, setOpen] = useState(false);
+    const [searchRoomCfg, setSearchRoomCfg] = useState<RoomCfgType>({
+        rooms: [
+            {
+                adults: 1,
+                children: [
+                    {
+                        age: 6,
+                    },
+                ],
+            },
+        ],
+    });
+    const [value, setValue] = useState({
+        startDate: new Date().toISOString().split("T")[0],
+        endDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0],
     });
     const [struct, setStruct] = useState<SearchHotelStruct>({
         city: "",
@@ -71,6 +94,11 @@ const Search: React.FC<SearchProps> = ({}) => {
             value: struct.city,
             label: (query.name as string) || "",
         });
+        setValue({
+            startDate: struct.in,
+            endDate: struct.out,
+        });
+        setSearchRoomCfg(struct.cfg);
         setStruct(struct);
         fetchHotels(struct);
     }, [router.isReady]);
@@ -91,17 +119,52 @@ const Search: React.FC<SearchProps> = ({}) => {
         setIsLoading(false);
     };
 
+    // useEffect(() => {
+    //     console.log(value, struct, value.startDate === struct.in);
+    //     if (value.startDate === struct.in && value.endDate === struct.out) {
+    //         return;
+    //     }
+    //     const structCpy = { ...struct };
+    //     structCpy.in = value.startDate;
+    //     structCpy.out = value.endDate;
+    //     setStruct(structCpy);
+    //     fetchHotels(structCpy);
+    // }, [value]);
+
+    // useEffect(() => {
+    //     if (searchCity.value === struct?.city) {
+    //         return;
+    //     }
+    //     const structCpy = { ...struct };
+    //     structCpy.city = searchCity.value;
+    //     setStruct(structCpy);
+    //     fetchHotels(structCpy);
+    // }, [searchCity]);
+
     useEffect(() => {
-        if (searchCity.value === struct?.city) {
-            return;
-        }
+        console.log(searchRoomCfg, struct.cfg);
+        console.log(
+            JSON.stringify(searchRoomCfg) === JSON.stringify(struct.cfg)
+        );
+        // if (searchRoomCfg === struct?.cfg) {
+        //     return;
+        // }
+        // const structCpy = { ...struct };
+        // structCpy.cfg = searchRoomCfg;
+        // setStruct(structCpy);
+        // fetchHotels(structCpy);
+    }, [searchRoomCfg]);
+
+    const researchHotels = () => {
         const structCpy = { ...struct };
+        structCpy.cfg = searchRoomCfg;
         structCpy.city = searchCity.value;
+        structCpy.in = value.startDate;
+        structCpy.out = value.endDate;
         setStruct(structCpy);
         fetchHotels(structCpy);
-    }, [searchCity]);
+    };
 
-    console.log(getFacilitiesMap(hotels.Hotels.Hotel));
     return (
         <div>
             {/* STICKY OR NOT? – <Navbar sticky /> */}
@@ -208,39 +271,86 @@ const Search: React.FC<SearchProps> = ({}) => {
                             </div>
                             {/* https://foto.hrsstatic.com/fotos/0/2/269/213/80/000000/http%3A%2F%2Ffoto-origin.hrsstatic.com%2Ffoto%2F6%2F8%2F6%2F4%2F%2Fteaser_686447.jpg/WYT98yP7mJCpeMkikrasbQ%3D%3D/134%2C106/6/Holiday_Inn_Express_LONDON_-_EXCEL-London-Aussenansicht-3-686447.jpg */}
                             <div className="w-9/12 p-2.5">
-                                <div className="flex items-center space-x-4">
-                                    <input
-                                        className="border border-gray-200 rounded-md text-sm py-1 px-2"
-                                        value={struct?.in}
-                                        type="date"
-                                        onChange={(e) => {
-                                            const structCpy = { ...struct };
-                                            structCpy.in = e.target
-                                                .value as string;
-                                            setStruct(
-                                                structCpy as SearchHotelStruct
-                                            );
-                                        }}
-                                        placeholder="check-in date"
-                                    />
-                                    <input
-                                        className="border border-gray-200 rounded-md text-sm py-0.5 px-1"
-                                        value={struct?.out}
-                                        type="date"
-                                        onChange={(e) => {
-                                            const structCpy = { ...struct };
-                                            structCpy.out = e.target
-                                                .value as string;
-                                            setStruct(
-                                                structCpy as SearchHotelStruct
-                                            );
-                                        }}
-                                        placeholder="check-out date"
-                                    />
-                                    <CityDropdown
-                                        city={searchCity}
-                                        setCity={setSearchCity}
-                                    />
+                                <div className="flex items-end space-x-4">
+                                    <div className="w-full">
+                                        <p className="text-gray-600 text-sm font-medium">
+                                            Dates
+                                        </p>
+                                        <Datepicker
+                                            primaryColor="blue"
+                                            value={value}
+                                            separator=" – "
+                                            placeholder="DD-MM-YYYY to DD-MM-YYYY"
+                                            displayFormat="DD-MM-YYYY"
+                                            // disabledDates={[
+                                            //     {
+                                            //         startDate: "2024-05-30",
+                                            //         endDate: "2024-05-30",
+                                            //     },
+                                            // ]}
+                                            // asSingle={true}
+                                            inputClassName={
+                                                "outline-nonefocus:ring-1 datepicker-input"
+                                            }
+                                            minDate={
+                                                // new Date(Date.now() - 24 * 60 * 60 * 1000)
+                                                new Date(Date.now())
+                                            }
+                                            onChange={(val: any) => {
+                                                if (
+                                                    val.startDate ===
+                                                    val.endDate
+                                                ) {
+                                                    toast.error(
+                                                        "A stay of at least 1 night is required"
+                                                    );
+                                                    return;
+                                                }
+                                                console.log("val :: ", val);
+                                                setValue(val);
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="w-full">
+                                        <CityDropdown
+                                            label="City"
+                                            city={searchCity}
+                                            setCity={setSearchCity}
+                                        />
+                                    </div>
+                                    <div className="w-max pl-1 pr-5">
+                                        <p className="text-gray-600 text-sm font-medium">
+                                            Rooms & persons
+                                        </p>
+                                        <p
+                                            onClick={() => setOpen(true)}
+                                            className="text-black whitespace-nowrap g-sans cursor-pointer py-1.5 text-lg font-medium"
+                                        >
+                                            {FORMAT_GRAMMAR(
+                                                searchRoomCfg.rooms
+                                                    .flatMap(
+                                                        (room) =>
+                                                            room.adults +
+                                                            room.children.length
+                                                    )
+                                                    .reduce((a, b) => a + b),
+                                                "person"
+                                            )}{" "}
+                                            –{" "}
+                                            {FORMAT_GRAMMAR(
+                                                searchRoomCfg.rooms.length,
+                                                "room"
+                                            )}
+                                        </p>
+                                    </div>
+                                    <div className="">
+                                        <button
+                                            className={`g-sans items-center bg-[#00395D] text-[#00AEEF] hover:bg-opacity-[0.98] rounded-md py-2 px-10 whitespace-nowrap font-medium text-md w-full justify-center`}
+                                            onClick={researchHotels}
+                                        >
+                                            Search
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="my-4 flex items-center">
                                     <div className="flex items-center space-x-3">
@@ -348,6 +458,12 @@ const Search: React.FC<SearchProps> = ({}) => {
                     </div>
                 </>
             )}
+            <RoomCfgModal
+                open={open}
+                setOpen={setOpen}
+                roomConfig={searchRoomCfg}
+                setRoomConfig={setSearchRoomCfg}
+            />
         </div>
     );
 };

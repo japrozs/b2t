@@ -92,6 +92,7 @@ body {
     background-color: white !important;
     color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
     width: 100%;
+
     border-radius: 10px;
     font-weight: 500;
     font-size: 90%;
@@ -114,4 +115,10 @@ select {
 
 option {
     font-family: "Menlo" !important;
+} */
+
+/* .react-select-dropdown__control {
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 } */

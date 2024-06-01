@@ -167,22 +167,17 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                     "room"
                                 )}
                             </p>
-                            <button
-                                onClick={() => {
-                                    router.push(
-                                        `/app/search?city=${city.value}&in=${
-                                            value.startDate
-                                        }&out=${
-                                            value.endDate
-                                        }&cfg=${JSON.stringify(
-                                            roomConfig
-                                        )}&name=${city.label}`
-                                    );
-                                }}
-                                className="transition-all mt-2.5 bg-blue-600 w-full text-center py-2 rounded-lg text-white font-medium drop-shadow-sm hover:bg-opacity-95"
+                            <a
+                                href={`/app/search?city=${city.value}&in=${
+                                    value.startDate
+                                }&out=${value.endDate}&cfg=${JSON.stringify(
+                                    roomConfig
+                                )}&name=${city.label}`}
                             >
-                                Search
-                            </button>
+                                <button className="transition-all mt-2.5 bg-blue-600 w-full text-center py-2 rounded-lg text-white font-medium drop-shadow-sm hover:bg-opacity-95">
+                                    Search
+                                </button>
+                            </a>
                         </div>
                     </div>
                     <div className="items-start w-full my-auto">
@@ -272,7 +267,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                                     value.endDate
                                                 }&cfg=${JSON.stringify(
                                                     roomConfig
-                                                )}`}
+                                                )}&name=${"(BER) Berlin"}`}
                                             >
                                                 <button
                                                     style={{
@@ -312,13 +307,13 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                                 trips!
                                             </p>
                                             <a
-                                                href={`/app/search?city=MUNICH&in=${
+                                                href={`/app/search?city=MUC&in=${
                                                     value.startDate
                                                 }&out=${
                                                     value.endDate
                                                 }&cfg=${JSON.stringify(
                                                     roomConfig
-                                                )}`}
+                                                )}&name=${"(MUC) Munich"}`}
                                             >
                                                 <button
                                                     style={{
@@ -365,7 +360,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                                     value.endDate
                                                 }&cfg=${JSON.stringify(
                                                     roomConfig
-                                                )}`}
+                                                )}&name=${"(PAR) Paris"}`}
                                             >
                                                 <button
                                                     style={{
@@ -411,7 +406,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                                     value.endDate
                                                 }&cfg=${JSON.stringify(
                                                     roomConfig
-                                                )}`}
+                                                )}&name=${"(Hamburg) Hamburg"}`}
                                             >
                                                 <button
                                                     style={{
@@ -458,7 +453,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                 value.startDate
                             }&out=${value.endDate}&cfg=${JSON.stringify(
                                 roomConfig
-                            )}`}
+                            )}&name=${"(LON) London"}`}
                         >
                             <button className="transition-all mt-10 bg-[#00395D] text-[#00AEEF] flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
                                 Book your dream getaway

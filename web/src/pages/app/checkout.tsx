@@ -136,19 +136,20 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                     setLatestHotel(response.data);
                 }
                 console.log("check-avaiability response :: ", response);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.error("Error fetching latest hotel price:", error);
+                setIsLoading(false);
             });
-        setIsLoading(false);
     }, [hotel, room, cfg]);
 
     return (
         <div>
             <Navbar />
             {isLoading ||
-            latestHotel.Hotels.Hotel.length === 0 ||
-            latestHotel.ErrorMessage?.Error.Messages.length === 0 ? (
+            (latestHotel.ErrorMessage?.Error.Messages.length as any) > 0 ||
+            latestHotel.Hotels.Hotel.length === 0 ? (
                 <p>loading...</p>
             ) : (
                 <div className="mt-3 mb-10">
@@ -311,16 +312,22 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                         Room & persons
                                     </p>
                                     <p className="text-base text-gray-800 font-semibold">
-                                        {(cfg as RoomCfgType).rooms
-                                            .flatMap(
-                                                (room) =>
-                                                    room.adults +
-                                                    room.children.length
-                                            )
-                                            .reduce((a, b) => a + b)}{" "}
-                                        persons (
-                                        {(cfg as RoomCfgType).rooms.length}{" "}
-                                        rooms)
+                                        {FORMAT_GRAMMAR(
+                                            (cfg as RoomCfgType).rooms
+                                                .flatMap(
+                                                    (room) =>
+                                                        room.adults +
+                                                        room.children.length
+                                                )
+                                                .reduce((a, b) => a + b),
+                                            "person"
+                                        )}{" "}
+                                        (
+                                        {FORMAT_GRAMMAR(
+                                            (cfg as RoomCfgType).rooms.length,
+                                            "room"
+                                        )}
+                                        )
                                     </p>
                                 </div>
                                 <div className="ml-auto mr-0 text-right">

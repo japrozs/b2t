@@ -52,10 +52,11 @@ export const CityDropdown: React.FC<CityDropdownProps> = ({
                         {label}
                     </p>
                     <Select
-                        className="w-full ml-auto mr-0 text-sm transition-all cursor-pointer outline-none text-gray-500 font-medium bg-white rounded-md"
+                        className="w-full ml-auto mr-0 text-sm transition-all cursor-pointer bg-white outline-none text-gray-500 font-medium  rounded-md"
                         onChange={(e) => {
                             setCity(e as any);
                         }}
+                        classNamePrefix={"react-select-dropdown"}
                         defaultValue={city}
                         value={city}
                         options={formattedCities}

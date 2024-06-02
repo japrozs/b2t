@@ -1,16 +1,26 @@
 import { COMMISSION_RATE } from "@/constants";
-import { HotelSearchItemType, RoomCfgType } from "@/types";
-import { FORMAT_GRAMMAR, getCheapestRoom, nightsBetween } from "@/utils";
+import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
+import {
+    FORMAT_GRAMMAR,
+    getCheapestRoom,
+    nightsBetween,
+    parseDate,
+} from "@/utils";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { IoIosCheckmarkCircle, IoIosCloseCircle } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
-import { MdOutlineAttachMoney, MdOutlineFastfood } from "react-icons/md";
+import {
+    MdOutlineAttachMoney,
+    MdOutlineCheck,
+    MdOutlineFastfood,
+} from "react-icons/md";
 import { useCheckoutStore } from "../../store/provider";
 import { Pill } from "../ui/pill";
 import { MdAlternateEmail } from "react-icons/md";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
@@ -45,42 +55,96 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         `https://previews.123rf.com/images/happyvector071/happyvector0711608/happyvector071160800591/62947847-abstract-creative-vector-design-layout-with-text-do-not-exist.jpg`
                     }
                 />
-                <div className="flex flex-col px-5 w-full truncate line-clamp-1 border-r border-gray-200 ">
-                    <h1 className="g-sans text-2xl text-blue-main truncate text-ellipsis">
+                <div className="flex flex-col px-5 w-full">
+                    <h1 className="g-sans mb-1 text-xl text-blue-main font-medium flex items-center flex-wrap">
                         {/* <h1 className="libre text-2xl text-blue-main font-medium truncate text-ellipsis"> */}
                         {/* show full hotel name on hover */}
                         {hotel.HotelName}
+                        <div className="mr-1.5"></div>
+                        <span className="flex items-center">
+                            {Array(hotel.StarRating)
+                                .fill(0)
+                                .map((_, idx: number) => (
+                                    <FaStar
+                                        key={idx}
+                                        className="text-sm text-yellow-500 mr-0.5"
+                                    />
+                                ))}
+                        </span>
                     </h1>
-                    <div className="flex items-center mt-0.5 my-1">
+                    <div className="flex items-center my-1">
                         <p className="flex items-center text-sm text-gray-500 font-medium">
                             <IoLocationOutline className="mr-1.5" />
                             {hotel.details.Details[0].HotelAddress.split(",")
                                 .slice(0, 2)
                                 .join(", ") || hotel.Chain}
                         </p>
-                        <span className="mx-2.5 text-gray-500">•</span>
-                        {Array(hotel.StarRating)
-                            .fill(0)
-                            .map((_, idx: number) => (
-                                <FaStar
-                                    key={idx}
-                                    className="text-sm text-yellow-500"
-                                />
-                            ))}
+                        {/* <span className="mx-2.5 text-gray-500">•</span> */}
                     </div>
-                    {hotel.details.Details[0].HotelEmail && (
+                    {/* {hotel.details.Details[0].HotelEmail && (
                         <div className="flex items-center">
                             <MdAlternateEmail className="text-gray-400 mr-2" />
                             <p className="transition-all text-sm text-blue-500 menlo hover:underline">
                                 {hotel.details.Details[0].HotelEmail}
                             </p>
                         </div>
-                    )}
+                    )} */}
                     {/* TODO – the language here is VERY confusing... fix it */}
                     {/* TODO – make pills for the facilites like travala */}
-                    <div className="mt-3 flex items-center">
+                    <div className="border-l-2 px-2 mt-4 border-gray-300">
+                        {Array(1)
+                            .fill(
+                                getCheapestRoom(
+                                    hotel.RoomTypeDetails.Rooms.Room
+                                )
+                            )
+                            .map((r: RoomDetailType) => (
+                                <>
+                                    <p className="font-medium text-sm">
+                                        {r.RoomType}
+                                    </p>
+                                    {r.MealPlan.toLowerCase() ===
+                                    "breakfast" ? (
+                                        <div className="flex items-center mt-1">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
+                                            <p className="font-medium text-sm text-green-600">
+                                                Breakfast included
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center mt-1">
+                                            <span className="ml-1 mr-3">•</span>
+                                            <p className="font-medium text-gray-700 text-sm">
+                                                Meal plan – {r.MealPlan}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {r.NonRefundable === "N" ? (
+                                        <div className="flex items-center mt-0">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
+                                            <p className="font-medium text-sm text-green-600">
+                                                Free cancellation before{" "}
+                                                {moment(
+                                                    parseDate(
+                                                        r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                    )
+                                                ).format("D MMMM, YYYY")}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center mt-0">
+                                            <span className="ml-1 mr-3">•</span>
+                                            <p className="font-medium text-gray-700 text-sm">
+                                                Non-refundable
+                                            </p>
+                                        </div>
+                                    )}
+                                </>
+                            ))}
+                    </div>
+                    {/* <div className="mt-3 flex items-center">
                         {hotel.RoomTypeDetails.Rooms.Room[0].NonRefundable ===
-                        "N" ? (
+                        "Y" ? (
                             <div className="flex items-center">
                                 <IoIosCloseCircle className="text-md mr-2 text-red-500" />
                                 <p className="font-medium text-sm">
@@ -101,7 +165,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                 {hotel.RoomTypeDetails.Rooms.Room[0].MealPlan}
                             </p>
                         </div>
-                    </div>
+                    </div> */}
                     {/* TODO – use icons like HRS if possible */}
                     {/* Show modal with hotel content full message */}
                     {/* show modal with all the pills when hovering on the facilities button */}
@@ -116,7 +180,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         ))}
                     </div>
                 </div>
-                <div className="self-end text-right min-w-36 flex flex-col">
+                <div className="self-stretch text-right min-w-36 w-max flex flex-col">
                     {showPricePerNightPerRoom ? (
                         <>
                             <p className="text-sm text-gray-400 font-medium">
@@ -154,7 +218,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         </>
                     ) : (
                         <>
-                            <p className="text-sm text-gray-400 font-medium">
+                            <p className="text-sm text-gray-500 font-medium mb-1.5">
                                 Total for{" "}
                                 {FORMAT_GRAMMAR(
                                     nightsBetween(
@@ -164,29 +228,31 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     "night"
                                 )}
                             </p>
-                            <p className="mt-2.5 mb-0 text-3xl text-blue-main font-semibold quat">
-                                ${" "}
-                                {Math.round(
-                                    COMMISSION_RATE *
+                            <div className="">
+                                <p className="ml-2 mb-0 text-3xl text-black font-semibold">
+                                    ${" "}
+                                    {Math.round(
+                                        COMMISSION_RATE *
+                                            getCheapestRoom(
+                                                hotel.RoomTypeDetails.Rooms.Room
+                                            ).TotalRate
+                                    )}
+                                </p>
+                                <p className="ml-auto mt-[-2px] text-md mr-0 mb-0 text-red-500 font-medium line-through">
+                                    ${" "}
+                                    {Math.round(
                                         getCheapestRoom(
                                             hotel.RoomTypeDetails.Rooms.Room
-                                        ).TotalRate
-                                )}
-                            </p>
-                            <p className="mt-auto mb-0 text-3xl text-red-500 font-semibold quat">
-                                ${" "}
-                                {Math.round(
-                                    getCheapestRoom(
-                                        hotel.RoomTypeDetails.Rooms.Room
-                                    ).RecommendedRetailPrice
-                                )}
-                            </p>
+                                        ).RecommendedRetailPrice
+                                    )}
+                                </p>
+                            </div>
                         </>
                     )}
-                    <p className="text-sm text-gray-400 font-medium">
-                        Including taxes and fees
+                    <p className="g-sans text-xs text-gray-400 font-medium mt-0">
+                        Incl. taxes and fees
                     </p>
-                    <button
+                    {/* <button
                         style={{
                             fontFamily: "blair-itc-medium",
                             // fontFamily: "google-sans",
@@ -194,7 +260,13 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         onClick={() => setOpen(!open)}
                         className="transition mx-auto border border-blue-main p-1.5 mt-2  text-sm text-blue-main hover:bg-blue-main hover:text-white "
                     >
-                        {open ? "less" : "more"} rooms
+                    </button> */}
+                    <button
+                        onClick={() => setOpen(!open)}
+                        className={`mt-auto mb-0 flex g-sans items-center bg-[#3073F0] text-white hover:bg-opacity-[0.98] rounded-md py-2 text-center justify-center whitespace-nowrap font-medium text-md w-full justify-center`}
+                    >
+                        {open ? "Less" : "More"} rooms
+                        <IoIosArrowDown className="text-[16px] ml-2" />
                     </button>
                 </div>
             </div>
@@ -307,7 +379,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     </p>
                                 </>
                             )}
-                            <p className="text-sm text-gray-400 font-medium">
+                            <p className="text-xs text-gray-400 font-medium">
                                 Including taxes and fees
                             </p>
                         </div>

@@ -56,6 +56,12 @@ export const CityDropdown: React.FC<CityDropdownProps> = ({
                         onChange={(e) => {
                             setCity(e as any);
                         }}
+                        styles={{
+                            control: (styles) => ({
+                                ...styles,
+                                minHeight: "10px",
+                            }),
+                        }}
                         classNamePrefix={"react-select-dropdown"}
                         defaultValue={city}
                         value={city}

@@ -119,40 +119,11 @@ const Search: React.FC<SearchProps> = ({}) => {
         setIsLoading(false);
     };
 
-    // useEffect(() => {
-    //     console.log(value, struct, value.startDate === struct.in);
-    //     if (value.startDate === struct.in && value.endDate === struct.out) {
-    //         return;
-    //     }
-    //     const structCpy = { ...struct };
-    //     structCpy.in = value.startDate;
-    //     structCpy.out = value.endDate;
-    //     setStruct(structCpy);
-    //     fetchHotels(structCpy);
-    // }, [value]);
-
-    // useEffect(() => {
-    //     if (searchCity.value === struct?.city) {
-    //         return;
-    //     }
-    //     const structCpy = { ...struct };
-    //     structCpy.city = searchCity.value;
-    //     setStruct(structCpy);
-    //     fetchHotels(structCpy);
-    // }, [searchCity]);
-
     useEffect(() => {
         console.log(searchRoomCfg, struct.cfg);
         console.log(
             JSON.stringify(searchRoomCfg) === JSON.stringify(struct.cfg)
         );
-        // if (searchRoomCfg === struct?.cfg) {
-        //     return;
-        // }
-        // const structCpy = { ...struct };
-        // structCpy.cfg = searchRoomCfg;
-        // setStruct(structCpy);
-        // fetchHotels(structCpy);
     }, [searchRoomCfg]);
 
     const researchHotels = () => {
@@ -271,7 +242,14 @@ const Search: React.FC<SearchProps> = ({}) => {
                             </div>
                             {/* https://foto.hrsstatic.com/fotos/0/2/269/213/80/000000/http%3A%2F%2Ffoto-origin.hrsstatic.com%2Ffoto%2F6%2F8%2F6%2F4%2F%2Fteaser_686447.jpg/WYT98yP7mJCpeMkikrasbQ%3D%3D/134%2C106/6/Holiday_Inn_Express_LONDON_-_EXCEL-London-Aussenansicht-3-686447.jpg */}
                             <div className="w-9/12 p-2.5">
-                                <div className="flex items-end space-x-4">
+                                <div className="flex items-end space-x-4 mb-7">
+                                    <div className="w-full">
+                                        <CityDropdown
+                                            label="City"
+                                            city={searchCity}
+                                            setCity={setSearchCity}
+                                        />
+                                    </div>
                                     <div className="w-full">
                                         <p className="text-gray-600 text-sm font-medium">
                                             Dates
@@ -311,20 +289,13 @@ const Search: React.FC<SearchProps> = ({}) => {
                                             }}
                                         />
                                     </div>
-                                    <div className="w-full">
-                                        <CityDropdown
-                                            label="City"
-                                            city={searchCity}
-                                            setCity={setSearchCity}
-                                        />
-                                    </div>
                                     <div className="w-max pl-1 pr-5">
                                         <p className="text-gray-600 text-sm font-medium">
                                             Rooms & persons
                                         </p>
                                         <p
                                             onClick={() => setOpen(true)}
-                                            className="text-black whitespace-nowrap g-sans cursor-pointer py-1.5 text-lg font-medium"
+                                            className="border border-gray-300 rounded-lg px-4 py-1 text-black whitespace-nowrap g-sans cursor-pointer pt-1.5 text-lg font-medium"
                                         >
                                             {FORMAT_GRAMMAR(
                                                 searchRoomCfg.rooms

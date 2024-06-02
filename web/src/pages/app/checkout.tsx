@@ -29,6 +29,7 @@ import { Footer } from "@/components/shared/footer";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineCheck } from "react-icons/md";
 import { LuMoon } from "react-icons/lu";
+import { Spinner } from "@/components/shared/spinner";
 
 interface CheckoutProps {}
 const Checkout: React.FC<CheckoutProps> = ({}) => {
@@ -150,7 +151,9 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
             {isLoading ||
             (latestHotel.ErrorMessage?.Error.Messages.length as any) > 0 ||
             latestHotel.Hotels.Hotel.length === 0 ? (
-                <p>loading...</p>
+                <div className="h-screen">
+                    <Spinner />
+                </div>
             ) : (
                 <div className="mt-3 mb-10">
                     <div className="flex items-start max-w-[76rem] mx-auto space-x-10">
@@ -195,10 +198,25 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                         {/* TODO – change these hardcoded values */}
                                         <div className="bg-blue-50 border border-blue-400 rounded-lg py-2 px-3 mb-2">
                                             <div className="flex items-center mb-1">
-                                                <RxCross2 className="text-lg text-red-500 mr-1.5" />
-                                                <p className="text-sm text-gray-800 font-medium">
-                                                    Breakfast not included
-                                                </p>
+                                                {(
+                                                    room as RoomDetailType
+                                                ).MealPlan.toLowerCase() ===
+                                                "breakfast" ? (
+                                                    <>
+                                                        <MdOutlineCheck className="text-lg text-green-500 mr-1.5" />
+                                                        <p className="text-sm text-gray-800 font-medium">
+                                                            Breakfast included
+                                                        </p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <RxCross2 className="text-lg text-red-500 mr-1.5" />
+                                                        <p className="text-sm text-gray-800 font-medium">
+                                                            Breakfast not
+                                                            included (Room only)
+                                                        </p>
+                                                    </>
+                                                )}
                                             </div>
                                             <div className="flex items-center">
                                                 <MdOutlineCheck className="text-lg text-green-500 mr-1.5" />

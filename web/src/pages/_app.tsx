@@ -7,7 +7,9 @@ import NextTransitionBar from "next-transition-bar";
 import { SWRConfig } from "swr";
 import { Toaster } from "sonner";
 
-Axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api/`;
+// // TODO: CHANGE THIS VERY IMPORTANT
+// Axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api/`;
+Axios.defaults.baseURL = `http://192.168.1.6:4000/api/`;
 Axios.defaults.withCredentials = true;
 
 const fetcher = async (options: object): Promise<AxiosResponse<any, any>> => {
@@ -19,8 +21,14 @@ const fetcher = async (options: object): Promise<AxiosResponse<any, any>> => {
     }
 };
 
+// // TODO: CHANGE THIS VERY IMPORTANT
+// const client = new ApolloClient({
+//     uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+//     credentials: "include",
+//     cache: new InMemoryCache(),
+// });
 const client = new ApolloClient({
-    uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+    uri: `http://192.168.1.6:4000/graphql`,
     credentials: "include",
     cache: new InMemoryCache(),
 });

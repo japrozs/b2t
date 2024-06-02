@@ -149,7 +149,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                             </p>
                             <p
                                 onClick={() => setOpen(true)}
-                                className="text-black g-sans cursor-pointer py-1.5 text-lg font-medium"
+                                className="border border-gray-300 rounded-lg px-4 py-1 text-black g-sans cursor-pointer mt-1 text-lg font-medium"
                             >
                                 {FORMAT_GRAMMAR(
                                     roomConfig.rooms

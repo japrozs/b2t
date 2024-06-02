@@ -2,6 +2,9 @@
 
 <!-- TODO: do these -->
 
+-- bugs
+[ ] hotel preview image gets messed up in hotel card if the hotel name overflows to 2 lines and the wifi icon is visible (taj 51 buckingham)
+
 [ ] show popup of text when hover of star rating (take from bookingcom)
 [ ] show breakup of price in `hotel-card` next to full pric
 [ ] make carousel of hotel partners
@@ -14,3 +17,4 @@
 
 -- later on
 [ ] a section for recent searches
+[ ] show skeleton loaders instead of spinning loaders

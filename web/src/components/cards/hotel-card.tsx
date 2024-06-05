@@ -4,6 +4,7 @@ import {
     HOTEL_FACILITY_FRONT_DESK_KEY,
 } from "@/constants";
 import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
+import { Tooltip } from "react-tooltip";
 import {
     FORMAT_GRAMMAR,
     getCheapestRoom,
@@ -12,33 +13,21 @@ import {
 } from "@/utils";
 import moment from "moment";
 import { useRouter } from "next/router";
-import React, { useId, useState } from "react";
+import React, { useState } from "react";
+import { FaWifi } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
-import { LuBadgeInfo } from "react-icons/lu";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoLocationOutline } from "react-icons/io5";
+import { MdOutlineCheck } from "react-icons/md";
+import { useCheckoutStore } from "../../store/provider";
 import {
     Popover,
-    PopoverTrigger,
-    PopoverContent,
-    Button,
-} from "@nextui-org/react";
-import {
-    IoIosArrowUp,
-    IoIosCheckmarkCircle,
-    IoIosCloseCircle,
-} from "react-icons/io";
-import { IoLocationOutline } from "react-icons/io5";
-import {
-    MdOutlineAttachMoney,
-    MdOutlineCheck,
-    MdOutlineFastfood,
-} from "react-icons/md";
-import { useCheckoutStore } from "../../store/provider";
-import { Pill } from "../ui/pill";
-import { MdAlternateEmail } from "react-icons/md";
-import { IoIosArrowDown } from "react-icons/io";
-import { FaWifi } from "react-icons/fa";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { Tooltip } from "react-tooltip";
+    PopoverButton,
+    PopoverPanel,
+    Transition,
+} from "@headlessui/react";
+import { Popper } from "../ui/popper";
+import { SlQuestion } from "react-icons/sl";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
@@ -351,41 +340,174 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             <p className="g-sans text-lg flex items-center text-blue-main font-medium truncate text-ellipsis">
                                 {room.RoomType}
                             </p>
-                            {room.MealPlan.toLowerCase() === "breakfast" ? (
-                                <div className="flex items-center mt-1">
-                                    <MdOutlineCheck className="text-md mr-2 text-green-600" />
-                                    <p className="font-medium text-sm text-green-600">
-                                        Breakfast included
-                                    </p>
+                            <div className="flex items-stretch">
+                                <div className="w-full pr-2.5">
+                                    {room.MealPlan.toLowerCase() ===
+                                    "breakfast" ? (
+                                        <div className="flex items-center mt-1">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
+                                            <p className="font-medium text-sm text-green-600">
+                                                Breakfast included
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center mt-1">
+                                            <span className="ml-1 mr-3">•</span>
+                                            <p className="font-medium text-gray-700 text-sm">
+                                                Meal plan – {room.MealPlan}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {room.NonRefundable === "N" ? (
+                                        <div className="flex items-center mt-0">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
+                                            <p className="flex items-center font-medium text-sm text-green-600">
+                                                Free cancellation before{" "}
+                                                {moment(
+                                                    parseDate(
+                                                        room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                    )
+                                                ).format("D MMMM, YYYY")}
+                                                <Popper
+                                                    panelShadow
+                                                    button={({ open }) => (
+                                                        <SlQuestion
+                                                            className={`text-blue-500 text-md ml-2 mt-1`}
+                                                        />
+                                                    )}
+                                                    panel={() => (
+                                                        <div className="bg-white w-96 p-4 flex items-start">
+                                                            <div className="py-1 pr-2">
+                                                                <MdOutlineCheck className="text-md text-green-600" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="flex items-center font-medium text-sm text-green-600">
+                                                                    Free
+                                                                    cancellation
+                                                                    before{" "}
+                                                                    {moment(
+                                                                        parseDate(
+                                                                            room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                                        )
+                                                                    ).format(
+                                                                        "D MMMM, YYYY"
+                                                                    )}
+                                                                </p>
+                                                                <p className="text-sm text-gray-700 mt-1">
+                                                                    You may
+                                                                    cancel free
+                                                                    of charge
+                                                                    until{" "}
+                                                                    <span className="font-medium">
+                                                                        23:59
+                                                                    </span>{" "}
+                                                                    on{" "}
+                                                                    <span className="font-medium">
+                                                                        {moment(
+                                                                            parseDate(
+                                                                                room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                                            )
+                                                                        )
+                                                                            .subtract(
+                                                                                1,
+                                                                                "days"
+                                                                            )
+                                                                            .format(
+                                                                                "D MMMM, YYYY"
+                                                                            )}
+                                                                    </span>
+                                                                    . You will
+                                                                    be charged{" "}
+                                                                    {room
+                                                                        .CancellationPolicyDetails
+                                                                        .Cancellation[0]
+                                                                        .NightToCharge
+                                                                        ? `the cost
+                                                                    of ${FORMAT_GRAMMAR(
+                                                                        room
+                                                                            .CancellationPolicyDetails
+                                                                            .Cancellation[0]
+                                                                            .NightToCharge,
+                                                                        "night"
+                                                                    )}`
+                                                                        : room
+                                                                              .CancellationPolicyDetails
+                                                                              .Cancellation[0]
+                                                                              .PercentOrAmt ===
+                                                                          "P"
+                                                                        ? `${Math.round(
+                                                                              parseFloat(
+                                                                                  room
+                                                                                      .CancellationPolicyDetails
+                                                                                      .Cancellation[0]
+                                                                                      .Value ||
+                                                                                      ""
+                                                                              )
+                                                                          )}% of the booking ammount`
+                                                                        : `\$ ${Math.round(
+                                                                              parseFloat(
+                                                                                  room
+                                                                                      .CancellationPolicyDetails
+                                                                                      .Cancellation[0]
+                                                                                      .Value ||
+                                                                                      ""
+                                                                              )
+                                                                          )}`}{" "}
+                                                                    if you
+                                                                    cancel on or
+                                                                    after{" "}
+                                                                    <span className="font-medium">
+                                                                        00:00
+                                                                    </span>{" "}
+                                                                    on{" "}
+                                                                    <span className="font-medium">
+                                                                        {moment(
+                                                                            parseDate(
+                                                                                room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                                            )
+                                                                        ).format(
+                                                                            "D MMMM, YYYY"
+                                                                        )}
+                                                                    </span>
+                                                                    . If you
+                                                                    don't show
+                                                                    up, the
+                                                                    no-show fee
+                                                                    will be the
+                                                                    same as the
+                                                                    cancellation
+                                                                    fee.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                />
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center mt-0">
+                                            <span className="ml-1 mr-3">•</span>
+                                            <p className="font-medium text-gray-700 text-sm">
+                                                Non-refundable
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
-                            ) : (
-                                <div className="flex items-center mt-1">
-                                    <span className="ml-1 mr-3">•</span>
-                                    <p className="font-medium text-gray-700 text-sm">
-                                        Meal plan – {room.MealPlan}
-                                    </p>
+                                <div className="pl-2.5 w-full border-l border-gray-300">
+                                    {hotel.details.Details[0].RoomTypes.RoomType.filter(
+                                        (r) =>
+                                            r.RoomTypeCode ===
+                                                room.RoomTypeCode &&
+                                            r.RoomType === room.RoomType
+                                    ).map((room) => (
+                                        <div>
+                                            <p>MaxOccAdt – {room.MaxOccAdt}</p>
+                                            <p>MaxOccChd – {room.MaxOccChd}</p>
+                                            <p>MaxOccPax – {room.MaxOccPax}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
-                            {room.NonRefundable === "N" ? (
-                                <div className="flex items-center mt-0">
-                                    <MdOutlineCheck className="text-md mr-2 text-green-600" />
-                                    <p className="font-medium text-sm text-green-600">
-                                        Free cancellation before{" "}
-                                        {moment(
-                                            parseDate(
-                                                room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                            )
-                                        ).format("D MMMM, YYYY")}
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="flex items-center mt-0">
-                                    <span className="ml-1 mr-3">•</span>
-                                    <p className="font-medium text-gray-700 text-sm">
-                                        Non-refundable
-                                    </p>
-                                </div>
-                            )}
+                            </div>
                             <div className="mt-3 flex items-center">
                                 <p>i – contract message</p>
                             </div>

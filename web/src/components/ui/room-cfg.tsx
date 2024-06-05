@@ -256,12 +256,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                     <button
                         className={`ml-auto mr-0 g-sans text-center bg-[#00395D] text-[#00AEEF] hover:bg-opacity-[0.98] rounded-md py-2 px-10 whitespace-nowrap font-medium text-md`}
                         onClick={() => {
-                            const roomCpy = [...roomConfig.rooms];
-                            roomCpy.push({
-                                adults: 1,
-                                children: [{ age: 5 }],
-                            });
-                            setRoomConfig({ rooms: roomCpy });
+                            setOpen(false);
                         }}
                     >
                         Done

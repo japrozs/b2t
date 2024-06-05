@@ -142,7 +142,9 @@ export interface RoomDetailType {
             FromDate: number;
             FromTime: string;
             ToDate: number;
-            NightToCharge: number;
+            NightToCharge?: number;
+            PercentOrAmt?: string;
+            Value?: string;
         }[];
     };
     PromotionalContract: string;

@@ -1,15 +1,15 @@
-import {nextui} from '@nextui-org/theme';
+import { nextui } from "@nextui-org/theme";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
-    "./node_modules/@nextui-org/theme/dist/components/(popover|button|ripple|spinner).js"
-  ],
+    content: [
+        "./src/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
+        "./node_modules/@nextui-org/theme/dist/components/(popover|button|ripple|spinner).js",
+    ],
     theme: {
         extend: {
             backgroundImage: {
@@ -21,6 +21,7 @@ const config: Config = {
                 "primary-color": "#35E0A1",
                 "blue-main": "#09225A",
                 "blue-sec": "#558FF0",
+                "ios-blue": "#147efb",
             },
             fontSize: {
                 tiny: "0.89rem",
@@ -32,6 +33,6 @@ const config: Config = {
             },
         },
     },
-  plugins: [nextui()],
+    plugins: [nextui()],
 };
 export default config;

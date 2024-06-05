@@ -18,3 +18,4 @@
 -- later on
 [ ] a section for recent searches
 [ ] show skeleton loaders instead of spinning loaders
+[ ] expedia timeline like cancellation policy

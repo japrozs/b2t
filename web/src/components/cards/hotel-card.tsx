@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import { FaWifi } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { IoLocationOutline } from "react-icons/io5";
+import { IoLocationOutline, IoPerson } from "react-icons/io5";
 import { MdOutlineCheck } from "react-icons/md";
 import { useCheckoutStore } from "../../store/provider";
 import {
@@ -28,6 +28,7 @@ import {
 } from "@headlessui/react";
 import { Popper } from "../ui/popper";
 import { SlQuestion } from "react-icons/sl";
+import { HotelModal } from "../modals/hotel-modal";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
@@ -46,6 +47,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     const [open, setOpen] = useState(false);
     const { setHotel, setRoom, setCfg } = useCheckoutStore((state) => state);
     const router = useRouter();
+    const [hotelModalOpen, setHotelModalOpen] = useState(false);
     // console.log(
     //     hotel.HotelName,
     //     hotel.HotelCode,
@@ -67,7 +69,12 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     <h1 className="g-sans mb-1 text-xl text-blue-main font-medium flex items-center flex-wrap">
                         {/* <h1 className="libre text-2xl text-blue-main font-medium truncate text-ellipsis"> */}
                         {/* show full hotel name on hover */}
-                        <div className="mr-1.5">{hotel.HotelName}</div>
+                        <div
+                            onClick={() => setHotelModalOpen(true)}
+                            className="mr-1.5 text-ios-blue hover:bg-blue-50 py-0.5 hover:underline cursor-pointer px-1 rounded-md"
+                        >
+                            {hotel.HotelName}
+                        </div>
                         <span className="flex items-center">
                             {Array(hotel.StarRating)
                                 .fill(0)
@@ -82,9 +89,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     <div className="flex items-center my-1">
                         <p className="flex items-center text-sm text-gray-500 font-medium">
                             <IoLocationOutline className="mr-1.5" />
-                            {hotel.details.Details[0].HotelAddress.split(",")
+                            {hotel.details.Details[0].HotelAddress ||
+                                hotel.Chain}
+                            {/* {hotel.details.Details[0].HotelAddress.split(",")
                                 .slice(0, 2)
-                                .join(", ") || hotel.Chain}
+                                .join(", ") || hotel.Chain} */}
                         </p>
                         {/* <span className="mx-2.5 text-gray-500">•</span> */}
                     </div>
@@ -113,8 +122,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     {r.MealPlan.toLowerCase() ===
                                     "breakfast" ? (
                                         <div className="flex items-center mt-1">
-                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
-                                            <p className="font-medium text-sm text-green-600">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-700" />
+                                            <p className="font-medium text-sm text-green-700">
                                                 Breakfast included
                                             </p>
                                         </div>
@@ -128,14 +137,16 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     )}
                                     {r.NonRefundable === "N" ? (
                                         <div className="flex items-center mt-0">
-                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
-                                            <p className="font-medium text-sm text-green-600">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-700" />
+                                            <p className="font-medium text-sm text-green-700">
                                                 Free cancellation before{" "}
-                                                {moment(
-                                                    parseDate(
-                                                        r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                                    )
-                                                ).format("D MMMM, YYYY")}
+                                                <span className="font-semibold">
+                                                    {moment(
+                                                        parseDate(
+                                                            r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                        )
+                                                    ).format("D MMMM, YYYY")}
+                                                </span>
                                             </p>
                                         </div>
                                     ) : (
@@ -149,30 +160,6 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                 </>
                             ))}
                     </div>
-                    {/* <div className="mt-3 flex items-center">
-                        {hotel.RoomTypeDetails.Rooms.Room[0].NonRefundable ===
-                        "Y" ? (
-                            <div className="flex items-center">
-                                <IoIosCloseCircle className="text-md mr-2 text-red-500" />
-                                <p className="font-medium text-sm">
-                                    Non-refundable
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="flex items-center">
-                                <IoIosCheckmarkCircle className="text-md mr-2 text-green-600" />
-                                <p className="font-medium text-sm">
-                                    Refundable
-                                </p>
-                            </div>
-                        )}
-                        <div className="ml-3 flex items-center">
-                            <MdOutlineFastfood className="text-md mr-2 text-purple-500" />
-                            <p className="font-medium text-sm">
-                                {hotel.RoomTypeDetails.Rooms.Room[0].MealPlan}
-                            </p>
-                        </div>
-                    </div> */}
                     {/* TODO – use icons like HRS if possible */}
                     <div className="mt-auto mb-0 flex items-center">
                         {hotel.details.Details[0].HotelFacilities.Facility.includes(
@@ -183,7 +170,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     aria-label="Free Wi-Fi"
                                     className="text-xl text-blue-600"
                                 />
-                                <p className="ml-2 uppercase g-sans text-gray-600 font-semibold text-xs">
+                                <p className="ml-2 uppercase g-sans text-gray-700 font-semibold text-xs">
                                     Free Wi-Fi
                                 </p>
                                 <span className="ml-3 mr-1 text-gray-300">
@@ -208,7 +195,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                         fill="currentColor"
                                     />
                                 </svg>
-                                <p className="ml-2 uppercase g-sans text-gray-600 font-semibold text-xs">
+                                <p className="ml-2 uppercase g-sans text-gray-700 font-semibold text-xs">
                                     24H FRONT DESK
                                 </p>
                                 <span className="ml-3 mr-1 text-gray-300">
@@ -216,7 +203,9 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                 </span>
                             </div>
                         )}
-                        <p className="transition-all cursor-pointer font-medium text-blue-600 text-sm py-1 px-2 rounded-md bg-blue-50">
+                        <p
+                            className={`transition-all cursor-pointer font-medium text-blue-600 text-sm py-1 px-2 rounded-md bg-blue-50`}
+                        >
                             Facilities
                         </p>
                     </div>
@@ -334,19 +323,19 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                 hotel.RoomTypeDetails.Rooms.Room.map((room, idx: number) => (
                     <div
                         key={idx}
-                        className="border border-gray-200 m-[0.875rem] p-3 flex items-start"
+                        className="border border-gray-200 m-[0.875rem] p-3 flex items-stretch"
                     >
-                        <div className="w-full">
-                            <p className="g-sans text-lg flex items-center text-blue-main font-medium truncate text-ellipsis">
+                        <div className="w-full flex flex-col">
+                            <p className="g-sans text-lg flex items-center text-blue-main font-medium truncate text-ellipsis mb-1">
                                 {room.RoomType}
                             </p>
                             <div className="flex items-stretch">
-                                <div className="w-full pr-2.5">
+                                <div className="w-full pr-0">
                                     {room.MealPlan.toLowerCase() ===
                                     "breakfast" ? (
                                         <div className="flex items-center mt-1">
-                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
-                                            <p className="font-medium text-sm text-green-600">
+                                            <MdOutlineCheck className="text-md mr-2 text-green-700" />
+                                            <p className="font-medium text-sm text-green-700">
                                                 Breakfast included
                                             </p>
                                         </div>
@@ -360,28 +349,30 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     )}
                                     {room.NonRefundable === "N" ? (
                                         <div className="flex items-center mt-0">
-                                            <MdOutlineCheck className="text-md mr-2 text-green-600" />
-                                            <p className="flex items-center font-medium text-sm text-green-600">
-                                                Free cancellation before{" "}
-                                                {moment(
-                                                    parseDate(
-                                                        room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                                    )
-                                                ).format("D MMMM, YYYY")}
+                                            <MdOutlineCheck className="text-md mr-2 text-green-700" />
+                                            <p className="flex items-center font-medium text-sm text-green-700">
+                                                Free cancellation before
+                                                <span className="font-semibold ml-1">
+                                                    {moment(
+                                                        parseDate(
+                                                            room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                        )
+                                                    ).format("D MMMM, YYYY")}
+                                                </span>
                                                 <Popper
                                                     panelShadow
                                                     button={({ open }) => (
                                                         <SlQuestion
-                                                            className={`text-blue-500 text-md ml-2 mt-1`}
+                                                            className={`text-blue-600 text-md ml-2 mt-1`}
                                                         />
                                                     )}
                                                     panel={() => (
                                                         <div className="bg-white w-96 p-4 flex items-start">
                                                             <div className="py-1 pr-2">
-                                                                <MdOutlineCheck className="text-md text-green-600" />
+                                                                <MdOutlineCheck className="text-md text-green-700" />
                                                             </div>
                                                             <div>
-                                                                <p className="flex items-center font-medium text-sm text-green-600">
+                                                                <p className="flex items-center font-medium text-sm text-green-700">
                                                                     Free
                                                                     cancellation
                                                                     before{" "}
@@ -443,7 +434,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                                                                       .Value ||
                                                                                       ""
                                                                               )
-                                                                          )}% of the booking ammount`
+                                                                          )}% of the booking amount`
                                                                         : `\$ ${Math.round(
                                                                               parseFloat(
                                                                                   room
@@ -493,7 +484,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                         </div>
                                     )}
                                 </div>
-                                <div className="pl-2.5 w-full border-l border-gray-300">
+                                <div className="pl-4 w-full">
                                     {hotel.details.Details[0].RoomTypes.RoomType.filter(
                                         (r) =>
                                             r.RoomTypeCode ===
@@ -501,15 +492,63 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                             r.RoomType === room.RoomType
                                     ).map((room) => (
                                         <div>
-                                            <p>MaxOccAdt – {room.MaxOccAdt}</p>
-                                            <p>MaxOccChd – {room.MaxOccChd}</p>
-                                            <p>MaxOccPax – {room.MaxOccPax}</p>
+                                            <p className="mt-1 font-medium flex items-center text-sm text-gray-700">
+                                                Maximum Occupancy{" "}
+                                                <span className="mx-2 text-gray-400 g-sans">
+                                                    ––
+                                                </span>
+                                                {Array(room.MaxOccPax)
+                                                    .fill(0)
+                                                    .map((_, idx) => (
+                                                        <IoPerson className="text-md mr-0.5" />
+                                                    ))}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="mt-3 flex items-center">
+                            {/* <div className="mt-3 flex items-center">
                                 <p>i – contract message</p>
+                            </div> */}
+                            <div className="mt-auto mb-0 flex items-center">
+                                {hotel.details.Details[0].HotelFacilities.Facility.includes(
+                                    HOTEL_FACILITY_FREE_WIFI_KEY
+                                ) && (
+                                    <div className="p-1.5 flex items-center">
+                                        <FaWifi
+                                            aria-label="Free Wi-Fi"
+                                            className="text-xl text-blue-600"
+                                        />
+                                        <p className="ml-2 uppercase g-sans text-gray-700 font-semibold text-xs">
+                                            Free Wi-Fi
+                                        </p>
+                                        <span className="ml-3 mr-1 text-gray-300">
+                                            •
+                                        </span>
+                                    </div>
+                                )}
+                                <p className="uppercase g-sans font-semibold text-xs flex items-center text-gray-700">
+                                    What's Included?{" "}
+                                    <Popper
+                                        panelShadow
+                                        button={({ open }) => (
+                                            <SlQuestion
+                                                className={`text-blue-600 text-md ml-2 mt-1`}
+                                            />
+                                        )}
+                                        panel={() => (
+                                            <div className="bg-white w-72 p-4">
+                                                <p className="text-black g-sans font-medium">
+                                                    What's included?
+                                                </p>
+                                                <hr className="mt-1 mb-1.5" />
+                                                <p className="text-sm text-gray-700">
+                                                    {room.ContractLabel}
+                                                </p>
+                                            </div>
+                                        )}
+                                    />
+                                </p>
                             </div>
                         </div>
                         <div className="self-end text-right min-w-36 flex flex-col">
@@ -602,9 +641,10 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     setCfg(cfg);
                                     router.push("/app/checkout");
                                 }}
-                                className={`mt-3 mb-0 flex g-sans items-center bg-black text-white hover:bg-opacity-[0.98] rounded-md py-1.5 text-center whitespace-nowrap font-medium text-md  justify-center`}
+                                // className={`mt-3 mb-0 g-sans bg-black text-white hover:bg-opacity-[0.98] rounded-md py-1.5 text-center whitespace-nowrap font-medium text-md`}
+                                className={`mt-3 mb-0 g-sans text-center bg-black text-white hover:bg-opacity-[0.98] rounded-full py-2 px-0 whitespace-nowrap font-medium text-base`}
                             >
-                                Book room
+                                Reserve
                             </button>
                         </div>
                         {/* <div className="ml-5 min-w-32 self-center flex items-center">
@@ -620,6 +660,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         </div> */}
                     </div>
                 ))}
+            <HotelModal
+                open={hotelModalOpen}
+                setOpen={setHotelModalOpen}
+                hotel={hotel}
+            />
         </div>
     );
 };

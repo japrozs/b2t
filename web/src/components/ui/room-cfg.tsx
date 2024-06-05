@@ -181,7 +181,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="my-5">
+                        <div className="mt-5">
                             {room.children.map(
                                 (child: { age: number }, i: number) => (
                                     <div

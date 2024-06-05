@@ -7,6 +7,7 @@ import {
     RoomDetailType,
 } from "@/types";
 import React, { useEffect, useState } from "react";
+import { BiLeftArrowAlt } from "react-icons/bi";
 import useSWR from "swr";
 import {
     FORMAT_GRAMMAR,
@@ -242,11 +243,12 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                                 />
                                             ))}
                                         {cfgRoom.children.map(
-                                            (_, childIndex) => (
+                                            (child, childIndex) => (
                                                 <PersonDetailsCfg
                                                     key={`child-${roomIndex}-${childIndex}`}
                                                     personType="Child"
                                                     personIndex={childIndex}
+                                                    childAge={child.age}
                                                     onDataChange={(data) =>
                                                         handleChildDataChange(
                                                             data,
@@ -297,10 +299,16 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     <p className="text-center text-xs font-semibold text-gray-600 mt-1">
                                         {FORMAT_GRAMMAR(
                                             nightsBetween(
-                                                (hotel as HotelSearchItemType)
-                                                    .StartDate,
-                                                (hotel as HotelSearchItemType)
-                                                    .EndDate
+                                                parseDate(
+                                                    (
+                                                        hotel as HotelSearchItemType
+                                                    ).StartDate.toString()
+                                                ),
+                                                parseDate(
+                                                    (
+                                                        hotel as HotelSearchItemType
+                                                    ).EndDate.toString()
+                                                )
                                             ),
                                             "night"
                                         )}
@@ -354,7 +362,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     </p>
                                     <p className="text-base font-semibold">
                                         $
-                                        {Math.round(
+                                        {/* {Math.ceil(
                                             ((room as RoomDetailType)
                                                 .TotalRate *
                                                 COMMISSION_RATE) /
@@ -372,6 +380,23 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                                 ) *
                                                     (cfg as RoomCfgType).rooms
                                                         .length)
+                                        )} */}
+                                        {Math.ceil(
+                                            COMMISSION_RATE *
+                                                ((room as RoomDetailType)
+                                                    .TotalRate /
+                                                    nightsBetween(
+                                                        parseDate(
+                                                            (
+                                                                hotel as HotelSearchItemType
+                                                            ).StartDate.toString()
+                                                        ),
+                                                        parseDate(
+                                                            (
+                                                                hotel as HotelSearchItemType
+                                                            ).EndDate.toString()
+                                                        )
+                                                    ))
                                         )}
                                     </p>
                                 </div>
@@ -409,8 +434,9 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 </p>
                                 <p className="text-right text-3xl g-sans font-medium mb-1.5 pb-1.5">
                                     $
-                                    {Math.round(
+                                    {Math.ceil(
                                         (room as RoomDetailType).TotalRate *
+                                            (cfg as RoomCfgType).rooms.length *
                                             COMMISSION_RATE
                                     )}
                                 </p>

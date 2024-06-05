@@ -6,6 +6,7 @@ import { RoomDetailType } from "@/types";
 interface PersonDetailsProps {
     personType: "Adult" | "Child";
     personIndex: number;
+    childAge?: number;
     onDataChange: (data: any) => void;
 }
 
@@ -16,13 +17,15 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
     personType,
     personIndex,
     onDataChange,
+    childAge,
 }) => {
     const [title, setTitle] = useState("Mr");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [age, setAge] = useState("");
+    const [age, setAge] = useState(childAge?.toString() || "");
     const [nationality, setNationality] = useState("LON");
     const [gender, setGender] = useState("M");
+    console.log(childAge);
 
     useEffect(() => {
         const data = {

@@ -14,6 +14,28 @@ export const searchHotel = async (req: Request, res: Response) => {
             where: { code: city },
             relations: ["hotels"],
         });
+        console.log("body : ", {
+            Profile: {
+                // TODO: change these to environment variables
+                Password: "EybSIuEUqr9aaoPm",
+                Code: "NobleTravels",
+                TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+            },
+            SearchCriteria: {
+                RoomConfiguration: {
+                    Room: JSON.stringify(formatRoomCfg(JSON.parse(cfg))),
+                },
+                StartDate: startDate.replaceAll("-", ""),
+                EndDate: endDate.replaceAll("-", ""),
+                HotelCode: searchCity?.hotels
+                    .map((hotel) => hotel.code)
+                    .join(", "),
+                // TODO: THIS IS NATIONALITY OF TRAVELLER, probably don't hardcode it
+                Nationality: "LON",
+                GroupByRooms: "Y",
+                CancellationPolicy: "Y",
+            },
+        });
         axios
             .post(`https://api.iwtxconnect.com/hotel/api/v1/search`, {
                 Profile: {

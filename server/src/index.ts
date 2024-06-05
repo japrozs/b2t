@@ -51,18 +51,18 @@ const main = async () => {
     const redis = new Redis(process.env.REDIS_URL);
     app.set("trust proxy", 1);
     // TODO: CHANGE THIS VERY IMPORTANT
-    // app.use(
-    //     cors({
-    //         origin: process.env.CORS_ORIGIN,
-    //         credentials: true,
-    //     })
-    // );
     app.use(
         cors({
-            origin: "http://192.168.1.6:3000",
+            origin: process.env.CORS_ORIGIN,
             credentials: true,
         })
     );
+    // app.use(
+    //     cors({
+    //         origin: "http://192.168.1.6:3000",
+    //         credentials: true,
+    //     })
+    // );
     app.use(bodyParser.json());
 
     app.use(

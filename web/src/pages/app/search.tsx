@@ -74,9 +74,9 @@ const Search: React.FC<SearchProps> = ({}) => {
     const [sortByPriceOrder, setSortByPriceOrder] = useState("L2H");
     const [sortByRating, setSortByRating] = useState(false);
     const [sortByRatingOrder, setSortByRatingOrder] = useState("H2L");
-    const [showTotalPrice, setShowTotalPrice] = useState(true);
+    const [showTotalPrice, setShowTotalPrice] = useState(false);
     const [showPricePerNightPerRoom, setShowPricePerNightPerRoom] =
-        useState(false);
+        useState(true);
     const [filterQuery, setFilterQuery] = useState("");
 
     useEffect(() => {
@@ -295,7 +295,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         </p>
                                         <p
                                             onClick={() => setOpen(true)}
-                                            className="border border-gray-300 rounded-lg px-4 py-1 text-black whitespace-nowrap g-sans cursor-pointer pt-1.5 text-lg font-medium"
+                                            className="border border-gray-300 mt-1.5 rounded-lg px-4 py-[0.30rem] text-black whitespace-nowrap g-sans cursor-pointer text-md font-medium"
                                         >
                                             {FORMAT_GRAMMAR(
                                                 searchRoomCfg.rooms

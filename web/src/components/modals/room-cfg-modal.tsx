@@ -9,6 +9,8 @@ import {
 } from "@headlessui/react";
 import { RoomCfgType } from "@/types";
 import RoomConfig from "../ui/room-cfg";
+import { RxCross2 } from "react-icons/rx";
+import { FORMAT_GRAMMAR } from "@/utils";
 
 interface RoomCfgModalProps {
     open: boolean;
@@ -50,13 +52,51 @@ export const RoomCfgModal: React.FC<RoomCfgModalProps> = ({
                         {/* The actual dialog panel  */}
                         <DialogPanel
                             style={{
-                                maxHeight: "35rem",
+                                maxHeight: "39rem",
                             }}
-                            className="w-full overflow-y-scroll  max-w-2xl rounded-lg space-y-4 bg-white p-5"
+                            className="w-full overflow-y-scroll py-4 max-w-2xl rounded-lg space-y-4 bg-white"
                         >
+                            <div className="flex items-center px-4">
+                                <p className="text-lg flex items-center g-sans font-medium">
+                                    Rooms
+                                    <span className="text-gray-600 mx-2 font-normal">
+                                        ––
+                                    </span>
+                                    <span className="text-gray-600 font-normal">
+                                        {FORMAT_GRAMMAR(
+                                            roomConfig.rooms.length,
+                                            "room"
+                                        )}{" "}
+                                        (
+                                        {FORMAT_GRAMMAR(
+                                            roomConfig.rooms
+                                                .flatMap((room) => room.adults)
+                                                .reduce((a, b) => a + b),
+                                            "adult"
+                                        )}
+                                        ,{" "}
+                                        {FORMAT_GRAMMAR(
+                                            roomConfig.rooms
+                                                .flatMap(
+                                                    (room) =>
+                                                        room.children.length
+                                                )
+                                                .reduce((a, b) => a + b),
+                                            "child",
+                                            "children"
+                                        )}
+                                        )
+                                    </span>
+                                </p>
+                                <RxCross2
+                                    onClick={() => setOpen(false)}
+                                    className="transition-all ml-auto text-2xl text-gray-400 hover:text-blue-600 cursor-pointer"
+                                />
+                            </div>
                             <RoomConfig
                                 roomConfig={roomConfig}
                                 setRoomConfig={setRoomConfig}
+                                setOpen={setOpen}
                             />
                         </DialogPanel>
                     </div>

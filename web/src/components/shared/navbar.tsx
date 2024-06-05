@@ -5,6 +5,7 @@ import { IoMdMenu } from "react-icons/io";
 import { Logo } from "../ui/logo";
 import { NAVBAR_COLORS } from "@/theme";
 import useRandomColor from "@/utils/use-random-color";
+import { BiLeftArrowAlt } from "react-icons/bi";
 
 interface NavbarProps {
     sticky?: boolean;
@@ -23,6 +24,14 @@ export const Navbar: React.FC<NavbarProps> = ({ sticky }) => {
                 sticky && "sticky top-0 z-10"
             } py-2 flex items-center`}
         >
+            {/* <div className="flex items-center">
+                <BiLeftArrowAlt
+                    style={{
+                        color: themeColors[0],
+                    }}
+                    className={`z-10 ml-0 text-3xl text-[${themeColors[0]}] cursor-pointer`}
+                />
+            </div> */}
             <div className="flex items-center w-full max-w-[76rem] mx-auto">
                 <Link href="/app/">
                     <Logo

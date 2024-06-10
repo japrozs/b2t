@@ -3,9 +3,13 @@ import {
     HOTEL_FACILITY_FRONT_DESK_KEY,
 } from "@/constants";
 import { HotelSearchItemType } from "@/types";
+import { getCheapestRoom } from "@/utils";
 import { Dialog, DialogPanel, Transition } from "@headlessui/react";
-import React, { Dispatch, Fragment, SetStateAction } from "react";
+import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { FaWifi } from "react-icons/fa";
+import { MdOutlineCheck } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
+import { Carousel } from "../ui/carousel";
 
 interface HotelModalProps {
     open: boolean;
@@ -18,6 +22,7 @@ export const HotelModal: React.FC<HotelModalProps> = ({
     setOpen,
     hotel,
 }) => {
+    const [showFullDescription, setShowFullDescription] = useState(false);
     return (
         <Transition appear show={open}>
             <Transition.Child
@@ -49,19 +54,26 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                             }}
                             className="w-full overflow-y-scroll py-4 max-w-5xl rounded-lg p-5 bg-white"
                         >
-                            <div className="flex items-stretch space-x-5">
-                                <div className="w-3/5 bg-red-500">
-                                    <p>hi there</p>
+                            <div className="flex items-start space-x-5">
+                                <div className="w-3/5">
+                                    {/* <p>hi there</p> */}
+                                    <Carousel hotel={hotel} />
                                 </div>
                                 <div className="w-2/5">
-                                    <p className="text-2xl font-semibold">
-                                        {hotel.HotelName}
-                                    </p>
+                                    <div className="flex items-start">
+                                        <p className="text-2xl font-semibold">
+                                            {hotel.HotelName}
+                                        </p>
+                                        <RxCross2
+                                            onClick={() => setOpen(false)}
+                                            className="transition-all ml-auto text-3xl text-gray-400 hover:text-blue-600 cursor-pointer"
+                                        />
+                                    </div>
                                     <div className="mt-1.5 flex items-center">
                                         {hotel.details.Details[0].HotelFacilities.Facility.includes(
                                             HOTEL_FACILITY_FREE_WIFI_KEY
                                         ) && (
-                                            <div className="p-1.5 flex items-center">
+                                            <div className="pl-0 p-1.5 flex items-center">
                                                 <FaWifi
                                                     aria-label="Free Wi-Fi"
                                                     className="text-lg text-blue-600"
@@ -99,6 +111,78 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                                 </span> */}
                                             </div>
                                         )}
+                                    </div>
+                                    <hr className="mt-2 mb-3" />
+                                    <div>
+                                        <p className="uppercase g-sans text-sm text-black font-bold mb-1">
+                                            description
+                                        </p>
+                                        {hotel.details.Details[0].Description
+                                            ?.length > 500 ? (
+                                            <div>
+                                                {showFullDescription ? (
+                                                    <p className="text-sm font-medium text-gray-700">
+                                                        {
+                                                            hotel.details
+                                                                .Details[0]
+                                                                .Description
+                                                        }
+                                                        <span
+                                                            onClick={() =>
+                                                                setShowFullDescription(
+                                                                    !showFullDescription
+                                                                )
+                                                            }
+                                                            className="text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                                        >
+                                                            Show less
+                                                        </span>
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-sm font-medium text-gray-700">
+                                                        {hotel.details.Details[0].Description.slice(
+                                                            0,
+                                                            500
+                                                        ) + "..."}
+                                                        <span
+                                                            onClick={() =>
+                                                                setShowFullDescription(
+                                                                    !showFullDescription
+                                                                )
+                                                            }
+                                                            className="text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                                        >
+                                                            Show more
+                                                        </span>
+                                                    </p>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <p className="text-sm font-medium text-gray-700">
+                                                {
+                                                    hotel.details.Details[0]
+                                                        .Description
+                                                }
+                                            </p>
+                                        )}
+                                    </div>
+                                    <hr className="mt-3 mb-3" />
+                                    <div>
+                                        <p className="uppercase g-sans text-sm text-black font-bold mb-1">
+                                            FACILITIES
+                                        </p>
+                                        <div className="flex flex-wrap">
+                                            {hotel.details.Details[0].HotelFacilities.Facility.map(
+                                                (fac: string) => (
+                                                    <div className="w-1/2 my-0.5 flex items-start">
+                                                        <MdOutlineCheck className="text-md mt-0.5 mr-2 text-green-700" />
+                                                        <p className="text-sm font-medium">
+                                                            {fac}
+                                                        </p>
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

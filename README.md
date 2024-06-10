@@ -4,7 +4,7 @@
 
 -- bugs
 [ ] hotel preview image gets messed up in hotel card if the hotel name overflows to 2 lines and the wifi icon is visible (taj 51 buckingham)
-
+[ ] TODO: make sure useIsAuth() is being caled on auth protected pages
 [ ] show popup of text when hover of star rating (take from bookingcom)
 [ ] show breakup of price in `hotel-card` next to full pric
 [ ] make carousel of hotel partners

@@ -1,4 +1,5 @@
 // import { Meta } from "@/components/shared/meta";
+import { Logo } from "@/components/ui/logo";
 import { Button } from "../components/ui/button";
 import { InputField } from "../components/ui/input-field";
 import { useRegisterMutation } from "../generated/graphql";
@@ -27,20 +28,14 @@ const Signup: React.FC<SignupProps> = ({}) => {
             <div className="h-screen">
                 <div className="px-6 py-5 z-10">
                     <Link href="/">
-                        <Image
-                            src="/logo.svg"
-                            className="h-8 w-auto"
-                            height={20}
-                            width={20}
-                            alt="logo"
-                        />
+                        <Logo className="h-9 w-auto text-[#050f2c]" />
                     </Link>
                 </div>
                 <div
                     style={{
                         marginTop: "13.8vh",
                     }}
-                    className="w-80 ml-auto mr-auto flex flex-col items-center justify-center"
+                    className="w-80 ml-auto mr-auto flex flex-col items-center justify-center  pb-20"
                 >
                     <p className="text-5xl font-semibold mb-5">Sign up</p>
                     <Formik
@@ -199,7 +194,7 @@ const Signup: React.FC<SignupProps> = ({}) => {
                         Already have an account?{" "}
                         <Link
                             href="/login"
-                            className="hover:underline hover:text-blue-main transition-all"
+                            className="hover:underline hover:text-blue-500 font-medium"
                         >
                             Login
                         </Link>

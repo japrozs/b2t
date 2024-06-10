@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { Logo } from "@/components/ui/logo";
 
 interface LoginProps {}
 
@@ -27,13 +28,7 @@ const Login: React.FC<LoginProps> = ({}) => {
             <div className="h-screen">
                 <div className="px-6 py-5 z-10">
                     <Link href="/">
-                        <Image
-                            src="/logo.svg"
-                            className="h-8 w-auto"
-                            height={20}
-                            width={20}
-                            alt="logo"
-                        />
+                        <Logo className="h-9 w-auto text-[#050f2c]" />
                     </Link>
                 </div>
                 <div
@@ -92,7 +87,7 @@ const Login: React.FC<LoginProps> = ({}) => {
                         Don{"'"}t have an account?{" "}
                         <Link
                             href="/signup"
-                            className="hover:underline hover:text-primary-color transition-all"
+                            className="hover:underline font-medium hover:text-blue-500"
                         >
                             Sign up
                         </Link>

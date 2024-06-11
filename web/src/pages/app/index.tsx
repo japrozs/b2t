@@ -112,6 +112,9 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                     inputClassName={
                                         "outline-nonefocus:ring-1  datepicker-input"
                                     }
+                                    toggleClassName={
+                                        "absolute right-0 mt-0.5 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
+                                    }
                                     minDate={
                                         // new Date(Date.now() - 24 * 60 * 60 * 1000)
                                         new Date(Date.now())
@@ -174,7 +177,9 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                     roomConfig
                                 )}&name=${city.label}`}
                             >
-                                <button className="transition-all mt-2.5 bg-blue-600 w-full text-center py-2 rounded-lg text-white font-medium drop-shadow-sm hover:bg-opacity-95">
+                                <button
+                                    className={`mt-3 g-sans items-center bg-[#00395D] text-[#00AEEF] hover:bg-opacity-[0.98] rounded-md py-2 px-10 whitespace-nowrap font-medium text-md w-full justify-center`}
+                                >
                                     Search
                                 </button>
                             </a>
@@ -455,7 +460,7 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                                 roomConfig
                             )}&name=${"(LON) London"}`}
                         >
-                            <button className="transition-all mt-10 bg-[#00395D] text-[#00AEEF] flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
+                            <button className="transition-all g-sans mt-10 bg-[#00395D] text-[#00AEEF] flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
                                 Book your dream getaway
                             </button>
                         </a>

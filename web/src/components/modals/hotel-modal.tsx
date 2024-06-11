@@ -6,12 +6,14 @@ import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
 import { getCheapestRoom, parseDate } from "@/utils";
 import { Dialog, DialogPanel, Transition } from "@headlessui/react";
 import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
-import { FaWifi } from "react-icons/fa";
+import { FaStar, FaWifi } from "react-icons/fa";
 import { MdOutlineCheck, MdOutlineKingBed } from "react-icons/md";
-import { RxCross2 } from "react-icons/rx";
+import { RxCross2, RxExit } from "react-icons/rx";
 import { Carousel } from "../ui/carousel";
 import moment from "moment";
 import { RoomCard } from "../cards/room-card";
+import { IoExitOutline } from "react-icons/io5";
+import { TbLogin2, TbLogout2 } from "react-icons/tb";
 
 interface HotelModalProps {
     open: boolean;
@@ -61,10 +63,10 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                             <div className="flex items-start space-x-5">
                                 <div className="w-3/5">
                                     <Carousel hotel={hotel} />
-                                    <p className="flex items-center mt-5 uppercase g-sans text-sm text-black font-bold mb-2">
+                                    {/* <p className="flex items-center mt-5 uppercase g-sans text-sm text-black font-bold mb-2">
                                         <MdOutlineKingBed className="text-xl mr-1 text-gray-400" />
                                         CHEAPEST ROOM
-                                    </p>
+                                    </p> */}
                                     {Array(1)
                                         .fill(
                                             getCheapestRoom(
@@ -84,12 +86,24 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                 </div>
                                 <div className="w-2/5">
                                     <div className="flex items-start">
-                                        <p className="text-2xl font-semibold">
-                                            {hotel.HotelName}
-                                        </p>
+                                        <div className="flex items-center flex-wrap">
+                                            <p className="mr-1.5 text-2xl font-semibold">
+                                                {hotel.HotelName}
+                                            </p>
+                                            <span className="flex items-center">
+                                                {Array(hotel.StarRating)
+                                                    .fill(0)
+                                                    .map((_, idx: number) => (
+                                                        <FaStar
+                                                            key={idx}
+                                                            className="text-sm text-yellow-500 mr-0.5"
+                                                        />
+                                                    ))}
+                                            </span>
+                                        </div>
                                         <RxCross2
                                             onClick={() => setOpen(false)}
-                                            className="transition-all ml-auto text-3xl text-gray-400 hover:text-blue-600 cursor-pointer"
+                                            className="min-w-7 transition-all my-1 ml-auto text-2xl text-gray-400 hover:text-blue-600 cursor-pointer"
                                         />
                                     </div>
                                     <div className="mt-1.5 flex items-center">
@@ -134,6 +148,40 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                                 </span> */}
                                             </div>
                                         )}
+                                    </div>
+                                    <div className="mt-1 flex items-center">
+                                        <TbLogin2 className="text-xl mr-1.5 text-gray-400" />
+                                        <p className="text-xs uppercase text-gray-700 g-sans font-semibold">
+                                            Check-in time
+                                        </p>
+                                        <span className="g-sans text-gray-300 ml-[1.125rem] mr-2">
+                                            ––
+                                        </span>
+                                        <p className="text-purple-500 bg-purple-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
+                                            From{" "}
+                                            {
+                                                hotel.details.Details[0]
+                                                    .CheckInTime
+                                            }{" "}
+                                            hrs
+                                        </p>
+                                    </div>
+                                    <div className="mt-1 flex items-center">
+                                        <TbLogout2 className="text-xl mr-1.5 text-gray-400" />
+                                        <p className="text-xs uppercase text-gray-700 g-sans font-semibold">
+                                            Check-out time
+                                        </p>
+                                        <span className="g-sans text-gray-300 ml-1.5 mr-2">
+                                            ––
+                                        </span>
+                                        <p className="text-purple-500 g-sans bg-purple-50 rounded-md text-sm py-0.5 font-medium px-1.5">
+                                            Until{" "}
+                                            {
+                                                hotel.details.Details[0]
+                                                    .CheckOutTime
+                                            }{" "}
+                                            hrs
+                                        </p>
                                     </div>
                                     <hr className="mt-2 mb-3" />
                                     <div>

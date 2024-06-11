@@ -30,6 +30,8 @@ import { Popper } from "../ui/popper";
 import { SlQuestion } from "react-icons/sl";
 import { HotelModal } from "../modals/hotel-modal";
 import { RoomCard } from "./room-card";
+import { CancellationPolicyHover } from "../ui/cancellation-policy-hover";
+import { TbLogin2, TbLogout2 } from "react-icons/tb";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
@@ -89,11 +91,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     <div className="flex items-center my-1">
                         <p className="flex items-center text-sm text-gray-500 font-medium">
                             <IoLocationOutline className="mr-1.5" />
-                            {hotel.details.Details[0].HotelAddress ||
-                                hotel.Chain}
-                            {/* {hotel.details.Details[0].HotelAddress.split(",")
+                            {/* {hotel.details.Details[0].HotelAddress ||
+                                hotel.Chain} */}
+                            {hotel.details.Details[0].HotelAddress.split(",")
                                 .slice(0, 2)
-                                .join(", ") || hotel.Chain} */}
+                                .join(", ") || hotel.Chain}
                         </p>
                         {/* <span className="mx-2.5 text-gray-500">•</span> */}
                     </div>
@@ -138,7 +140,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     {r.NonRefundable === "N" ? (
                                         <div className="flex items-center mt-0">
                                             <MdOutlineCheck className="text-md mr-2 text-green-700" />
-                                            <p className="font-medium text-sm text-green-700">
+                                            <p className="flex items-center font-medium text-sm text-green-700">
                                                 Free cancellation before{" "}
                                                 <span className="font-semibold">
                                                     {moment(
@@ -147,6 +149,9 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                                         )
                                                     ).format("D MMMM, YYYY")}
                                                 </span>
+                                                <CancellationPolicyHover
+                                                    room={r}
+                                                />
                                             </p>
                                         </div>
                                     ) : (
@@ -203,11 +208,69 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                 </span>
                             </div>
                         )}
-                        <p
-                            className={`transition-all cursor-pointer font-medium text-blue-600 text-sm py-1 px-2 rounded-md bg-blue-50`}
-                        >
-                            Facilities
-                        </p>
+                        <Popper
+                            panelShadow
+                            button={({ open }) => (
+                                <p
+                                    className={`transition-all font-medium text-blue-500 text-sm py-1 px-2 rounded-md ${
+                                        open && "bg-blue-50"
+                                    }`}
+                                >
+                                    Facilities
+                                </p>
+                            )}
+                            panel={() => (
+                                <div className="bg-white w-96 p-4">
+                                    <div className="mt-1 flex items-center">
+                                        <TbLogin2 className="text-xl mr-1.5 text-gray-400" />
+                                        <p className="text-xs uppercase text-gray-700 g-sans font-semibold">
+                                            Check-in time
+                                        </p>
+                                        <span className="g-sans text-gray-300 ml-[1.125rem] mr-2">
+                                            ––
+                                        </span>
+                                        <p className="text-purple-500 bg-purple-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
+                                            From{" "}
+                                            {
+                                                hotel.details.Details[0]
+                                                    .CheckInTime
+                                            }{" "}
+                                            hrs
+                                        </p>
+                                    </div>
+                                    <div className="mt-1 flex items-center">
+                                        <TbLogout2 className="text-xl mr-1.5 text-gray-400" />
+                                        <p className="text-xs uppercase text-gray-700 g-sans font-semibold">
+                                            Check-out time
+                                        </p>
+                                        <span className="g-sans text-gray-300 ml-1.5 mr-2">
+                                            ––
+                                        </span>
+                                        <p className="text-purple-500 g-sans bg-purple-50 rounded-md text-sm py-0.5 font-medium px-1.5">
+                                            Until{" "}
+                                            {
+                                                hotel.details.Details[0]
+                                                    .CheckOutTime
+                                            }{" "}
+                                            hrs
+                                        </p>
+                                    </div>
+                                    <hr className="my-3" />
+                                    <div className="flex flex-wrap">
+                                        {hotel.details.Details[0].HotelFacilities.Facility.map(
+                                            (fac: string) => (
+                                                <div className="w-1/2 my-0.5 flex items-start">
+                                                    <MdOutlineCheck className="text-md mt-0.5 mr-2 text-green-700" />
+                                                    <p className="text-sm font-medium">
+                                                        {fac}
+                                                    </p>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        />
                     </div>
                     {/* Show modal with hotel content full message */}
                     {/* show modal with all the pills when hovering on the facilities button */}

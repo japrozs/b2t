@@ -22,6 +22,8 @@ const config: Config = {
                 "blue-main": "#09225A",
                 "blue-sec": "#558FF0",
                 "ios-blue": "#147efb",
+                "sky-blue": "#00AEEF",
+                "teal-blue": "#00395D",
             },
             fontSize: {
                 tiny: "0.89rem",

@@ -270,6 +270,9 @@ const Search: React.FC<SearchProps> = ({}) => {
                                             inputClassName={
                                                 "outline-nonefocus:ring-1 datepicker-input"
                                             }
+                                            toggleClassName={
+                                                "absolute right-0 mt-0.5 h-full px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
+                                            }
                                             minDate={
                                                 // new Date(Date.now() - 24 * 60 * 60 * 1000)
                                                 new Date(Date.now())

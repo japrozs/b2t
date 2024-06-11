@@ -116,8 +116,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     hotel.RoomTypeDetails.Rooms.Room
                                 )
                             )
-                            .map((r: RoomDetailType) => (
-                                <>
+                            .map((r: RoomDetailType, i: number) => (
+                                <div key={i}>
                                     <p className="g-sans font-medium text-sm">
                                         {r.RoomType}
                                     </p>
@@ -142,7 +142,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                             <MdOutlineCheck className="text-md mr-2 text-green-700" />
                                             <p className="flex items-center font-medium text-sm text-green-700">
                                                 Free cancellation before{" "}
-                                                <span className="font-semibold">
+                                                <span className="font-semibold ml-1">
                                                     {moment(
                                                         parseDate(
                                                             r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
@@ -162,7 +162,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                             </p>
                                         </div>
                                     )}
-                                </>
+                                </div>
                             ))}
                     </div>
                     {/* TODO – use icons like HRS if possible */}
@@ -255,11 +255,17 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                             hrs
                                         </p>
                                     </div>
-                                    <hr className="my-3" />
+                                    {hotel.details.Details[0].HotelFacilities
+                                        .Facility.length !== 0 && (
+                                        <hr className="my-3" />
+                                    )}
                                     <div className="flex flex-wrap">
                                         {hotel.details.Details[0].HotelFacilities.Facility.map(
-                                            (fac: string) => (
-                                                <div className="w-1/2 my-0.5 flex items-start">
+                                            (fac: string, idx: number) => (
+                                                <div
+                                                    key={idx}
+                                                    className="w-1/2 my-0.5 flex items-start"
+                                                >
                                                     <MdOutlineCheck className="text-md mt-0.5 mr-2 text-green-700" />
                                                     <p className="text-sm font-medium">
                                                         {fac}

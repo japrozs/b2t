@@ -73,16 +73,24 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                                 hotel.RoomTypeDetails.Rooms.Room
                                             )
                                         )
-                                        .map((r: RoomDetailType) => (
-                                            <RoomCard
-                                                room={r}
-                                                hotel={hotel}
-                                                showPricePerNightPerRoom={true}
-                                                cfg={cfg}
-                                                rounded
-                                                mini
-                                            />
-                                        ))}
+                                        .map(
+                                            (
+                                                r: RoomDetailType,
+                                                idx: number
+                                            ) => (
+                                                <RoomCard
+                                                    room={r}
+                                                    key={idx}
+                                                    hotel={hotel}
+                                                    showPricePerNightPerRoom={
+                                                        true
+                                                    }
+                                                    cfg={cfg}
+                                                    rounded
+                                                    mini
+                                                />
+                                            )
+                                        )}
                                 </div>
                                 <div className="w-2/5">
                                     <div className="flex items-start">
@@ -244,8 +252,11 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                         </p>
                                         <div className="flex flex-wrap">
                                             {hotel.details.Details[0].HotelFacilities.Facility.map(
-                                                (fac: string) => (
-                                                    <div className="w-1/2 my-0.5 flex items-start">
+                                                (fac: string, i: number) => (
+                                                    <div
+                                                        key={i}
+                                                        className="w-1/2 my-0.5 flex items-start"
+                                                    >
                                                         <MdOutlineCheck className="text-md mt-0.5 mr-2 text-green-700" />
                                                         <p className="text-sm font-medium">
                                                             {fac}

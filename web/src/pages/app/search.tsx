@@ -230,7 +230,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         <p className="text-md font-medium text-gray-700 break-normal">
                                             {key}
                                         </p>
-                                        <p className="mx-1 bg-green-100 border border-green-500 text-green-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
+                                        <p className="mx-1 bg-emerald-100 border border-green-500 text-emerald-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
                                             {value as string}
                                         </p>
                                         <input

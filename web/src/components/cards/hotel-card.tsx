@@ -124,8 +124,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     {r.MealPlan.toLowerCase() ===
                                     "breakfast" ? (
                                         <div className="flex items-center mt-1">
-                                            <MdOutlineCheck className="text-md mr-2 text-green-700" />
-                                            <p className="font-medium text-sm text-green-700">
+                                            <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
+                                            <p className="font-medium text-sm text-emerald-600">
                                                 Breakfast included
                                             </p>
                                         </div>
@@ -139,8 +139,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                     )}
                                     {r.NonRefundable === "N" ? (
                                         <div className="flex items-center mt-0">
-                                            <MdOutlineCheck className="text-md mr-2 text-green-700" />
-                                            <p className="flex items-center font-medium text-sm text-green-700">
+                                            <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
+                                            <p className="flex items-center font-medium text-sm text-emerald-600">
                                                 Free cancellation before{" "}
                                                 <span className="font-semibold ml-1">
                                                     {moment(
@@ -266,7 +266,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                                     key={idx}
                                                     className="w-1/2 my-0.5 flex items-start"
                                                 >
-                                                    <MdOutlineCheck className="text-md mt-0.5 mr-2 text-green-700" />
+                                                    <MdOutlineCheck className="text-md mt-0.5 mr-2 text-emerald-600" />
                                                     <p className="text-sm font-medium">
                                                         {fac}
                                                     </p>

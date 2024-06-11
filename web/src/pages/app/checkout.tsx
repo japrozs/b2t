@@ -210,7 +210,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                                 ).MealPlan.toLowerCase() ===
                                                 "breakfast" ? (
                                                     <>
-                                                        <MdOutlineCheck className="text-lg text-green-500 mr-1.5" />
+                                                        <MdOutlineCheck className="text-lg text-emerald-600 mr-1.5" />
                                                         <p className="text-sm text-gray-800 font-medium">
                                                             Breakfast included
                                                         </p>
@@ -226,7 +226,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                                 )}
                                             </div>
                                             <div className="flex items-center">
-                                                <MdOutlineCheck className="text-lg text-green-500 mr-1.5" />
+                                                <MdOutlineCheck className="text-lg text-emerald-600 mr-1.5" />
                                                 <p className="text-sm text-gray-800 font-medium">
                                                     Refundable
                                                 </p>

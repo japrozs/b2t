@@ -257,7 +257,7 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                                         key={i}
                                                         className="w-1/2 my-0.5 flex items-start"
                                                     >
-                                                        <MdOutlineCheck className="text-md mt-0.5 mr-2 text-green-700" />
+                                                        <MdOutlineCheck className="text-md mt-0.5 mr-2 text-emerald-600" />
                                                         <p className="text-sm font-medium">
                                                             {fac}
                                                         </p>

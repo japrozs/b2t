@@ -45,7 +45,7 @@ export const Popper: React.FC<PopperProps> = ({
                     anchor="top"
                     className={`transition ${
                         panelShadow && "shadow-lg"
-                    }  rounded-lg border border-gray-300 -mt-1.5`}
+                    }  rounded-lg border border-gray-200 -mt-1.5`}
                 >
                     {panel({ open: isShowing })}
                 </PopoverPanel>

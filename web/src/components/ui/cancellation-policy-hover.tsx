@@ -22,10 +22,10 @@ export const CancellationPolicyHover: React.FC<
             panel={() => (
                 <div className="bg-white w-96 p-4 flex items-start">
                     <div className="py-1 pr-2">
-                        <MdOutlineCheck className="text-md text-green-700" />
+                        <MdOutlineCheck className="text-md text-emerald-600" />
                     </div>
                     <div>
-                        <p className="flex items-center font-medium text-sm text-green-700">
+                        <p className="flex items-center font-medium text-sm text-emerald-600">
                             Free cancellation before{" "}
                             {moment(
                                 parseDate(

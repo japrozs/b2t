@@ -50,13 +50,12 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                         {/* The actual dialog panel  */}
                         <DialogPanel
                             style={{
-                                maxHeight: "39rem",
+                                maxHeight: "42rem",
                             }}
                             className="w-full overflow-y-scroll py-4 max-w-5xl rounded-lg p-5 bg-white"
                         >
                             <div className="flex items-start space-x-5">
                                 <div className="w-3/5">
-                                    {/* <p>hi there</p> */}
                                     <Carousel hotel={hotel} />
                                 </div>
                                 <div className="w-2/5">

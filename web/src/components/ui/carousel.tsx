@@ -15,7 +15,7 @@ export const Carousel: React.FC<CarouselProps> = ({ hotel }) => {
         infinite: true,
         accessibility: true,
         arrows: false,
-        speed: 500,
+        speed: 200,
         fade: true,
         slidesToShow: 1,
         slidesToScroll: 1,

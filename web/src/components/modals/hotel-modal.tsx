@@ -2,25 +2,29 @@ import {
     HOTEL_FACILITY_FREE_WIFI_KEY,
     HOTEL_FACILITY_FRONT_DESK_KEY,
 } from "@/constants";
-import { HotelSearchItemType } from "@/types";
-import { getCheapestRoom } from "@/utils";
+import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
+import { getCheapestRoom, parseDate } from "@/utils";
 import { Dialog, DialogPanel, Transition } from "@headlessui/react";
 import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { FaWifi } from "react-icons/fa";
-import { MdOutlineCheck } from "react-icons/md";
+import { MdOutlineCheck, MdOutlineKingBed } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { Carousel } from "../ui/carousel";
+import moment from "moment";
+import { RoomCard } from "../cards/room-card";
 
 interface HotelModalProps {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     hotel: HotelSearchItemType;
+    cfg: RoomCfgType;
 }
 
 export const HotelModal: React.FC<HotelModalProps> = ({
     open,
     setOpen,
     hotel,
+    cfg,
 }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     return (
@@ -50,13 +54,33 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                         {/* The actual dialog panel  */}
                         <DialogPanel
                             style={{
-                                maxHeight: "42rem",
+                                maxHeight: "44rem",
                             }}
                             className="w-full overflow-y-scroll py-4 max-w-5xl rounded-lg p-5 bg-white"
                         >
                             <div className="flex items-start space-x-5">
                                 <div className="w-3/5">
                                     <Carousel hotel={hotel} />
+                                    <p className="flex items-center mt-5 uppercase g-sans text-sm text-black font-bold mb-2">
+                                        <MdOutlineKingBed className="text-xl mr-1 text-gray-400" />
+                                        CHEAPEST ROOM
+                                    </p>
+                                    {Array(1)
+                                        .fill(
+                                            getCheapestRoom(
+                                                hotel.RoomTypeDetails.Rooms.Room
+                                            )
+                                        )
+                                        .map((r: RoomDetailType) => (
+                                            <RoomCard
+                                                room={r}
+                                                hotel={hotel}
+                                                showPricePerNightPerRoom={true}
+                                                cfg={cfg}
+                                                rounded
+                                                mini
+                                            />
+                                        ))}
                                 </div>
                                 <div className="w-2/5">
                                     <div className="flex items-start">

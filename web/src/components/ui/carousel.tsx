@@ -28,28 +28,30 @@ export const Carousel: React.FC<CarouselProps> = ({ hotel }) => {
             ref={(slider) => {
                 sliderRef = slider as any;
             }}
-            className="mx-auto rounded-lg p-0"
+            className="mx-auto rounded-lg relative"
         >
             {hotel.details.Details[0].Images.Img.map((image, index) => (
-                <div key={index} className="focus:ring-0 focus:outline-none">
-                    <div className="flex items-center">
+                <div
+                    key={index}
+                    className="focus:ring-0 focus:outline-none relative"
+                >
+                    <img
+                        src={image}
+                        alt={`Slide ${index}`}
+                        className="w-full h-auto rounded-lg border border-gray-300"
+                    />
+                    <div className="absolute top-1/2 transform -translate-y-1/2 left-2">
                         <div
                             onClick={() => (sliderRef as any).slickPrev()}
-                            className="transition-all p-1 hover:bg-blue-50 rounded-lg mr-2 cursor-pointer "
+                            className="transition-all p-1 bg-gray-900 border border-gray-800 rounded-lg cursor-pointer"
                         >
                             <IoChevronBack className="text-xl text-blue-500" />
                         </div>
-                        <img
-                            src={image}
-                            alt={`Slide ${index}`}
-                            className="w-full h-auto rounded-lg border border-gray-300"
-                        />
-                        {/* <p onClick={() => (sliderRef as any).slickNext()}>
-                            next
-                        </p> */}
+                    </div>
+                    <div className="absolute top-1/2 transform -translate-y-1/2 right-2">
                         <div
                             onClick={() => (sliderRef as any).slickNext()}
-                            className="transition-all p-1 hover:bg-blue-50 rounded-lg ml-2 cursor-pointer "
+                            className="transition-all p-1 bg-gray-900 border border-gray-800 rounded-lg cursor-pointer"
                         >
                             <IoChevronForward className="text-xl text-blue-500" />
                         </div>
@@ -57,5 +59,39 @@ export const Carousel: React.FC<CarouselProps> = ({ hotel }) => {
                 </div>
             ))}
         </Slider>
+        // <Slider
+        //     {...settings}
+        //     ref={(slider) => {
+        //         sliderRef = slider as any;
+        //     }}
+        //     className="mx-auto rounded-lg p-0"
+        // >
+        //     {hotel.details.Details[0].Images.Img.map((image, index) => (
+        //         <div key={index} className="focus:ring-0 focus:outline-none">
+        //             <div className="flex items-center">
+        //                 <div
+        //                     onClick={() => (sliderRef as any).slickPrev()}
+        //                     className="transition-all p-1 hover:bg-blue-50 rounded-lg mr-2 cursor-pointer "
+        //                 >
+        //                     <IoChevronBack className="text-xl text-blue-500" />
+        //                 </div>
+        //                 <img
+        //                     src={image}
+        //                     alt={`Slide ${index}`}
+        //                     className="w-full h-auto rounded-lg border border-gray-300"
+        //                 />
+        //                 {/* <p onClick={() => (sliderRef as any).slickNext()}>
+        //                     next
+        //                 </p> */}
+        //                 <div
+        //                     onClick={() => (sliderRef as any).slickNext()}
+        //                     className="transition-all p-1 hover:bg-blue-50 rounded-lg ml-2 cursor-pointer "
+        //                 >
+        //                     <IoChevronForward className="text-xl text-blue-500" />
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     ))}
+        // </Slider>
     );
 };

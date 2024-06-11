@@ -100,7 +100,13 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                     toast.success("Booking created successfully.");
                     router.push("/app/");
                 } else {
-                    toast.error("An error occured with your booking.");
+                    if (response.data.error.Errors.Error.length === 0) {
+                        toast.error("An error occured with your booking.");
+                    } else {
+                        toast.error(
+                            `An error occured with your booking (${response.data.error.Errors.Error[0].Msg})`
+                        );
+                    }
                 }
                 setCreateBookingLoading(false);
             })

@@ -13,6 +13,8 @@ import {
     FORMAT_GRAMMAR,
     IS_EMPTY,
     formatCfg,
+    getPricePerNightPerRoom,
+    getTotalPrice,
     nightsBetween,
     parseDate,
     submitButtonDisabledFn,
@@ -31,6 +33,9 @@ import { RxCross2 } from "react-icons/rx";
 import { MdOutlineCheck } from "react-icons/md";
 import { LuMoon } from "react-icons/lu";
 import { Spinner } from "@/components/shared/spinner";
+import { Checkbox } from "@headlessui/react";
+import { GrCheckmark } from "react-icons/gr";
+import { Hotel } from "@/generated/graphql";
 
 interface CheckoutProps {}
 const Checkout: React.FC<CheckoutProps> = ({}) => {
@@ -47,6 +52,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
     const [adultsData, setAdultsData] = useState<any[]>([]);
     const [childrenData, setChildrenData] = useState<any[]>([]);
     const router = useRouter();
+    const [TandC, setTandC] = useState(false);
 
     console.log("zustand.hotel :: ", hotel);
     console.log("zustand.room :: ", room);
@@ -169,13 +175,6 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 {latestHotel.Hotels.Hotel[0].HotelName}
                             </p>
                             <hr className="mt-1.5 mb-4" /> */}
-                            <p className="text-2xl font-semibold mb-4">
-                                Credit card
-                            </p>
-                            <p className="text-sm text-gray-400 menlo">
-                                {"<-- PUT THE STRIPE STUFF HERE -->"}
-                            </p>
-                            <hr className="my-3" />
                             <p className="text-2xl font-semibold mb-0">
                                 Room details
                             </p>
@@ -268,6 +267,25 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     </div>
                                 )
                             )}
+                            <hr className="my-3" />
+                            <p className="text-2xl font-semibold mb-4">
+                                Credit card
+                            </p>
+                            <p className="text-sm text-gray-400 menlo">
+                                {"<-- PUT THE STRIPE STUFF HERE -->"}
+                            </p>
+                            {/* <div className="flex items-start">
+                                <Checkbox
+                                    checked={TandC}
+                                    onChange={() => setTandC(!TandC)}
+                                    className="mr-3 group size-[1.15rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
+                                >
+                                    <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
+                                </Checkbox>
+                                <p className="text-sm font-medium text-gray-700">
+
+                                </p>
+                            </div> */}
                         </div>
                         <div className="w-3/12 m-2.5 mx-0 py-2.5 sticky top-0">
                             <p className="text-2xl font-semibold">
@@ -283,10 +301,10 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     (hotel as HotelSearchItemType).Chain}
                             </p>
                             <hr className="pb-0 my-2" />
-                            <div className="mt-3 mb-2 flex items-center">
+                            <div className="mt-3 mb-1 flex items-center">
                                 <div className="w-full">
                                     <p className="text-sm font-medium text-gray-500">
-                                        Arrival
+                                        Check-in
                                     </p>
                                     <p className="text-base text-gray-800 font-semibold">
                                         {parseDate(
@@ -322,7 +340,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 </div>
                                 <div className="w-full ml-auto mr-0">
                                     <p className="text-sm font-medium text-gray-500 text-right">
-                                        Departure
+                                        Check-out
                                     </p>
                                     <p className="text-right ml-auto mr-0 text-base text-gray-800 font-semibold">
                                         {parseDate(
@@ -336,6 +354,24 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                         })}
                                     </p>
                                 </div>
+                            </div>
+                            <div className="mb-1 flex items-center ">
+                                <p className="w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
+                                    From{" "}
+                                    {
+                                        (hotel as HotelSearchItemType).details
+                                            .Details[0].CheckInTime
+                                    }{" "}
+                                    hrs
+                                </p>
+                                <p className="ml-auto mr-0 w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
+                                    Until{" "}
+                                    {
+                                        (hotel as HotelSearchItemType).details
+                                            .Details[0].CheckOutTime
+                                    }{" "}
+                                    hrs
+                                </p>
                             </div>
                             <hr className="pb-0 mt-4 mb-3" />
                             <div className="my-2 flex items-center">
@@ -368,41 +404,12 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     </p>
                                     <p className="text-base font-semibold">
                                         $
-                                        {/* {Math.ceil(
-                                            ((room as RoomDetailType)
-                                                .TotalRate *
-                                                COMMISSION_RATE) /
-                                                (nightsBetween(
-                                                    new Date(
-                                                        (
-                                                            hotel as HotelSearchItemType
-                                                        ).StartDate
-                                                    ),
-                                                    new Date(
-                                                        (
-                                                            hotel as HotelSearchItemType
-                                                        ).EndDate
-                                                    )
-                                                ) *
-                                                    (cfg as RoomCfgType).rooms
-                                                        .length)
-                                        )} */}
-                                        {Math.ceil(
-                                            COMMISSION_RATE *
-                                                ((room as RoomDetailType)
-                                                    .TotalRate /
-                                                    nightsBetween(
-                                                        parseDate(
-                                                            (
-                                                                hotel as HotelSearchItemType
-                                                            ).StartDate.toString()
-                                                        ),
-                                                        parseDate(
-                                                            (
-                                                                hotel as HotelSearchItemType
-                                                            ).EndDate.toString()
-                                                        )
-                                                    ))
+                                        {getPricePerNightPerRoom(
+                                            room as RoomDetailType,
+                                            (hotel as HotelSearchItemType)
+                                                .StartDate,
+                                            (hotel as HotelSearchItemType)
+                                                .EndDate
                                         )}
                                     </p>
                                 </div>
@@ -440,10 +447,9 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 </p>
                                 <p className="text-right text-3xl g-sans font-medium mb-1.5 pb-1.5">
                                     $
-                                    {Math.ceil(
-                                        (room as RoomDetailType).TotalRate *
-                                            (cfg as RoomCfgType).rooms.length *
-                                            COMMISSION_RATE
+                                    {getTotalPrice(
+                                        room as RoomDetailType,
+                                        (cfg as RoomCfgType).rooms.length
                                     )}
                                 </p>
                             </div>
@@ -471,11 +477,11 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                             <p className="text-center text-xs px-2 text-gray-500 font-medium">
                                 By making your booking you agree to the{" "}
                                 <span className="underline font-semibold text-gray-700">
-                                    HRS General Terms And Conditions
+                                    Noble Travels General Terms And Conditions
                                 </span>{" "}
                                 as well as the{" "}
                                 <span className="underline font-semibold text-gray-700">
-                                    HRS data protection policy
+                                    Noble Travels data protection policy
                                 </span>
                                 . With this click your booking becomes binding.
                             </p>

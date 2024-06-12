@@ -17,12 +17,15 @@ import {
     sortAndFilterHotels,
 } from "@/utils";
 import { useIsAuth } from "@/utils/use-is-auth";
+import { GrCheckmark } from "react-icons/gr";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { use, useEffect, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import { toast } from "sonner";
 import { RoomCfgModal } from "@/components/modals/room-cfg-modal";
+import { Checkbox } from "@headlessui/react";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 interface SearchProps {}
 
@@ -78,6 +81,8 @@ const Search: React.FC<SearchProps> = ({}) => {
     const [showPricePerNightPerRoom, setShowPricePerNightPerRoom] =
         useState(true);
     const [filterQuery, setFilterQuery] = useState("");
+    const [sortFacilities, setSortFacilities] = useState<string[]>([]);
+    const [enabled, setEnabled] = useState(false);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -126,6 +131,10 @@ const Search: React.FC<SearchProps> = ({}) => {
         );
     }, [searchRoomCfg]);
 
+    useEffect(() => {
+        console.log(sortFacilities);
+    }, [sortFacilities]);
+
     const researchHotels = () => {
         const structCpy = { ...struct };
         structCpy.cfg = searchRoomCfg;
@@ -170,6 +179,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                                 ratingSortOrder:
                                                     sortByRatingOrder,
                                                 query: filterQuery,
+                                                facilities: sortFacilities,
                                             }
                                         ).length
                                     }{" "}
@@ -225,18 +235,38 @@ const Search: React.FC<SearchProps> = ({}) => {
                                 ).map(([key, value], idx: number) => (
                                     <div
                                         key={idx}
-                                        className="my-4 flex items-center"
+                                        className="my-4 flex items-start"
                                     >
+                                        <Checkbox
+                                            checked={sortFacilities.includes(
+                                                key
+                                            )}
+                                            onChange={() => {
+                                                const cpy = [...sortFacilities];
+                                                if (cpy.includes(key)) {
+                                                    cpy.splice(
+                                                        cpy.indexOf(key),
+                                                        1
+                                                    );
+                                                } else {
+                                                    cpy.push(key);
+                                                }
+                                                setSortFacilities(cpy);
+                                            }}
+                                            className="mr-3 group size-[1.15rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
+                                        >
+                                            <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
+                                        </Checkbox>
                                         <p className="text-md font-medium text-gray-700 break-normal">
                                             {key}
                                         </p>
                                         <p className="mx-1 bg-emerald-100 border border-green-500 text-emerald-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
                                             {value as string}
                                         </p>
-                                        <input
+                                        {/* <input
                                             className="ml-auto mr-0 fill-purple-500"
                                             type="checkbox"
-                                        />
+                                        /> */}
                                     </div>
                                 ))}
                             </div>
@@ -397,6 +427,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                                 ratingSortOrder:
                                                     sortByRatingOrder,
                                                 query: filterQuery,
+                                                facilities: sortFacilities,
                                             }
                                         ).map(
                                             (

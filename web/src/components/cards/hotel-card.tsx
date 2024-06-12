@@ -8,6 +8,10 @@ import { Tooltip } from "react-tooltip";
 import {
     FORMAT_GRAMMAR,
     getCheapestRoom,
+    getPricePerNightPerRoom,
+    getRRPPricePerNightPerRoom,
+    getRRPTotalPrice,
+    getTotalPrice,
     nightsBetween,
     parseDate,
 } from "@/utils";
@@ -142,13 +146,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                             <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
                                             <p className="flex items-center font-medium text-sm text-emerald-600">
                                                 Free cancellation before{" "}
-                                                <span className="font-semibold ml-1">
-                                                    {moment(
-                                                        parseDate(
-                                                            r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                                        )
-                                                    ).format("D MMMM, YYYY")}
-                                                </span>
+                                                {moment(
+                                                    parseDate(
+                                                        r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                    )
+                                                ).format("D MMMM, YYYY")}
                                                 <CancellationPolicyHover
                                                     room={r}
                                                 />
@@ -301,37 +303,23 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                 <p className="mb-0 text-3xl text-black font-semibold">
                                     ${" "}
                                     {/* this is the TotalRate * COMMISSION_RATE */}
-                                    {Math.ceil(
-                                        COMMISSION_RATE *
-                                            (getCheapestRoom(
-                                                hotel.RoomTypeDetails.Rooms.Room
-                                            ).TotalRate /
-                                                nightsBetween(
-                                                    parseDate(
-                                                        hotel.StartDate.toString()
-                                                    ),
-                                                    parseDate(
-                                                        hotel.EndDate.toString()
-                                                    )
-                                                ))
+                                    {getPricePerNightPerRoom(
+                                        getCheapestRoom(
+                                            hotel.RoomTypeDetails.Rooms.Room
+                                        ),
+                                        hotel.StartDate,
+                                        hotel.EndDate
                                     )}
                                 </p>
                                 <p className="mt-[-2px] text-md mb-0 text-red-500 font-medium line-through">
                                     ${" "}
                                     {/* This is the recommended price from IOLX */}
-                                    {Math.ceil(
-                                        (COMMISSION_RATE *
-                                            getCheapestRoom(
-                                                hotel.RoomTypeDetails.Rooms.Room
-                                            ).RecommendedRetailPrice) /
-                                            nightsBetween(
-                                                parseDate(
-                                                    hotel.StartDate.toString()
-                                                ),
-                                                parseDate(
-                                                    hotel.EndDate.toString()
-                                                )
-                                            )
+                                    {getRRPPricePerNightPerRoom(
+                                        getCheapestRoom(
+                                            hotel.RoomTypeDetails.Rooms.Room
+                                        ),
+                                        hotel.StartDate,
+                                        hotel.EndDate
                                     )}
                                 </p>
                             </div>
@@ -351,22 +339,20 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             <div className="">
                                 <p className="mb-0 text-3xl text-black font-semibold">
                                     ${" "}
-                                    {Math.ceil(
-                                        COMMISSION_RATE *
-                                            getCheapestRoom(
-                                                hotel.RoomTypeDetails.Rooms.Room
-                                            ).TotalRate *
-                                            cfg.rooms.length
+                                    {getTotalPrice(
+                                        getCheapestRoom(
+                                            hotel.RoomTypeDetails.Rooms.Room
+                                        ),
+                                        cfg.rooms.length
                                     )}
                                 </p>
                                 <p className="mt-[-2px] text-md mb-0 text-red-500 font-medium line-through">
                                     ${" "}
-                                    {Math.ceil(
-                                        COMMISSION_RATE *
-                                            getCheapestRoom(
-                                                hotel.RoomTypeDetails.Rooms.Room
-                                            ).RecommendedRetailPrice *
-                                            cfg.rooms.length
+                                    {getRRPTotalPrice(
+                                        getCheapestRoom(
+                                            hotel.RoomTypeDetails.Rooms.Room
+                                        ),
+                                        cfg.rooms.length
                                     )}
                                 </p>
                             </div>

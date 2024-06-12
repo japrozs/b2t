@@ -1,5 +1,13 @@
 import { HOTEL_FACILITY_FREE_WIFI_KEY, COMMISSION_RATE } from "@/constants";
-import { parseDate, FORMAT_GRAMMAR, nightsBetween } from "@/utils";
+import {
+    parseDate,
+    FORMAT_GRAMMAR,
+    nightsBetween,
+    getPricePerNightPerRoom,
+    getRRPPricePerNightPerRoom,
+    getTotalPrice,
+    getRRPTotalPrice,
+} from "@/utils";
 import moment from "moment";
 import router from "next/router";
 import React from "react";
@@ -59,19 +67,17 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                             </div>
                         )}
                         {room.NonRefundable === "N" ? (
-                            <div className="flex items-center mt-0">
+                            <div className="flex items-start mt-0">
                                 <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
                                 <p className="flex items-center font-medium text-sm text-emerald-600">
-                                    Free cancellation before
-                                    <span className="font-semibold ml-1">
-                                        {moment(
-                                            parseDate(
-                                                room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                            )
-                                        ).format("D MMMM, YYYY")}
-                                    </span>
-                                    <CancellationPolicyHover room={room} />
+                                    Free cancellation before{" "}
+                                    {moment(
+                                        parseDate(
+                                            room.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                        )
+                                    ).format("D MMMM, YYYY")}
                                 </p>
+                                <CancellationPolicyHover room={room} />
                             </div>
                         ) : (
                             <div className="flex items-center mt-0">
@@ -184,33 +190,19 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                             <p className="mb-0 text-3xl text-black font-semibold">
                                 ${" "}
                                 {/* this is the TotalRate * COMMISSION_RATE */}
-                                {Math.ceil(
-                                    COMMISSION_RATE *
-                                        (room.TotalRate /
-                                            nightsBetween(
-                                                parseDate(
-                                                    hotel.StartDate.toString()
-                                                ),
-                                                parseDate(
-                                                    hotel.EndDate.toString()
-                                                )
-                                            ))
+                                {getPricePerNightPerRoom(
+                                    room,
+                                    hotel.StartDate,
+                                    hotel.EndDate
                                 )}
                             </p>
                             <p className="mt-[-2px] text-md mb-0 text-red-500 font-medium line-through">
                                 ${" "}
                                 {/* This is the recommended price from IOLX */}
-                                {Math.ceil(
-                                    COMMISSION_RATE *
-                                        (room.RecommendedRetailPrice /
-                                            nightsBetween(
-                                                parseDate(
-                                                    hotel.StartDate.toString()
-                                                ),
-                                                parseDate(
-                                                    hotel.EndDate.toString()
-                                                )
-                                            ))
+                                {getRRPPricePerNightPerRoom(
+                                    room,
+                                    hotel.StartDate,
+                                    hotel.EndDate
                                 )}
                             </p>
                         </div>
@@ -229,20 +221,10 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                         </p>
                         <div className="">
                             <p className="mb-0 text-3xl text-black font-semibold">
-                                ${" "}
-                                {Math.ceil(
-                                    COMMISSION_RATE *
-                                        room.TotalRate *
-                                        cfg.rooms.length
-                                )}
+                                $ {getTotalPrice(room, cfg.rooms.length)}
                             </p>
                             <p className="mt-[-2px] text-md mb-0 text-red-500 font-medium line-through">
-                                ${" "}
-                                {Math.ceil(
-                                    COMMISSION_RATE *
-                                        room.RecommendedRetailPrice *
-                                        cfg.rooms.length
-                                )}
+                                $ {getRRPTotalPrice(room, cfg.rooms.length)}
                             </p>
                         </div>
                     </>

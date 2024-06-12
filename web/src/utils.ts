@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useGetAllCitiesQuery } from "./generated/graphql";
 import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "./types";
+import { COMMISSION_RATE } from "./constants";
 
 export const formatAutoCompleteResults = (
     struct: { d: string } | undefined
@@ -123,6 +124,7 @@ export const sortAndFilterHotels = (
         ratings: boolean;
         ratingSortOrder: string;
         query: string;
+        facilities: string[];
     }
 ): HotelSearchItemType[] => {
     console.log(schema);
@@ -182,6 +184,12 @@ export const sortAndFilterHotels = (
                     .join("")
                     .toLowerCase()
             );
+    });
+
+    cpy = cpy.filter((hotel: HotelSearchItemType) => {
+        return schema.facilities.every((fac) =>
+            hotel.details.Details[0].HotelFacilities.Facility.includes(fac)
+        );
     });
 
     return cpy;
@@ -255,4 +263,46 @@ export const submitButtonDisabledFn = (
     console.log(childrenData, adultsData);
 
     return hasInvalidChild || hasInvalidAdult;
+};
+
+export const getPricePerNightPerRoom = (
+    room: RoomDetailType,
+    startDate: number,
+    endDate: number
+): number => {
+    return Math.ceil(
+        COMMISSION_RATE *
+            (room.TotalRate /
+                nightsBetween(
+                    parseDate(startDate.toString()),
+                    parseDate(endDate.toString())
+                ))
+    );
+};
+export const getRRPPricePerNightPerRoom = (
+    room: RoomDetailType,
+    startDate: number,
+    endDate: number
+): number => {
+    return Math.ceil(
+        COMMISSION_RATE *
+            (room.RecommendedRetailPrice /
+                nightsBetween(
+                    parseDate(startDate.toString()),
+                    parseDate(endDate.toString())
+                ))
+    );
+};
+
+export const getTotalPrice = (
+    room: RoomDetailType,
+    numRooms: number
+): number => {
+    return Math.ceil(COMMISSION_RATE * room.TotalRate * numRooms);
+};
+export const getRRPTotalPrice = (
+    room: RoomDetailType,
+    numRooms: number
+): number => {
+    return Math.ceil(COMMISSION_RATE * room.RecommendedRetailPrice * numRooms);
 };

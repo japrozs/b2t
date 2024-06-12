@@ -1,9 +1,9 @@
+import axios from "axios";
 import { Request, Response } from "express";
-import { createBookingSchema } from "../schemas/create-booking-schema";
-import { z } from "zod";
-import axios, { AxiosError } from "axios";
-import { Booking } from "../entities/booking";
 import { v4 } from "uuid";
+import { z } from "zod";
+import { Booking } from "../entities/booking";
+import { createBookingSchema } from "../schemas/create-booking-schema";
 
 interface CheckoutInfoDataType {
     title: string;

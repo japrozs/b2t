@@ -110,9 +110,9 @@ const main = async () => {
     // refreshHotelDetails();
 
     // TODO: add expressAuth middleware for these routes
-    app.post("/api/search-hotel", searchHotel);
-    app.post("/api/check-availability", checkAvailability);
-    app.post("/api/create-booking", createBooking);
+    app.post("/api/search-hotel", expressIsAuth, searchHotel);
+    app.post("/api/check-availability", expressIsAuth, checkAvailability);
+    app.post("/api/create-booking", expressIsAuth, createBooking);
 
     app.listen(parseInt(process.env.PORT), () => {
         console.log(`🚀 Server started on localhost:${process.env.PORT}`);

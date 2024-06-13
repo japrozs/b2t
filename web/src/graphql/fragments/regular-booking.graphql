@@ -1,0 +1,15 @@
+fragment RegularBooking on Booking {
+    id
+    details
+    creatorId
+    creator {
+        ...RegularUser
+    }
+    hotelId
+    hotel {
+        ...RegularHotel
+    }
+    createdAt
+    updatedAt
+    __typename
+}

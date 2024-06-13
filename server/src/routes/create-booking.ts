@@ -4,6 +4,7 @@ import { v4 } from "uuid";
 import { z } from "zod";
 import { Booking } from "../entities/booking";
 import { createBookingSchema } from "../schemas/create-booking-schema";
+import { Hotel } from "../entities/hotel";
 
 interface CheckoutInfoDataType {
     title: string;
@@ -102,10 +103,14 @@ export const createBooking = async (req: Request, res: Response) => {
                     });
                     return;
                 }
+                const hotel = await Hotel.findOne({
+                    code: validatedBody.hotelCode,
+                });
                 await Booking.create({
                     id: agencyRefId,
                     details: JSON.stringify(response.data),
                     creatorId: req.session.userId,
+                    hotelId: hotel?.id,
                 }).save();
                 res.status(200).json({ status: "OK", ...response.data });
             })

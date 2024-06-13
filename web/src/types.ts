@@ -218,3 +218,69 @@ export interface RoomCfgType {
         }[];
     }[];
 }
+
+export interface BookingDetailType {
+    BookingDetails: {
+        Source: number;
+        BookedDate: number;
+        BookingNumber: string;
+        BookingTotalRate: number;
+        RecommendedRetailPrice: number;
+        Currency: string;
+        BookingStatus: string;
+        Passengers: {
+            PaxNumber: number;
+            RoomNo: number;
+            Title: number;
+            TitleString: string;
+            PassengerType: "ADT" | "CHD";
+            Age: number;
+            FirstName: string;
+            LastName: string;
+            Nationality: string;
+            Gender: number;
+            GenderString: string;
+        }[];
+        AgencyRef: string;
+        PartyName: string;
+    };
+    HotelDetails: {
+        StartDate: number;
+        EndDate: number;
+        HotelCode: string;
+        HotelName: string;
+        TotalRate: number;
+        RecommendedRetailPrice: number;
+        Currency: string;
+        TimeZone: string;
+        RoomDetails: {
+            RoomType: string;
+            RoomTypeCode: number;
+            RoomStatus: string;
+            CurrCode: string;
+            ContractTokenId: string;
+            RoomConfigurationId: number;
+            RoomNo: number;
+            MealPlan: string;
+            MealPlanCode: number;
+            TaxSellCharges: number;
+            Rate: number;
+            RecommendedRetailPrice: number;
+            SubResNo: string;
+            SupplierResNo: string;
+            Messages: {
+                Message: {
+                    Id: number;
+                    MessageId: number;
+                    MessageShort: string;
+                    MessageFull: string;
+                    Type: string;
+                    MessageChargeBase: string;
+                    ValueType: string;
+                    AgeFrom: number;
+                    AgeTo: number;
+                }[];
+            };
+        }[];
+    };
+}

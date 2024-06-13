@@ -9,6 +9,7 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 import { User } from "./user";
+import { Hotel } from "./hotel";
 
 @ObjectType()
 @Entity()
@@ -28,6 +29,14 @@ export class Booking extends BaseEntity {
     @Field()
     @Column()
     creatorId: number;
+
+    @Field(() => Hotel)
+    @ManyToOne(() => Hotel, (hotel) => hotel.bookings)
+    hotel: Hotel;
+
+    @Field()
+    @Column()
+    hotelId: number;
 
     @Field(() => String)
     @CreateDateColumn()

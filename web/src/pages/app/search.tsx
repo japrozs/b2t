@@ -204,7 +204,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                 ).map(([key, value], idx: number) => (
                                     <div
                                         key={idx}
-                                        className="my-4 flex items-start"
+                                        className="my-4 flex items-center"
                                     >
                                         <Checkbox
                                             checked={sortFacilities.includes(

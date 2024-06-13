@@ -17,6 +17,7 @@
 -   [x] show check-in, check-out, and description in hotel card
 -   [ ] change the url in the search page when search parameters are changed, otherwise when a person tries to go back from the checking page, he sees the search he did from the index page and finds stale results
 -   [ ] break bookings listing into current (active) and past
+-   [ ] check if supplier notes is possible in API
 
 ### `later on`
 

@@ -23,6 +23,7 @@ import { createBooking } from "./routes/create-booking";
 import { Booking } from "./entities/booking";
 import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
 import { refreshHotelDetails } from "./utils/refresh-details";
+import { BookingResolver } from "./resolvers/booking-resolver";
 
 const main = async () => {
     const conn = await createConnection({
@@ -80,7 +81,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [CityResolver, UserResolver],
+            resolvers: [CityResolver, UserResolver, BookingResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({

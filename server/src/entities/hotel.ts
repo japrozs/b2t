@@ -5,10 +5,12 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
 import { City } from "./city";
+import { Booking } from "./booking";
 
 @ObjectType()
 @Entity()
@@ -36,6 +38,10 @@ export class Hotel extends BaseEntity {
     @Field(() => City)
     @ManyToOne(() => City, (city) => city.hotels)
     city: City;
+
+    @Field(() => [Booking])
+    @OneToMany(() => Booking, (booking) => booking.hotel)
+    bookings: Booking[];
 
     @Field()
     @Column()

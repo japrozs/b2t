@@ -17,6 +17,18 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Booking = {
+  __typename?: 'Booking';
+  createdAt: Scalars['String']['output'];
+  creator: User;
+  creatorId: Scalars['Float']['output'];
+  details: Scalars['String']['output'];
+  hotel: Hotel;
+  hotelId: Scalars['Float']['output'];
+  id: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
+};
+
 export type City = {
   __typename?: 'City';
   code: Scalars['String']['output'];
@@ -38,6 +50,7 @@ export type FieldError = {
 export type Hotel = {
   __typename?: 'Hotel';
   body: Scalars['String']['output'];
+  bookings: Array<Booking>;
   city: City;
   cityId: Scalars['Float']['output'];
   code: Scalars['String']['output'];
@@ -82,6 +95,7 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: 'Query';
   getAllCities: Array<City>;
+  getBookings: Array<Booking>;
   getCity: City;
   me?: Maybe<User>;
 };
@@ -97,6 +111,7 @@ export type User = {
   PANName: Scalars['String']['output'];
   PANNumber: Scalars['String']['output'];
   address: Scalars['String']['output'];
+  bookings: Array<Booking>;
   city: Scalars['String']['output'];
   companyName: Scalars['String']['output'];
   country: Scalars['String']['output'];
@@ -135,6 +150,8 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type RegularBookingFragment = { __typename: 'Booking', id: string, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
+
 export type RegularCityFragment = { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
@@ -170,6 +187,11 @@ export type GetAllCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string }> };
 
+export type GetBookingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: string, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
+
 export type GetCityQueryVariables = Exact<{
   code: Scalars['String']['input'];
 }>;
@@ -182,37 +204,6 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string } | null };
 
-export const RegularCityFragmentDoc = gql`
-    fragment RegularCity on City {
-  id
-  code
-  name
-  countryName
-  countryCode
-  createdAt
-  updatedAt
-  __typename
-}
-    `;
-export const RegularHotelFragmentDoc = gql`
-    fragment RegularHotel on Hotel {
-  id
-  code
-  name
-  body
-  details
-  cityId
-  createdAt
-  updatedAt
-  __typename
-}
-    `;
-export const RegularErrorFragmentDoc = gql`
-    fragment RegularError on FieldError {
-  field
-  message
-}
-    `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -232,6 +223,55 @@ export const RegularUserFragmentDoc = gql`
   createdAt
   updatedAt
   __typename
+}
+    `;
+export const RegularHotelFragmentDoc = gql`
+    fragment RegularHotel on Hotel {
+  id
+  code
+  name
+  body
+  details
+  cityId
+  createdAt
+  updatedAt
+  __typename
+}
+    `;
+export const RegularBookingFragmentDoc = gql`
+    fragment RegularBooking on Booking {
+  id
+  details
+  creatorId
+  creator {
+    ...RegularUser
+  }
+  hotelId
+  hotel {
+    ...RegularHotel
+  }
+  createdAt
+  updatedAt
+  __typename
+}
+    ${RegularUserFragmentDoc}
+${RegularHotelFragmentDoc}`;
+export const RegularCityFragmentDoc = gql`
+    fragment RegularCity on City {
+  id
+  code
+  name
+  countryName
+  countryCode
+  createdAt
+  updatedAt
+  __typename
+}
+    `;
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on FieldError {
+  field
+  message
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -381,6 +421,45 @@ export type GetAllCitiesQueryHookResult = ReturnType<typeof useGetAllCitiesQuery
 export type GetAllCitiesLazyQueryHookResult = ReturnType<typeof useGetAllCitiesLazyQuery>;
 export type GetAllCitiesSuspenseQueryHookResult = ReturnType<typeof useGetAllCitiesSuspenseQuery>;
 export type GetAllCitiesQueryResult = Apollo.QueryResult<GetAllCitiesQuery, GetAllCitiesQueryVariables>;
+export const GetBookingsDocument = gql`
+    query getBookings {
+  getBookings {
+    ...RegularBooking
+  }
+}
+    ${RegularBookingFragmentDoc}`;
+
+/**
+ * __useGetBookingsQuery__
+ *
+ * To run a query within a React component, call `useGetBookingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBookingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBookingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBookingsQuery(baseOptions?: Apollo.QueryHookOptions<GetBookingsQuery, GetBookingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBookingsQuery, GetBookingsQueryVariables>(GetBookingsDocument, options);
+      }
+export function useGetBookingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBookingsQuery, GetBookingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBookingsQuery, GetBookingsQueryVariables>(GetBookingsDocument, options);
+        }
+export function useGetBookingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetBookingsQuery, GetBookingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetBookingsQuery, GetBookingsQueryVariables>(GetBookingsDocument, options);
+        }
+export type GetBookingsQueryHookResult = ReturnType<typeof useGetBookingsQuery>;
+export type GetBookingsLazyQueryHookResult = ReturnType<typeof useGetBookingsLazyQuery>;
+export type GetBookingsSuspenseQueryHookResult = ReturnType<typeof useGetBookingsSuspenseQuery>;
+export type GetBookingsQueryResult = Apollo.QueryResult<GetBookingsQuery, GetBookingsQueryVariables>;
 export const GetCityDocument = gql`
     query getCity($code: String!) {
   getCity(code: $code) {

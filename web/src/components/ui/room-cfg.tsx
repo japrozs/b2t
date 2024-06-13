@@ -18,8 +18,6 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
 }) => {
     return (
         <div className="m-4">
-            {/* TODO – make this look better please */}
-            {/* confirm if there should be a minimum of one adult in a room */}
             {roomConfig.rooms.map(
                 (room: RoomCfgType["rooms"][0], idx: number) => (
                     <div
@@ -32,7 +30,6 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                             {idx != 0 && (
                                 <RiDeleteBin6Line
                                     onClick={() => {
-                                        // TODO: this removes all rooms
                                         const roomCpy = [...roomConfig.rooms];
                                         console.log(roomCpy, idx);
                                         roomCpy.splice(idx, 1);
@@ -87,7 +84,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                                                 room.adults +
                                                     room.children.length +
                                                     1 <=
-                                                4
+                                                6
                                             ) {
                                                 const roomCpy = [
                                                     ...roomConfig.rooms,
@@ -102,7 +99,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                                             room.adults +
                                                 room.children.length +
                                                 1 <=
-                                            4
+                                            6
                                                 ? "text-blue-600 cursor-pointer"
                                                 : "cursor-not-allowed text-gray-500"
                                         }`}
@@ -155,7 +152,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                                                 room.adults +
                                                     room.children.length +
                                                     1 <=
-                                                4
+                                                6
                                             ) {
                                                 const roomCpy = [
                                                     ...roomConfig.rooms,
@@ -173,7 +170,7 @@ const RoomConfig: React.FC<RoomConfigProps> = ({
                                             room.adults +
                                                 room.children.length +
                                                 1 <=
-                                            4
+                                            6
                                                 ? "text-blue-600 cursor-pointer"
                                                 : "cursor-not-allowed text-gray-500"
                                         }`}

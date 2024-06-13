@@ -36,11 +36,11 @@ import { Spinner } from "@/components/shared/spinner";
 import { Checkbox } from "@headlessui/react";
 import { GrCheckmark } from "react-icons/gr";
 import { Hotel } from "@/generated/graphql";
+import moment from "moment";
 
 interface CheckoutProps {}
 const Checkout: React.FC<CheckoutProps> = ({}) => {
     useIsAuth();
-    // TODO: find a way to persist these between page refreshes
     const { hotel, room, cfg } = useCheckoutStore((state) => state);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [createBookingLoading, setCreateBookingLoading] = useState(false);
@@ -201,7 +201,6 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                             </span>
                                         </p>
                                         <hr className="mt-2 mb-3" />
-                                        {/* TODO – change these hardcoded values */}
                                         <div className="bg-blue-50 border border-blue-400 rounded-lg py-2 px-3 mb-2">
                                             <div className="flex items-center mb-1">
                                                 {(
@@ -224,12 +223,33 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                                     </>
                                                 )}
                                             </div>
-                                            <div className="flex items-center">
-                                                <MdOutlineCheck className="text-lg text-emerald-600 mr-1.5" />
-                                                <p className="text-sm text-gray-800 font-medium">
-                                                    Refundable
-                                                </p>
-                                            </div>
+                                            {(room as RoomDetailType)
+                                                .NonRefundable === "N" ? (
+                                                <div className="flex items-center mt-0">
+                                                    <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
+                                                    <p className="flex items-center font-medium text-sm text-emerald-600">
+                                                        Free cancellation before{" "}
+                                                        {moment(
+                                                            parseDate(
+                                                                (
+                                                                    room as RoomDetailType
+                                                                ).CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                            )
+                                                        ).format(
+                                                            "D MMMM, YYYY"
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center mt-0">
+                                                    <span className="ml-1 mr-3">
+                                                        •
+                                                    </span>
+                                                    <p className="font-medium text-gray-700 text-sm">
+                                                        Non-refundable
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
                                         {Array(cfgRoom.adults)
                                             .fill(0)
@@ -473,7 +493,6 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                             >
                                 Book now
                             </button>
-                            {/* TODO: change this  */}
                             <p className="text-center text-xs px-2 text-gray-500 font-medium">
                                 By making your booking you agree to the{" "}
                                 <span className="underline font-semibold text-gray-700">

@@ -16,9 +16,8 @@ export const searchHotel = async (req: Request, res: Response) => {
         });
         console.log("body : ", {
             Profile: {
-                // TODO: change these to environment variables
-                Password: "EybSIuEUqr9aaoPm",
-                Code: "NobleTravels",
+                Password: process.env.IOLX_API_PASSWORD,
+                Code: process.env.IOLX_API_CODE,
                 TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
             },
             SearchCriteria: {
@@ -39,9 +38,8 @@ export const searchHotel = async (req: Request, res: Response) => {
         axios
             .post(`https://api.iwtxconnect.com/hotel/api/v1/search`, {
                 Profile: {
-                    // TODO: change these to environment variables
-                    Password: "EybSIuEUqr9aaoPm",
-                    Code: "NobleTravels",
+                    Password: process.env.IOLX_API_PASSWORD,
+                    Code: process.env.IOLX_API_CODE,
                     TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
                 },
                 SearchCriteria: {

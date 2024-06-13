@@ -217,7 +217,6 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                     Search hotels
                 </button>
             </div>
-            {/* TODO – change this copy pasted content */}
             <div className="p-10">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex items-center  mb-6">

@@ -46,7 +46,6 @@ export const Navbar: React.FC<NavbarProps> = ({ sticky }) => {
                     <Logo className={`h-9 w-auto text-white`} />
                 </Link>
                 <div className="flex items-center ml-auto mr-0 space-x-5">
-                    {/* TODO – make this show a meny with profile, account settings and logout */}
                     <Menu>
                         <MenuButton className="">
                             <IoMdMenu

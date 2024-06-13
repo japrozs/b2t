@@ -10,9 +10,6 @@ interface PersonDetailsProps {
     onDataChange: (data: any) => void;
 }
 
-{
-    /* TODO: try and add validation to these input boxes if possible */
-}
 export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
     personType,
     personIndex,
@@ -44,14 +41,7 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
             <p className="text-md font-medium mb-1">
                 {personType} {personIndex + 1} details
             </p>
-            {/* TODO: add labels to these inputs (its ambigous) */}
             <div className="flex items-center">
-                {/* <input
-                    className="w-min border border-gray-200 rounded-md text-sm py-1 px-2"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Mr, Mrs, Miss, Ms"
-                /> */}
                 <div className="w-full">
                     <DropDown
                         options={{
@@ -108,28 +98,12 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                     type="number"
                     placeholder="Age"
                 />
-                {/* <input
-                    className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
-                    value={nationality}
-                    onChange={(e) => {
-                        setNationality(e.target.value);
-                    }}
-                    placeholder="Nationality"
-                /> */}
                 <DropDown
                     options={countryList}
                     // label="Nationality"
                     state={nationality}
                     setState={setNationality}
                 />
-                {/* <input
-                    className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
-                    value={gender}
-                    onChange={(e) => {
-                        setGender(e.target.value);
-                    }}
-                    placeholder="Gender (M/F)"
-                /> */}
                 <DropDown
                     options={{
                         M: "Male",

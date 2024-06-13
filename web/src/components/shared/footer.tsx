@@ -31,12 +31,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
                     </p>
                 </div>
                 <div className="p-3 w-full">
-                    <Logo
-                        style={{
-                            color: themeColor[0],
-                        }}
-                        className={`h-8 w-auto text-[${themeColor[0]}]`}
-                    />
+                    <Logo className={`h-8 w-auto text-white`} />
                 </div>
             </div>
             <hr className="px-4 my-2.5 max-w-[76rem] mx-auto border-gray-900" />

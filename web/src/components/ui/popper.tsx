@@ -21,12 +21,16 @@ export const Popper: React.FC<PopperProps> = ({
     panelShadow,
 }) => {
     const [isShowing, setIsShowing] = useState(false);
+
     return (
-        // TODO: figure out a way to make the text in the box readable
         <Popover className="">
             <PopoverButton
-                onMouseEnter={() => setIsShowing(true)}
-                onMouseLeave={() => setIsShowing(false)}
+                onMouseEnter={() => {
+                    setTimeout(async () => setIsShowing(true), 100);
+                }}
+                onMouseLeave={() => {
+                    setTimeout(async () => setIsShowing(false), 100);
+                }}
             >
                 {button({ open: isShowing })}
             </PopoverButton>
@@ -40,8 +44,12 @@ export const Popper: React.FC<PopperProps> = ({
                 leaveTo="scale-95 opacity-0"
             >
                 <PopoverPanel
-                    onMouseEnter={() => setIsShowing(true)}
-                    onMouseLeave={() => setIsShowing(false)}
+                    onMouseEnter={() => {
+                        setTimeout(async () => setIsShowing(true), 100);
+                    }}
+                    onMouseLeave={() => {
+                        setTimeout(async () => setIsShowing(false), 100);
+                    }}
                     anchor="top"
                     className={`transition ${
                         panelShadow && "shadow-lg"

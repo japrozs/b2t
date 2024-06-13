@@ -53,15 +53,6 @@ export const validateRegister = (options: UserInput) => {
             },
         ];
     }
-    // TODO: same check coded twice
-    if (options.password.length <= 6) {
-        return [
-            {
-                field: "password",
-                message: "length must be greater than 6",
-            },
-        ];
-    }
 
     if (options.number.length < 10) {
         return [

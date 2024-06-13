@@ -43,9 +43,6 @@ interface HotelCardProps {
     showPricePerNightPerRoom?: boolean;
 }
 
-// TODO: find a way to incorporate two prices (online rate and our rates) into hotel card
-// TODO: display search query at the top and modification
-
 export const HotelCard: React.FC<HotelCardProps> = ({
     hotel,
     cfg,
@@ -81,16 +78,31 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         >
                             {hotel.HotelName}
                         </div>
-                        <span className="flex items-center">
-                            {Array(hotel.StarRating)
-                                .fill(0)
-                                .map((_, idx: number) => (
-                                    <FaStar
-                                        key={idx}
-                                        className="text-sm text-yellow-500 mr-0.5"
-                                    />
-                                ))}
-                        </span>
+                        <Popper
+                            button={() => (
+                                <span className="flex cursor-help items-center">
+                                    {Array(hotel.StarRating)
+                                        .fill(0)
+                                        .map((_, idx: number) => (
+                                            <FaStar
+                                                key={idx}
+                                                className="text-sm text-yellow-500 mr-0.5"
+                                            />
+                                        ))}
+                                </span>
+                            )}
+                            panelShadow
+                            panel={() => (
+                                <div className="bg-white w-80 p-3">
+                                    <p className="text-xs font-medium text-gray-700">
+                                        This star rating is provided to Noble
+                                        Travels by the property and is usually
+                                        determined by an official hotel rating
+                                        organization or another third party.
+                                    </p>
+                                </div>
+                            )}
+                        />
                     </h1>
                     <div className="flex items-center my-1">
                         <p className="flex items-center text-sm text-gray-500 font-medium">
@@ -103,16 +115,6 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         </p>
                         {/* <span className="mx-2.5 text-gray-500">•</span> */}
                     </div>
-                    {/* {hotel.details.Details[0].HotelEmail && (
-                        <div className="flex items-center">
-                            <MdAlternateEmail className="text-gray-400 mr-2" />
-                            <p className="transition-all text-sm text-blue-500 menlo hover:underline">
-                                {hotel.details.Details[0].HotelEmail}
-                            </p>
-                        </div>
-                    )} */}
-                    {/* TODO – the language here is VERY confusing... fix it */}
-                    {/* TODO – make pills for the facilites like travala */}
                     <div className="border-l-2 px-2 mt-2.5 border-gray-300 mb-1">
                         {Array(1)
                             .fill(
@@ -167,7 +169,6 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                 </div>
                             ))}
                     </div>
-                    {/* TODO – use icons like HRS if possible */}
                     <div className="mt-auto mb-0 flex items-center">
                         {hotel.details.Details[0].HotelFacilities.Facility.includes(
                             HOTEL_FACILITY_FREE_WIFI_KEY
@@ -363,7 +364,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                     </p>
                     <button
                         onClick={() => setOpen(!open)}
-                        className={`mt-auto mb-0 flex g-sans items-center bg-[#3073F0] text-white hover:bg-opacity-[0.98] rounded-md py-2 text-center justify-center whitespace-nowrap font-medium text-md w-full justify-center`}
+                        className={`mt-auto mb-0 flex g-sans items-center bg-[#3073F0] text-white hover:bg-opacity-[0.98] rounded-md py-2 text-center whitespace-nowrap font-medium text-md w-full justify-center`}
                     >
                         {open ? "Less" : "More"} rooms
                         {open ? (

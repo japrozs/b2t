@@ -72,9 +72,8 @@ export const createBooking = async (req: Request, res: Response) => {
         axios
             .post(`https://api.iwtxconnect.com/hotel/book`, {
                 Profile: {
-                    // TODO: use environment variables
-                    Password: "EybSIuEUqr9aaoPm",
-                    Code: "NobleTravels",
+                    Password: process.env.IOLX_API_PASSWORD,
+                    Code: process.env.IOLX_API_CODE,
                     TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
                 },
                 Passengers: passengers,

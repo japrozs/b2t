@@ -50,19 +50,12 @@ const main = async () => {
     const RedisStore = connectRedis(session);
     const redis = new Redis(process.env.REDIS_URL);
     app.set("trust proxy", 1);
-    // TODO: CHANGE THIS VERY IMPORTANT
     app.use(
         cors({
             origin: process.env.CORS_ORIGIN,
             credentials: true,
         })
     );
-    // app.use(
-    //     cors({
-    //         origin: "http://192.168.1.6:3000",
-    //         credentials: true,
-    //     })
-    // );
     app.use(bodyParser.json());
 
     app.use(
@@ -104,12 +97,11 @@ const main = async () => {
         cors: false,
     });
 
-    // run this function every day instead
+    // TODO: run this function every day instead
     // THESE FIX ARE HIGHLY UNSTABLE AND NEED TO BE FIXED BEFORE SHIPPING TO PRODUCTION
     // refreshDatabaseWithNewHotels();
     // refreshHotelDetails();
 
-    // TODO: add expressAuth middleware for these routes
     app.post("/api/search-hotel", expressIsAuth, searchHotel);
     app.post("/api/check-availability", expressIsAuth, checkAvailability);
     app.post("/api/create-booking", expressIsAuth, createBooking);

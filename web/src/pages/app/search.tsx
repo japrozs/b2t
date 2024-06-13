@@ -29,7 +29,6 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 
 interface SearchProps {}
 
-// TODo: allow not to pick dates before today
 const Search: React.FC<SearchProps> = ({}) => {
     useIsAuth();
     const router = useRouter();
@@ -158,7 +157,6 @@ const Search: React.FC<SearchProps> = ({}) => {
             ) : (
                 <>
                     <div>
-                        {/* TODO: stop spinner and show error when there is a search error */}
                         <div className="mt-5 space-x-5 flex items-start max-w-[76rem] mx-auto">
                             {/* Rest of the component... */}
                             {/* <div className="w-3/12 m-2.5 mx-0 py-3 px-4 bg-gray-50 rounded"> */}
@@ -186,35 +184,6 @@ const Search: React.FC<SearchProps> = ({}) => {
                                     hotel results for you based on your search.
                                 </p>
                                 <hr className="bg-gray-900 my-4" />
-                                {/* <p className="font-semibold text-md">
-                                    Price display
-                                </p>
-                                <div className="mt-2 flex flex-wrap space-x-2.5 items-center">
-                                    <Pill
-                                        colored={showPricePerNightPerRoom}
-                                        className="cursor-pointer"
-                                        bgAndBorderColor="border-pink-500 bg-pink-200"
-                                        textColor="text-pink-700"
-                                        label="Price per night/room"
-                                        onClick={() => {
-                                            setShowPricePerNightPerRoom(true);
-                                            setShowTotalPrice(false);
-                                        }}
-                                    />
-                                    <Pill
-                                        colored={showTotalPrice}
-                                        className="cursor-pointer"
-                                        bgAndBorderColor="border-pink-500 bg-pink-200"
-                                        textColor="text-pink-700"
-                                        label="Total price"
-                                        onClick={() => {
-                                            setShowPricePerNightPerRoom(false);
-                                            setShowTotalPrice(true);
-                                        }}
-                                    />
-                                </div> 
-                                <hr className="bg-gray-900 my-4" />
-                                */}
                                 <p className="font-semibold text-base">
                                     Filter by hotel/chain
                                 </p>
@@ -263,14 +232,9 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         <p className="mx-1 bg-emerald-100 border border-green-500 text-emerald-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
                                             {value as string}
                                         </p>
-                                        {/* <input
-                                            className="ml-auto mr-0 fill-purple-500"
-                                            type="checkbox"
-                                        /> */}
                                     </div>
                                 ))}
                             </div>
-                            {/* https://foto.hrsstatic.com/fotos/0/2/269/213/80/000000/http%3A%2F%2Ffoto-origin.hrsstatic.com%2Ffoto%2F6%2F8%2F6%2F4%2F%2Fteaser_686447.jpg/WYT98yP7mJCpeMkikrasbQ%3D%3D/134%2C106/6/Holiday_Inn_Express_LONDON_-_EXCEL-London-Aussenansicht-3-686447.jpg */}
                             <div className="w-9/12 p-2.5">
                                 <div className="flex items-end space-x-4 mb-7">
                                     <div className="w-full">
@@ -290,13 +254,6 @@ const Search: React.FC<SearchProps> = ({}) => {
                                             separator=" – "
                                             placeholder="DD-MM-YYYY to DD-MM-YYYY"
                                             displayFormat="DD-MM-YYYY"
-                                            // disabledDates={[
-                                            //     {
-                                            //         startDate: "2024-05-30",
-                                            //         endDate: "2024-05-30",
-                                            //     },
-                                            // ]}
-                                            // asSingle={true}
                                             inputClassName={
                                                 "outline-nonefocus:ring-1 datepicker-input"
                                             }

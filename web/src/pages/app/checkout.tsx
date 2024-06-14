@@ -14,7 +14,11 @@ import {
     IS_EMPTY,
     formatCfg,
     getPricePerNightPerRoom,
+    getPricePerNightPerRoomCheckout,
+    getRRPPricePerNightPerRoom,
+    getRRPTotalPrice,
     getTotalPrice,
+    getTotalPriceCheckout,
     nightsBetween,
     parseDate,
     submitButtonDisabledFn,
@@ -313,12 +317,12 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                             </p>
                             <p className="mt-1.5 flex items-center text-sm text-gray-500 font-medium">
                                 <IoLocationOutline className="mr-1.5" />
-                                {(
-                                    hotel as HotelSearchItemType
-                                ).details.Details[0].HotelAddress.split(",")
+                                {latestHotel.Hotels.Hotel[0].details.Details[0].HotelAddress.split(
+                                    ","
+                                )
                                     .slice(0, 2)
                                     .join(", ") ||
-                                    (hotel as HotelSearchItemType).Chain}
+                                    latestHotel.Hotels.Hotel[0].Chain}
                             </p>
                             <hr className="pb-0 my-2" />
                             <div className="mt-3 mb-1 flex items-center">
@@ -328,9 +332,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     </p>
                                     <p className="text-base text-gray-800 font-semibold">
                                         {parseDate(
-                                            (
-                                                hotel as HotelSearchItemType
-                                            ).StartDate.toString()
+                                            latestHotel.Hotels.Hotel[0].StartDate.toString()
                                         ).toLocaleDateString("en-us", {
                                             weekday: "short",
                                             month: "short",
@@ -344,14 +346,10 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                         {FORMAT_GRAMMAR(
                                             nightsBetween(
                                                 parseDate(
-                                                    (
-                                                        hotel as HotelSearchItemType
-                                                    ).StartDate.toString()
+                                                    latestHotel.Hotels.Hotel[0].StartDate.toString()
                                                 ),
                                                 parseDate(
-                                                    (
-                                                        hotel as HotelSearchItemType
-                                                    ).EndDate.toString()
+                                                    latestHotel.Hotels.Hotel[0].EndDate.toString()
                                                 )
                                             ),
                                             "night"
@@ -364,9 +362,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     </p>
                                     <p className="text-right ml-auto mr-0 text-base text-gray-800 font-semibold">
                                         {parseDate(
-                                            (
-                                                hotel as HotelSearchItemType
-                                            ).EndDate.toString()
+                                            latestHotel.Hotels.Hotel[0].EndDate.toString()
                                         ).toLocaleDateString("en-us", {
                                             weekday: "short",
                                             month: "short",
@@ -379,7 +375,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 <p className="w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
                                     From{" "}
                                     {
-                                        (hotel as HotelSearchItemType).details
+                                        latestHotel.Hotels.Hotel[0].details
                                             .Details[0].CheckInTime
                                     }{" "}
                                     hrs
@@ -387,7 +383,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 <p className="ml-auto mr-0 w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
                                     Until{" "}
                                     {
-                                        (hotel as HotelSearchItemType).details
+                                        latestHotel.Hotels.Hotel[0].details
                                             .Details[0].CheckOutTime
                                     }{" "}
                                     hrs
@@ -424,12 +420,19 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                     </p>
                                     <p className="text-base font-semibold">
                                         $
-                                        {getPricePerNightPerRoom(
-                                            room as RoomDetailType,
-                                            (hotel as HotelSearchItemType)
+                                        {getPricePerNightPerRoomCheckout(
+                                            latestHotel.Hotels.Hotel[0].RoomTypeDetails.Rooms.Room.filter(
+                                                (r) =>
+                                                    r.RoomTypeCode ===
+                                                        (room as RoomDetailType)
+                                                            .RoomTypeCode &&
+                                                    r.RoomType ===
+                                                        (room as RoomDetailType)
+                                                            .RoomType
+                                            )[0],
+                                            latestHotel.Hotels.Hotel[0]
                                                 .StartDate,
-                                            (hotel as HotelSearchItemType)
-                                                .EndDate
+                                            latestHotel.Hotels.Hotel[0].EndDate
                                         )}
                                     </p>
                                 </div>
@@ -467,8 +470,16 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 </p>
                                 <p className="text-right text-3xl g-sans font-medium mb-1.5 pb-1.5">
                                     $
-                                    {getTotalPrice(
-                                        room as RoomDetailType,
+                                    {getTotalPriceCheckout(
+                                        latestHotel.Hotels.Hotel[0].RoomTypeDetails.Rooms.Room.filter(
+                                            (r) =>
+                                                r.RoomTypeCode ===
+                                                    (room as RoomDetailType)
+                                                        .RoomTypeCode &&
+                                                r.RoomType ===
+                                                    (room as RoomDetailType)
+                                                        .RoomType
+                                        )[0],
                                         (cfg as RoomCfgType).rooms.length
                                     )}
                                 </p>

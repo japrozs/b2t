@@ -18,6 +18,10 @@
 -   [ ] change the url in the search page when search parameters are changed, otherwise when a person tries to go back from the checking page, he sees the search he did from the index page and finds stale results
 -   [ ] break bookings listing into current (active) and past
 -   [ ] check if supplier notes is possible in API
+-   [ ] add timeouts and request throttling
+-   [ ] in `checkout.tsx`, use `latestHotel` instead of `hotel`
+-   [ ] in `checkout.tsx`, inform the customer about price increase or decrease
+-   [ ] show rooms in hotel card in ascending order
 
 ### `later on`
 

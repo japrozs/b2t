@@ -1,0 +1,185 @@
+{
+    "BookingDetails": {
+        "Source": 227,
+        "BookedDate": 20240614,
+        "BookingNumber": "1435965",
+        "BookingTotalRate": 11410,
+        "RecommendedRetailPrice": 13423.54,
+        "Currency": "USD",
+        "BookingStatus": "Confirmed",
+        "Passengers": [
+            {
+                "PaxNumber": 1,
+                "RoomNo": 1,
+                "Title": 1,
+                "TitleString": "Mr",
+                "PassengerType": "ADT",
+                "Age": 52,
+                "FirstName": "PRITPAL",
+                "LastName": "SINGHSAINI",
+                "Nationality": "IND",
+                "Gender": 1,
+                "GenderString": "M"
+            },
+            {
+                "PaxNumber": 2,
+                "RoomNo": 2,
+                "Title": 2,
+                "TitleString": "Mrs",
+                "PassengerType": "ADT",
+                "Age": 42,
+                "FirstName": "HARPREET",
+                "LastName": "KAURSAINI",
+                "Nationality": "IND",
+                "Gender": 2,
+                "GenderString": "F"
+            },
+            {
+                "PaxNumber": 3,
+                "RoomNo": 1,
+                "Title": 1,
+                "TitleString": "Mr",
+                "PassengerType": "CHD",
+                "Age": 17,
+                "FirstName": "NIMRAT",
+                "LastName": "SINGHSAINI",
+                "Nationality": "IND",
+                "Gender": 1,
+                "GenderString": "M"
+            },
+            {
+                "PaxNumber": 4,
+                "RoomNo": 2,
+                "Title": 1,
+                "TitleString": "Mr",
+                "PassengerType": "CHD",
+                "Age": 14,
+                "FirstName": "JAPROZ",
+                "LastName": "SINGHSAINI",
+                "Nationality": "IND",
+                "Gender": 1,
+                "GenderString": "M"
+            }
+        ],
+        "AgencyRef": "9de9de08-2cd1-4d28-8",
+        "PartyName": "SINGHSAINI/PRITPAL"
+    },
+    "HotelDetails": {
+        "StartDate": 20240813,
+        "EndDate": 20240815,
+        "HotelCode": "227-280486",
+        "HotelName": "The Oberoi, New Delhi",
+        "TotalRate": 11410,
+        "RecommendedRetailPrice": 13423.54,
+        "Currency": "USD",
+        "TimeZone": "Asia/Calcutta",
+        "RoomDetails": [
+            {
+                "RoomType": "Deluxe Suite",
+                "RoomTypeCode": 5280,
+                "RoomStatus": "TEST",
+                "CurrCode": "USD",
+                "ContractTokenId": "22031",
+                "RoomConfigurationId": 1,
+                "RoomNo": 1,
+                "MealPlan": "Breakfast",
+                "MealPlanCode": 7,
+                "TaxSellCharges": 72000,
+                "Rate": 5705,
+                "RecommendedRetailPrice": 6711.77,
+                "SubResNo": "IOLx-1435965-12300695",
+                "SupplierResNo": "c74b61a2-1fdf-4a01-aff1-90a46b38ac26_TEST",
+                "Messages": {
+                    "Message": [
+                        {
+                            "Id": 859169,
+                            "MessageId": 1035407,
+                            "MessageShort": "CheckIn instructions",
+                            "MessageFull": "<ul>  <li>Extra-person charges may apply and vary depending on property policy</li><li>Government-issued photo identification and a credit card, debit card, or cash deposit may be required at check-in for incidental charges</li><li>Special requests are subject to availability upon check-in and may incur additional charges; special requests cannot be guaranteed</li><li>This property accepts credit cards, debit cards, and cash</li><li>Please note that cultural norms and guest policies may differ by country and by property; the policies listed are provided by the property</li>  </ul> <ul>  <li>Please note: A child bed is provided for 1 child between 9-11 years of age staying in a room with a parent. For 2 children between 8 and 12 years, an additional room is necessary at a discounted rate.</li>  </ul>\nThis property offers transfers from the airport (surcharges may apply). Guests must contact the property with arrival details before travel, using the contact information on the booking confirmation. Front desk staff will greet guests on arrival. Guests are required to download the property's Aarogya Setu mobile app before check-in. At check-in, guests must provide either a negative PCR COVID-19 test result or a record of full COVID-19 vaccination. Guests providing a negative COVID-19 test result must have been tested no more than 72 hours prior to check-in. For more details, please contact the property using the information on the booking confirmation.  Customers may be requested by the property to provide documentation of recent travel history (such as showing passport immigration stamps) and/or complete a health declaration. To register at this property, guests who are Indian citizens must provide a valid photo identity card issued by the Government of India; travelers who are not citizens of India must present a valid passport and visa.",
+                            "Type": "Check in Instruction",
+                            "MessageChargeBase": "0",
+                            "ValueType": "Fixed",
+                            "AgeFrom": 0,
+                            "AgeTo": 99
+                        },
+                        {
+                            "Id": 859170,
+                            "MessageId": 1035408,
+                            "MessageShort": "Optional fees",
+                            "MessageFull": "<ul> <li>Fee for buffet breakfast: approximately INR 1350–1600 for adults, and INR 675–850 for children</li><li>Airport shuttle fee: INR 6000 per vehicle (one-way, maximum occupancy 3)</li></ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p>",
+                            "Type": "Optional Fees",
+                            "MessageChargeBase": "0",
+                            "ValueType": "Fixed",
+                            "AgeFrom": 0,
+                            "AgeTo": 99
+                        },
+                        {
+                            "Id": 859171,
+                            "MessageId": 1035409,
+                            "MessageShort": "Know before you go",
+                            "MessageFull": "<ul>  <li>Reservations are required for golf tee times and massage services. Reservations can be made by contacting the hotel prior to arrival, using the contact information on the booking confirmation. </li><li>The property has connecting/adjoining rooms, which are subject to availability and can be requested by contacting the property using the number on the booking confirmation. </li><li>No pets and no service animals are allowed at this property. </li><li>Contactless check-in and contactless check-out are available.</li><li>At check-in, guests must provide either a negative PCR COVID-19 test result or a record of full COVID-19 vaccination.</li><li>Guest providing a negative COVID-19 test result must have been tested no more than 72 hours prior to check-in. </li><li>This property welcomes guests of all sexual orientations and gender identities (LGBTQ+ friendly).</li> </ul>",
+                            "Type": "Know Before You Go",
+                            "MessageChargeBase": "0",
+                            "ValueType": "Fixed",
+                            "AgeFrom": 0,
+                            "AgeTo": 99
+                        }
+                    ]
+                }
+            },
+            {
+                "RoomType": "Deluxe Suite",
+                "RoomTypeCode": 5280,
+                "RoomStatus": "TEST",
+                "CurrCode": "USD",
+                "ContractTokenId": "22031",
+                "RoomConfigurationId": 2,
+                "RoomNo": 2,
+                "MealPlan": "Breakfast",
+                "MealPlanCode": 7,
+                "TaxSellCharges": 72000,
+                "Rate": 5705,
+                "RecommendedRetailPrice": 6711.77,
+                "SubResNo": "IOLx-1435965-12300696",
+                "SupplierResNo": "fe001d83-a9e1-417c-b00a-d1ce2fe27185_TEST",
+                "Messages": {
+                    "Message": [
+                        {
+                            "Id": 859172,
+                            "MessageId": 1035407,
+                            "MessageShort": "CheckIn instructions",
+                            "MessageFull": "<ul>  <li>Extra-person charges may apply and vary depending on property policy</li><li>Government-issued photo identification and a credit card, debit card, or cash deposit may be required at check-in for incidental charges</li><li>Special requests are subject to availability upon check-in and may incur additional charges; special requests cannot be guaranteed</li><li>This property accepts credit cards, debit cards, and cash</li><li>Please note that cultural norms and guest policies may differ by country and by property; the policies listed are provided by the property</li>  </ul> <ul>  <li>Please note: A child bed is provided for 1 child between 9-11 years of age staying in a room with a parent. For 2 children between 8 and 12 years, an additional room is necessary at a discounted rate.</li>  </ul>\nThis property offers transfers from the airport (surcharges may apply). Guests must contact the property with arrival details before travel, using the contact information on the booking confirmation. Front desk staff will greet guests on arrival. Guests are required to download the property's Aarogya Setu mobile app before check-in. At check-in, guests must provide either a negative PCR COVID-19 test result or a record of full COVID-19 vaccination. Guests providing a negative COVID-19 test result must have been tested no more than 72 hours prior to check-in. For more details, please contact the property using the information on the booking confirmation.  Customers may be requested by the property to provide documentation of recent travel history (such as showing passport immigration stamps) and/or complete a health declaration. To register at this property, guests who are Indian citizens must provide a valid photo identity card issued by the Government of India; travelers who are not citizens of India must present a valid passport and visa.",
+                            "Type": "Check in Instruction",
+                            "MessageChargeBase": "0",
+                            "ValueType": "Fixed",
+                            "AgeFrom": 0,
+                            "AgeTo": 99
+                        },
+                        {
+                            "Id": 859173,
+                            "MessageId": 1035408,
+                            "MessageShort": "Optional fees",
+                            "MessageFull": "<ul> <li>Fee for buffet breakfast: approximately INR 1350–1600 for adults, and INR 675–850 for children</li><li>Airport shuttle fee: INR 6000 per vehicle (one-way, maximum occupancy 3)</li></ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p>",
+                            "Type": "Optional Fees",
+                            "MessageChargeBase": "0",
+                            "ValueType": "Fixed",
+                            "AgeFrom": 0,
+                            "AgeTo": 99
+                        },
+                        {
+                            "Id": 859174,
+                            "MessageId": 1035409,
+                            "MessageShort": "Know before you go",
+                            "MessageFull": "<ul>  <li>Reservations are required for golf tee times and massage services. Reservations can be made by contacting the hotel prior to arrival, using the contact information on the booking confirmation. </li><li>The property has connecting/adjoining rooms, which are subject to availability and can be requested by contacting the property using the number on the booking confirmation. </li><li>No pets and no service animals are allowed at this property. </li><li>Contactless check-in and contactless check-out are available.</li><li>At check-in, guests must provide either a negative PCR COVID-19 test result or a record of full COVID-19 vaccination.</li><li>Guest providing a negative COVID-19 test result must have been tested no more than 72 hours prior to check-in. </li><li>This property welcomes guests of all sexual orientations and gender identities (LGBTQ+ friendly).</li> </ul>",
+                            "Type": "Know Before You Go",
+                            "MessageChargeBase": "0",
+                            "ValueType": "Fixed",
+                            "AgeFrom": 0,
+                            "AgeTo": 99
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

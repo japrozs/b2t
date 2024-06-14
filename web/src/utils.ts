@@ -306,3 +306,47 @@ export const getRRPTotalPrice = (
 ): number => {
     return Math.ceil(COMMISSION_RATE * room.RecommendedRetailPrice * numRooms);
 };
+
+export const convertStatusToString = (str: string) => {
+    switch (str.toLowerCase()) {
+        case "ok":
+            return "Confirmed";
+            break;
+        case "test":
+            return "Confirmed";
+            break;
+        case "rq":
+            return "On Request";
+            break;
+        case "xx":
+            return "Rejected";
+            break;
+        case "cx":
+            return "Cancelled";
+            break;
+        default:
+            return str;
+    }
+};
+
+export const getTotalPriceCheckout = (
+    room: RoomDetailType,
+    numRooms: number
+): number => {
+    return Math.ceil(COMMISSION_RATE * room.Rate * numRooms);
+};
+
+export const getPricePerNightPerRoomCheckout = (
+    room: RoomDetailType,
+    startDate: number,
+    endDate: number
+): number => {
+    return Math.ceil(
+        COMMISSION_RATE *
+            (room.Rate /
+                nightsBetween(
+                    parseDate(startDate.toString()),
+                    parseDate(endDate.toString())
+                ))
+    );
+};

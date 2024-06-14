@@ -132,6 +132,7 @@ export interface RoomDetailType {
     NumberOfMeals: number;
     RoomNumber: number;
     Rate: number;
+    RateDetails?: number[];
     RoomStatusDetails: {
         Status: string[];
     };

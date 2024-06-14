@@ -8,8 +8,11 @@ export class BookingResolver {
     @Query(() => [Booking])
     async getBookings(@Ctx() { req }: Context) {
         return Booking.find({
-            where: { id: req.session.userId },
+            where: { creatorId: req.session.userId },
             relations: ["creator", "hotel"],
+            order: {
+                createdAt: "DESC",
+            },
         });
     }
 }

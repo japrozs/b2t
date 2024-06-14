@@ -1,4 +1,5 @@
 import { BookingCard } from "@/components/cards/booking-card";
+import { CancelBookingModal } from "@/components/modals/cancel-booking-modal";
 import { Footer } from "@/components/shared/footer";
 import { Navbar } from "@/components/shared/navbar";
 import { Spinner } from "@/components/shared/spinner";
@@ -6,7 +7,11 @@ import {
     RegularBookingFragment,
     useGetBookingsQuery,
 } from "@/generated/graphql";
-import { BookingDetailType } from "@/types";
+import {
+    BookingDetailType,
+    HotelDetailType,
+    HotelSearchItemType,
+} from "@/types";
 import { useIsAuth } from "@/utils/use-is-auth";
 import React from "react";
 import { RiSuitcaseLine } from "react-icons/ri";
@@ -52,6 +57,11 @@ const Bookings: React.FC<BookingsProps> = ({}) => {
                                                     JSON.parse(
                                                         booking.details
                                                     ) as BookingDetailType
+                                                }
+                                                hotel={
+                                                    JSON.parse(
+                                                        booking.hotel.details
+                                                    ) as HotelDetailType
                                                 }
                                             />
                                         )

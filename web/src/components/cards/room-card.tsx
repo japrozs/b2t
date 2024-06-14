@@ -46,7 +46,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({
             }`}
         >
             <div className="w-full flex flex-col">
-                <p className="g-sans text-lg flex items-center text-blue-main font-medium truncate text-ellipsis mb-1">
+                <p className="g-sans text-lg flex whitespace-normal items-center text-blue-main font-medium truncate text-ellipsis mb-1">
                     {room.RoomType}
                 </p>
                 <div className="flex items-stretch">

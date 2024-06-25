@@ -6,6 +6,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryColumn,
+    PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
 import { User } from "./user";
@@ -15,11 +16,11 @@ import { Hotel } from "./hotel";
 @Entity()
 export class Booking extends BaseEntity {
     @Field()
-    @PrimaryColumn()
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Field()
-    @Column()
+    @Column({ default: "{}" })
     details: string;
 
     @Field(() => User)

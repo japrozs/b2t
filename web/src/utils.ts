@@ -242,26 +242,29 @@ export const submitButtonDisabledFn = (
     childrenData: PersonDetailType,
     adultsData: PersonDetailType
 ): boolean => {
+    if (!childrenData || !adultsData) {
+        return true; // Disable the button if either is undefined
+    }
+
     const hasInvalidChild = childrenData.some((room) =>
-        room.some(
-            (detail) =>
-                detail.age.length === 0 ||
-                detail.firstName.length === 0 ||
-                detail.lastName.length === 0
-        )
+        room
+            ? room.some(
+                  (detail) =>
+                      !detail.age || !detail.firstName || !detail.lastName
+              )
+            : false
     );
 
     const hasInvalidAdult = adultsData.some((room) =>
-        room.some(
-            (detail) =>
-                detail.age.length === 0 ||
-                detail.firstName.length === 0 ||
-                detail.lastName.length === 0
-        )
+        room
+            ? room.some(
+                  (detail) =>
+                      !detail.age || !detail.firstName || !detail.lastName
+              )
+            : false
     );
 
     console.log(childrenData, adultsData);
-
     return hasInvalidChild || hasInvalidAdult;
 };
 
@@ -311,19 +314,14 @@ export const convertStatusToString = (str: string) => {
     switch (str.toLowerCase()) {
         case "ok":
             return "Confirmed";
-            break;
         case "test":
             return "Confirmed";
-            break;
         case "rq":
             return "On Request";
-            break;
         case "xx":
             return "Rejected";
-            break;
         case "cx":
             return "Cancelled";
-            break;
         default:
             return str;
     }

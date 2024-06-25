@@ -56,7 +56,6 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
     const [adultsData, setAdultsData] = useState<any[]>([]);
     const [childrenData, setChildrenData] = useState<any[]>([]);
     const router = useRouter();
-    const [TandC, setTandC] = useState(false);
 
     console.log("zustand.hotel :: ", hotel);
     console.log("zustand.room :: ", room);
@@ -73,6 +72,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
         }
         updatedAdultsData[roomIndex][adultIndex] = data;
         setAdultsData(updatedAdultsData);
+        console.log(childrenData, adultsData);
     };
 
     const handleChildDataChange = (

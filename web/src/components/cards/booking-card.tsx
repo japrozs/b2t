@@ -5,22 +5,30 @@ import React, { useState } from "react";
 import { IoPerson } from "react-icons/io5";
 import {
     MdConfirmationNumber,
+    MdDelete,
     MdOutlineConfirmationNumber,
 } from "react-icons/md";
 import { RiHotelLine } from "react-icons/ri";
 import { TbLogin2, TbLogout2 } from "react-icons/tb";
 import { CancelBookingModal } from "../modals/cancel-booking-modal";
 import { COMMISSION_RATE } from "@/constants";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { RegularBookingFragment } from "@/generated/graphql";
 
 interface BookingCardProps {
-    booking: BookingDetailType;
+    bookingDetails: BookingDetailType;
     hotel: HotelDetailType;
+    booking: RegularBookingFragment;
 }
 
-export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
+export const BookingCard: React.FC<BookingCardProps> = ({
+    bookingDetails,
+    hotel,
+    booking,
+}) => {
     const [cancelBookingModalOpen, setCancelBookingModalOpen] = useState(false);
 
-    console.log("booking :: ", booking);
+    console.log("booking :: ", bookingDetails);
     return (
         <div className="border bg-gray-50 border-gray-200 mb-5 p-[0.875rem]">
             {/* <img
@@ -40,7 +48,8 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                         <p className="ml-auto mr-0 text-xl font-medium g-sans text-emerald-500 bg-emerald-50 rounded-md py-0.5 px-1.5">
                             ${" "}
                             {Math.ceil(
-                                COMMISSION_RATE * booking.HotelDetails.TotalRate
+                                COMMISSION_RATE *
+                                    bookingDetails.HotelDetails.TotalRate
                             )}
                         </p>
                     </div>
@@ -57,10 +66,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 </span>
                                 <p
                                     className={`${
-                                        booking.HotelDetails.RoomDetails.every(
+                                        bookingDetails.HotelDetails.RoomDetails.every(
                                             (room) => room.RoomStatus === "OK"
                                         ) ||
-                                        booking.HotelDetails.RoomDetails.every(
+                                        bookingDetails.HotelDetails.RoomDetails.every(
                                             (room) => room.RoomStatus === "TEST"
                                         )
                                             ? "text-emerald-500 bg-emerald-50"
@@ -68,8 +77,8 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                     } rounded-md g-sans text-sm py-0.5 font-medium px-1.5`}
                                 >
                                     {convertStatusToString(
-                                        booking.HotelDetails.RoomDetails[0]
-                                            .RoomStatus
+                                        bookingDetails.HotelDetails
+                                            .RoomDetails[0].RoomStatus
                                     )}
                                 </p>
                             </div>
@@ -84,7 +93,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 <p className="text-purple-500 bg-purple-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
                                     {moment(
                                         parseDate(
-                                            booking.HotelDetails.StartDate.toString()
+                                            bookingDetails.HotelDetails.StartDate.toString()
                                         )
                                     ).format("D MMMM, YYYY")}
                                 </p>
@@ -100,7 +109,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 <p className="text-purple-500 g-sans bg-purple-50 rounded-md text-sm py-0.5 font-medium px-1.5">
                                     {moment(
                                         parseDate(
-                                            booking.HotelDetails.EndDate.toString()
+                                            bookingDetails.HotelDetails.EndDate.toString()
                                         )
                                     ).format("D MMMM, YYYY")}
                                 </p>
@@ -116,7 +125,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 <p className="text-blue-500 g-sans bg-blue-50 rounded-md text-sm py-0.5 font-medium px-1.5">
                                     {moment(
                                         parseDate(
-                                            booking.BookingDetails.BookedDate.toString()
+                                            bookingDetails.BookingDetails.BookedDate.toString()
                                         )
                                     ).format("D MMMM, YYYY")}
                                 </p>
@@ -134,7 +143,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 <p
                                     className={`text-gray-700 rounded-md text-sm font-semibold menlo py-0.5 font-medium px-1.5`}
                                 >
-                                    {booking.BookingDetails.PartyName}
+                                    {bookingDetails.BookingDetails.PartyName}
                                 </p>
                             </div>
                             <div className="mt-1 flex items-center">
@@ -148,7 +157,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 <p
                                     className={`bg-blue-50 py-0.5 px-1 text-blue-600 menlo rounded-md text-sm font-medium`}
                                 >
-                                    {booking.BookingDetails.AgencyRef}
+                                    {booking.id}
                                 </p>
                             </div>
                             <div className="mt-1 flex items-center">
@@ -162,7 +171,10 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                 <p
                                     className={`bg-blue-50 py-0.5 px-1 text-blue-600 menlo rounded-md text-sm font-medium`}
                                 >
-                                    {booking.BookingDetails.BookingNumber}
+                                    {
+                                        bookingDetails.BookingDetails
+                                            .BookingNumber
+                                    }
                                 </p>
                             </div>
                             <div className="mt-1 flex items-center">
@@ -177,8 +189,8 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
                                     className={`w-max bg-blue-50 py-0.5 px-1 text-blue-600 menlo rounded-md text-sm font-medium`}
                                 >
                                     {
-                                        booking.HotelDetails.RoomDetails[0]
-                                            .SupplierResNo
+                                        bookingDetails.HotelDetails
+                                            .RoomDetails[0].SupplierResNo
                                     }
                                 </p>
                             </div>
@@ -200,18 +212,20 @@ export const BookingCard: React.FC<BookingCardProps> = ({ booking, hotel }) => {
             <div className="flex items=center">
                 <button
                     onClick={() => setCancelBookingModalOpen(true)}
-                    className={` ml-auto mr-2 g-sans text-center bg-red-500 text-white hover:bg-opacity-[0.96] rounded-md py-1.5 px-4 whitespace-nowrap font-medium text-md`}
+                    className={`transition-all cursor-pointer ease-soft-spring flex items-center ml-auto mr-2 text-center bg-gray-100 border border-gray-200 hover:bg-red-50 text-red-500 hover:bg-opacity-[0.96] rounded-md py-1.5 px-4 whitespace-nowrap font-medium text-sm`}
                 >
+                    {/* <MdDelete className="mr-1.5 text-lg" /> */}
                     Cancel Booking
                 </button>
                 <button
-                    className={`g-sans text-center bg-blue-500 text-white hover:bg-opacity-[0.98] rounded-md py-1.5 px-10 whitespace-nowrap font-medium text-md`}
+                    className={`transition-all ease-soft-spring cursor-pointer text-center bg-blue-500 text-white hover:bg-opacity-[0.98] rounded-md py-1.5 px-10 whitespace-nowrap font-medium text-sm`}
                 >
                     Open
                 </button>
             </div>
             <CancelBookingModal
                 open={cancelBookingModalOpen}
+                booking={booking}
                 setOpen={setCancelBookingModalOpen}
             />
         </div>

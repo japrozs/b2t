@@ -22,6 +22,7 @@
 -   [ ] in `checkout.tsx`, use `latestHotel` instead of `hotel`
 -   [ ] in `checkout.tsx`, inform the customer about price increase or decrease
 -   [ ] show rooms in hotel card in ascending order
+-   [ ] make sure the migrations work
 
 ### `later on`
 

@@ -38,7 +38,7 @@ export const Carousel: React.FC<CarouselProps> = ({ hotel }) => {
                     <img
                         src={image}
                         alt={`Slide ${index}`}
-                        className="w-full h-auto rounded-lg border border-gray-300"
+                        className="w-full h-[30rem]  object-cover rounded-lg border border-gray-300"
                     />
                     <div className="absolute top-1/2 transform -translate-y-1/2 left-2">
                         <div

@@ -69,7 +69,15 @@ export const createBooking = async (req: Request, res: Response) => {
             }
         }
         console.log(passengers);
-        const agencyRefId = v4().slice(0, 20);
+
+        const hotel = await Hotel.findOne({
+            code: validatedBody.hotelCode,
+        });
+        const booking = await Booking.create({
+            creatorId: req.session.userId,
+            hotelId: hotel?.id,
+        }).save();
+
         axios
             .post(`https://api.iwtxconnect.com/hotel/book`, {
                 Profile: {
@@ -82,7 +90,7 @@ export const createBooking = async (req: Request, res: Response) => {
                     StartDate: validatedBody.startDate,
                     EndDate: validatedBody.endDate,
                     HotelCode: validatedBody.hotelCode,
-                    AgencyRef: agencyRefId,
+                    AgencyRef: booking.id,
                     RoomDetails: {
                         room: validatedBody.adultsData.map((_, i: number) => ({
                             roomTypeCode: validatedBody.RoomTypeCode,
@@ -97,24 +105,24 @@ export const createBooking = async (req: Request, res: Response) => {
             })
             .then(async (response) => {
                 if (response.data.ErrorMessage) {
+                    await Booking.delete({ id: booking.id });
                     res.status(200).json({
                         status: "NOT_OK",
                         error: response.data.ErrorMessage,
                     });
                     return;
                 }
-                const hotel = await Hotel.findOne({
-                    code: validatedBody.hotelCode,
-                });
-                await Booking.create({
-                    id: agencyRefId,
-                    details: JSON.stringify(response.data),
-                    creatorId: req.session.userId,
-                    hotelId: hotel?.id,
-                }).save();
+
+                await Booking.update(
+                    { id: booking.id },
+                    {
+                        details: JSON.stringify(response.data),
+                    }
+                );
                 res.status(200).json({ status: "OK", ...response.data });
             })
-            .catch((error) => {
+            .catch(async (error) => {
+                await Booking.delete({ id: booking.id });
                 console.log(error);
                 res.status(200).json({
                     status: "NOT_OK",

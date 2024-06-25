@@ -1,0 +1,3 @@
+mutation CancelBooking($id: Int!) {
+    cancelBooking(id: $id)
+}

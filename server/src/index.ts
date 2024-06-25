@@ -35,6 +35,7 @@ const main = async () => {
         entities: [User, City, Hotel, Booking],
     });
     await conn.runMigrations();
+    // await Booking.delete({});
     // (await Hotel.find({ where: { details: "{}" } })).forEach((hotel: Hotel) => {
     //     console.log({
     //         code: hotel.code,

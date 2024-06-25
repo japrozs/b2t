@@ -126,3 +126,8 @@ option {
     color: black !important;
     border: 1px solid rgb(209 213 219);
 }
+
+/* the text selection color on windows is absolutely disgusting */
+*::selection {
+    background: #b4d7fe !important;
+}

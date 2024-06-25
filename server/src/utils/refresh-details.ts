@@ -23,6 +23,7 @@ const makeRequest = async (code: string, id: number) => {
                             SearchCriteria: {
                                 // HotelCode: hotel.code,
                                 HotelCode: code,
+                                HotelImageType: "Zoom",
                             },
                         }),
                     },

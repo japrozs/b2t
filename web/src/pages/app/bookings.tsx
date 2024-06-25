@@ -12,9 +12,10 @@ import {
     HotelDetailType,
     HotelSearchItemType,
 } from "@/types";
+import { convertStatusToString } from "@/utils";
 import { useIsAuth } from "@/utils/use-is-auth";
 import { Checkbox } from "@headlessui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GrCheckmark } from "react-icons/gr";
 import { IoFilter } from "react-icons/io5";
 import {
@@ -29,12 +30,21 @@ interface BookingsProps {}
 const Bookings: React.FC<BookingsProps> = ({}) => {
     useIsAuth();
     const { data, loading } = useGetBookingsQuery();
-    const [statusSelected, setStatusSelected] = useState(false);
+    const [statusSelected, setStatusSelected] = useState<string[]>([]);
+    const STATUS_FILTER_MAP: Record<string, string> = {
+        OK: "Confirmed",
+        RQ: "On Request",
+        CX: "Cancelled",
+    };
     const [bookingDateFilter, setBookingDateFilter] = useState({
         startDate: null,
         endDate: null,
     });
     const [filterHotelName, setFilterHotelName] = useState("");
+
+    useEffect(() => {
+        console.log(statusSelected);
+    }, [statusSelected]);
 
     return (
         <div>
@@ -67,11 +77,12 @@ const Bookings: React.FC<BookingsProps> = ({}) => {
                                         ) => (
                                             <BookingCard
                                                 key={idx}
-                                                booking={
+                                                bookingDetails={
                                                     JSON.parse(
                                                         booking.details
                                                     ) as BookingDetailType
                                                 }
+                                                booking={booking}
                                                 hotel={
                                                     JSON.parse(
                                                         booking.hotel.details
@@ -91,54 +102,43 @@ const Bookings: React.FC<BookingsProps> = ({}) => {
                                         {/* <RiProgress4Line className="text-gray-400 text-lg mr-2" /> */}
                                         Status
                                     </p>
-                                    <div className="my-2.5 flex items-center">
-                                        <Checkbox
-                                            checked={statusSelected}
-                                            onChange={() =>
-                                                setStatusSelected(
-                                                    !statusSelected
-                                                )
-                                            }
-                                            className="mr-3 group size-[1rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
-                                        >
-                                            <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
-                                        </Checkbox>
-                                        <p className="text-sm font-medium text-gray-700 break-normal">
-                                            Confirmed
-                                        </p>
-                                    </div>
-                                    <div className="my-2.5 flex items-center">
-                                        <Checkbox
-                                            checked={statusSelected}
-                                            onChange={() =>
-                                                setStatusSelected(
-                                                    !statusSelected
-                                                )
-                                            }
-                                            className="mr-3 group size-[1rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
-                                        >
-                                            <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
-                                        </Checkbox>
-                                        <p className="text-sm font-medium text-gray-700 break-normal">
-                                            On Request
-                                        </p>
-                                    </div>
-                                    <div className="my-2.5 flex items-center">
-                                        <Checkbox
-                                            checked={statusSelected}
-                                            onChange={() =>
-                                                setStatusSelected(
-                                                    !statusSelected
-                                                )
-                                            }
-                                            className="mr-3 group size-[1rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
-                                        >
-                                            <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
-                                        </Checkbox>
-                                        <p className="text-sm font-medium text-gray-700 break-normal">
-                                            Cancelled{" "}
-                                        </p>
-                                    </div>
+                                    {Object.keys(STATUS_FILTER_MAP).map(
+                                        (key: string, idx: number) => (
+                                            <div
+                                                key={idx}
+                                                className="my-2.5 flex items-center"
+                                            >
+                                                <Checkbox
+                                                    checked={statusSelected.includes(
+                                                        key
+                                                    )}
+                                                    onChange={() => {
+                                                        const cpy = [
+                                                            ...statusSelected,
+                                                        ];
+                                                        if (cpy.includes(key)) {
+                                                            cpy.splice(
+                                                                cpy.indexOf(
+                                                                    key
+                                                                ),
+                                                                1
+                                                            );
+                                                        } else {
+                                                            cpy.push(key);
+                                                        }
+                                                        setStatusSelected(cpy);
+                                                    }}
+                                                    className="mr-3 group size-[1rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
+                                                >
+                                                    <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
+                                                </Checkbox>
+                                                <p className="text-sm font-medium text-gray-700 break-normal">
+                                                    {convertStatusToString(key)}
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
+
                                     <hr className="mt-4 mb-2" />
                                     <p className="font-medium g-sans text-base flex items-center">
                                         Filter by Date

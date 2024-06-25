@@ -25,7 +25,7 @@ export type Booking = {
   details: Scalars['String']['output'];
   hotel: Hotel;
   hotelId: Scalars['Float']['output'];
-  id: Scalars['String']['output'];
+  id: Scalars['Float']['output'];
   updatedAt: Scalars['String']['output'];
 };
 
@@ -63,11 +63,17 @@ export type Hotel = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  cancelBooking: Scalars['Boolean']['output'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean']['output'];
   login: UserResponse;
   logout: Scalars['Boolean']['output'];
   register: UserResponse;
+};
+
+
+export type MutationCancelBookingArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -150,7 +156,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type RegularBookingFragment = { __typename: 'Booking', id: string, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
+export type RegularBookingFragment = { __typename: 'Booking', id: number, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
 
 export type RegularCityFragment = { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string };
 
@@ -161,6 +167,13 @@ export type RegularHotelFragment = { __typename: 'Hotel', id: number, code: stri
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string } | null };
 
 export type RegularUserFragment = { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string };
+
+export type CancelBookingMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type CancelBookingMutation = { __typename?: 'Mutation', cancelBooking: boolean };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -190,7 +203,7 @@ export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __
 export type GetBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: string, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
+export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: number, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
 
 export type GetCityQueryVariables = Exact<{
   code: Scalars['String']['input'];
@@ -285,6 +298,37 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const CancelBookingDocument = gql`
+    mutation CancelBooking($id: Int!) {
+  cancelBooking(id: $id)
+}
+    `;
+export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutation, CancelBookingMutationVariables>;
+
+/**
+ * __useCancelBookingMutation__
+ *
+ * To run a mutation, you first call `useCancelBookingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelBookingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelBookingMutation, { data, loading, error }] = useCancelBookingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCancelBookingMutation(baseOptions?: Apollo.MutationHookOptions<CancelBookingMutation, CancelBookingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelBookingMutation, CancelBookingMutationVariables>(CancelBookingDocument, options);
+      }
+export type CancelBookingMutationHookResult = ReturnType<typeof useCancelBookingMutation>;
+export type CancelBookingMutationResult = Apollo.MutationResult<CancelBookingMutation>;
+export type CancelBookingMutationOptions = Apollo.BaseMutationOptions<CancelBookingMutation, CancelBookingMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {

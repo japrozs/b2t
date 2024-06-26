@@ -2,6 +2,7 @@ fragment RegularBooking on Booking {
     id
     details
     creatorId
+    cancelled
     creator {
         ...RegularUser
     }

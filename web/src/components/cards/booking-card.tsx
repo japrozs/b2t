@@ -9,6 +9,7 @@ import {
     MdOutlineConfirmationNumber,
 } from "react-icons/md";
 import { RiHotelLine } from "react-icons/ri";
+import { FiTrash } from "react-icons/fi";
 import { TbLogin2, TbLogout2 } from "react-icons/tb";
 import { CancelBookingModal } from "../modals/cancel-booking-modal";
 import { COMMISSION_RATE } from "@/constants";
@@ -42,9 +43,20 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 <div className="self-start w-full">
                     <div className="flex items-center">
                         {/* <RiHotelLine className="text-gray-300 mr-1.5 text-lg" /> */}
-                        <p className="g-sans text-xl text-blue-main font-medium rounded-md">
+                        <p
+                            className={`g-sans text-xl ${
+                                booking.cancelled
+                                    ? "text-gray-400 line-through flex items-center"
+                                    : "text-blue-main"
+                            } font-medium rounded-md`}
+                        >
                             {hotel.Details[0].HotelName}
                         </p>
+                        {booking.cancelled && (
+                            <span className="ml-3 text-red-500 border border-red-100 text-xs font-medium g-sans bg-red-50 p-1 rounded-md">
+                                CANCELLED
+                            </span>
+                        )}
                         <p className="ml-auto mr-0 text-xl font-medium g-sans text-emerald-500 bg-emerald-50 rounded-md py-0.5 px-1.5">
                             ${" "}
                             {Math.ceil(
@@ -209,24 +221,28 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 </div>
             </div>
             <hr className="mt-3.5 mb-1.5" />
-            <div className="flex items=center">
-                <button
-                    onClick={() => setCancelBookingModalOpen(true)}
-                    className={`transition-all cursor-pointer ease-soft-spring flex items-center ml-auto mr-2 text-center bg-gray-100 border border-gray-200 hover:bg-red-50 text-red-500 hover:bg-opacity-[0.96] rounded-md py-1.5 px-4 whitespace-nowrap font-medium text-sm`}
-                >
-                    {/* <MdDelete className="mr-1.5 text-lg" /> */}
-                    Cancel Booking
-                </button>
-                <button
-                    className={`transition-all ease-soft-spring cursor-pointer text-center bg-blue-500 text-white hover:bg-opacity-[0.98] rounded-md py-1.5 px-10 whitespace-nowrap font-medium text-sm`}
-                >
-                    Open
-                </button>
-            </div>
+            {!booking.cancelled && (
+                <div className="flex items-stretch">
+                    {/* TODO: show this button only if you're within the cancellation period */}
+                    <button
+                        onClick={() => setCancelBookingModalOpen(true)}
+                        className={`transition-all cursor-pointer ease-soft-spring flex items-center ml-auto mr-2 text-center bg-gray-100 border border-gray-200 hover:bg-red-50 text-red-500 hover:bg-opacity-[0.96] rounded-md py-1.5 px-4 whitespace-nowrap font-medium text-sm`}
+                    >
+                        {/* <FiTrash className="mr-2 text-base" /> */}
+                        Cancel Booking
+                    </button>
+                    <button
+                        className={`transition-all ease-soft-spring cursor-pointer text-center bg-blue-500 text-white hover:bg-opacity-[0.98] rounded-md py-1.5 px-10 whitespace-nowrap font-medium text-sm`}
+                    >
+                        Open
+                    </button>
+                </div>
+            )}
             <CancelBookingModal
                 open={cancelBookingModalOpen}
                 booking={booking}
                 setOpen={setCancelBookingModalOpen}
+                details={bookingDetails}
             />
         </div>
     );

@@ -19,6 +19,7 @@ export type Scalars = {
 
 export type Booking = {
   __typename?: 'Booking';
+  cancelled: Scalars['Boolean']['output'];
   createdAt: Scalars['String']['output'];
   creator: User;
   creatorId: Scalars['Float']['output'];
@@ -73,7 +74,10 @@ export type Mutation = {
 
 
 export type MutationCancelBookingArgs = {
+  bookingNum: Scalars['String']['input'];
   id: Scalars['Int']['input'];
+  source: Scalars['Int']['input'];
+  subResNum: Scalars['String']['input'];
 };
 
 
@@ -156,7 +160,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type RegularBookingFragment = { __typename: 'Booking', id: number, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
+export type RegularBookingFragment = { __typename: 'Booking', id: number, details: string, creatorId: number, cancelled: boolean, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
 
 export type RegularCityFragment = { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string };
 
@@ -170,6 +174,9 @@ export type RegularUserFragment = { __typename: 'User', id: number, firstName: s
 
 export type CancelBookingMutationVariables = Exact<{
   id: Scalars['Int']['input'];
+  bookingNum: Scalars['String']['input'];
+  subResNum: Scalars['String']['input'];
+  source: Scalars['Int']['input'];
 }>;
 
 
@@ -203,7 +210,7 @@ export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __
 export type GetBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: number, details: string, creatorId: number, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
+export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: number, details: string, creatorId: number, cancelled: boolean, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
 
 export type GetCityQueryVariables = Exact<{
   code: Scalars['String']['input'];
@@ -256,6 +263,7 @@ export const RegularBookingFragmentDoc = gql`
   id
   details
   creatorId
+  cancelled
   creator {
     ...RegularUser
   }
@@ -299,8 +307,13 @@ export const RegularUserResponseFragmentDoc = gql`
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
 export const CancelBookingDocument = gql`
-    mutation CancelBooking($id: Int!) {
-  cancelBooking(id: $id)
+    mutation CancelBooking($id: Int!, $bookingNum: String!, $subResNum: String!, $source: Int!) {
+  cancelBooking(
+    id: $id
+    bookingNum: $bookingNum
+    subResNum: $subResNum
+    source: $source
+  )
 }
     `;
 export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutation, CancelBookingMutationVariables>;
@@ -319,6 +332,9 @@ export type CancelBookingMutationFn = Apollo.MutationFunction<CancelBookingMutat
  * const [cancelBookingMutation, { data, loading, error }] = useCancelBookingMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      bookingNum: // value for 'bookingNum'
+ *      subResNum: // value for 'subResNum'
+ *      source: // value for 'source'
  *   },
  * });
  */

@@ -1,3 +1,13 @@
-mutation CancelBooking($id: Int!) {
-    cancelBooking(id: $id)
+mutation CancelBooking(
+    $id: Int!
+    $bookingNum: String!
+    $subResNum: String!
+    $source: Int!
+) {
+    cancelBooking(
+        id: $id
+        bookingNum: $bookingNum
+        subResNum: $subResNum
+        source: $source
+    )
 }

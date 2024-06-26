@@ -12,28 +12,44 @@ import React, {
     useState,
 } from "react";
 import { IoMdClose } from "react-icons/io";
+import { toast } from "sonner";
 
 interface CancelBookingModalProps {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     booking: RegularBookingFragment;
+    details: BookingDetailType;
 }
 
 export const CancelBookingModal: React.FC<CancelBookingModalProps> = ({
     open,
     setOpen,
     booking,
+    details,
 }) => {
     const [bookingNumberInput, setBookingNumberInput] = useState("");
     const [cancelBookingMut, { loading }] = useCancelBookingMutation();
 
     const cancelBooking = async () => {
+        const obj = {
+            id: booking.id,
+            bookingNum: details.BookingDetails.BookingNumber,
+            source: details.BookingDetails.Source,
+            subResNum: details.HotelDetails.RoomDetails.map(
+                (room) => room.SubResNo
+            ).join(","),
+        };
+        console.log("req :: ", obj);
         const resp = await cancelBookingMut({
-            variables: {
-                id: booking.id,
-            },
+            variables: obj,
         });
-        console.log("resp :: ", resp);
+        if (resp.data?.cancelBooking === true) {
+            toast.success("Booking cancelled successfully");
+        } else {
+            // TODO: do something here;
+            toast.error("An error occured. Please try again later.");
+        }
+        setOpen(false);
     };
 
     return (
@@ -98,7 +114,7 @@ export const CancelBookingModal: React.FC<CancelBookingModalProps> = ({
                                         setBookingNumberInput(e.target.value)
                                     }
                                     className={`menlo medium w-full text-gray-700 shadow-sm transition-all text-smol border placeholder-gray-300 py-1 px-3 bg-white rounded-md outline-none focus:ring-2 focus:ring-border-blue-100`}
-                                    placeholder={"Waldorf Astoria"}
+                                    placeholder={"Booking no."}
                                 />
                             </div>
                             <div className="mt-5 flex items-center">
@@ -109,11 +125,11 @@ export const CancelBookingModal: React.FC<CancelBookingModalProps> = ({
                                                 booking.id.toString() || loading
                                         }
                                         onClick={cancelBooking}
-                                        className={`transition-all ease-soft-spring g-sans flex items-center ml-auto text-center ${
+                                        className={`transition-all ease-soft-spring flex items-center ml-auto text-center ${
                                             bookingNumberInput !==
                                                 booking.id.toString() || loading
                                                 ? "cursor-disabled bg-gray-100 border border-gray-100 text-gray-300 cursor-not-allowed"
-                                                : "bg-red-50 border border-red-100 hover:bg-red-100 text-red-500 cursor-pointer"
+                                                : "bg-red-500 border border-red-500 hover:bg-opacity-[0.94] text-white cursor-pointer"
                                         } hover:bg-opacity-[0.96] rounded-md py-1.5 px-8 whitespace-nowrap font-medium text-sm`}
                                     >
                                         {loading

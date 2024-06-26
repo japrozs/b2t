@@ -246,26 +246,32 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                         )}
                                     </div>
                                     <hr className="mt-3 mb-3" />
-                                    <div>
-                                        <p className="uppercase g-sans text-sm text-black font-bold mb-1">
-                                            FACILITIES
-                                        </p>
-                                        <div className="flex flex-wrap">
-                                            {hotel.details.Details[0].HotelFacilities.Facility.map(
-                                                (fac: string, i: number) => (
-                                                    <div
-                                                        key={i}
-                                                        className="w-1/2 my-0.5 flex items-start"
-                                                    >
-                                                        <MdOutlineCheck className="text-md mt-0.5 mr-2 text-emerald-600" />
-                                                        <p className="text-sm font-medium">
-                                                            {fac}
-                                                        </p>
-                                                    </div>
-                                                )
-                                            )}
+                                    {hotel.details.Details[0].HotelFacilities
+                                        .Facility.length !== 0 && (
+                                        <div>
+                                            <p className="uppercase g-sans text-sm text-black font-bold mb-1">
+                                                FACILITIES
+                                            </p>
+                                            <div className="flex flex-wrap">
+                                                {hotel.details.Details[0].HotelFacilities.Facility.map(
+                                                    (
+                                                        fac: string,
+                                                        i: number
+                                                    ) => (
+                                                        <div
+                                                            key={i}
+                                                            className="w-1/2 my-0.5 flex items-start"
+                                                        >
+                                                            <MdOutlineCheck className="text-md mt-0.5 mr-2 text-emerald-600" />
+                                                            <p className="text-sm font-medium">
+                                                                {fac}
+                                                            </p>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </DialogPanel>

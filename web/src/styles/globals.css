@@ -128,6 +128,6 @@ option {
 }
 
 /* the text selection color on windows is absolutely disgusting */
-*::selection {
+/* *::selection {
     background: #b4d7fe !important;
-}
+} */

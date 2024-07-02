@@ -24,6 +24,9 @@ export const createBookingSchema = z.object({
     RoomTypeCode: z.number(),
     MealPlanCode: z.string(),
     Rate: z.number(),
+    TotalBookingAmount: z.number(),
+    PaymentMethodId: z.string(),
     ContractTokenId: z.string(),
+    roomDetails: z.string(),
     // cfg: z.string(),
 });

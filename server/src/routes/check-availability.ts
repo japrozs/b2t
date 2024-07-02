@@ -30,29 +30,52 @@ export const checkAvailability = async (req: Request, res: Response) => {
         });
 
         const hotel = await Hotel.findOne({ code: hotelCode });
+        const obj = {
+            Profile: {
+                Password: process.env.IOLX_API_PASSWORD,
+                Code: process.env.IOLX_API_CODE,
+                // TODO: make this TokenNumber a uuid (first read what TokenNumber's actually supposed to be)
+                TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+            },
+            SearchCriteria: {
+                RoomConfiguration: {
+                    Room: formattedCfg,
+                },
+                StartDate: startDate,
+                EndDate: endDate,
+                HotelCode: hotelCode,
+                // TODO: THIS IS NATIONALITY OF TRAVELLER, probably don't hardcode it
+                Nationality: "LON",
+                City: city,
+                GroupByRooms: "Y",
+                CancellationPolicy: "Y",
+            },
+        };
+
+        console.log("body :: ", JSON.stringify(obj, null, 4));
         axios
-            .post(`https://api.iwtxconnect.com/hotel/availability`, {
-                Profile: {
-                    Password: process.env.IOLX_API_PASSWORD,
-                    Code: process.env.IOLX_API_CODE,
-                    // TODO: make this TokenNumber a uuid (first read what TokenNumber's actually supposed to be)
-                    TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
-                },
-                SearchCriteria: {
-                    RoomConfiguration: {
-                        Room: formattedCfg,
-                    },
-                    StartDate: startDate,
-                    EndDate: endDate,
-                    HotelCode: hotelCode,
-                    // TODO: THIS IS NATIONALITY OF TRAVELLER, probably don't hardcode it
-                    Nationality: "LON",
-                    City: city,
-                    GroupByRooms: "Y",
-                    CancellationPolicy: "Y",
-                },
-            })
+            .post(`https://api.iwtxconnect.com/hotel/availability`, obj)
             .then((response) => {
+                if (response.data.ErrorMessage) {
+                    console.log(
+                        "error :: ",
+                        response.data.ErrorMessage.Error.Messages
+                    );
+                    res.status(200).json({
+                        Hotels: {
+                            Hotel: [],
+                        },
+                        ErrorMessage: {
+                            Error: {
+                                Messages: [
+                                    response.data.ErrorMessage.Error
+                                        .Messages[0],
+                                ],
+                            },
+                        },
+                    });
+                    return;
+                }
                 const result = JSON.parse(JSON.stringify(response.data));
                 result.Hotels.Hotel.forEach((h: any) => {
                     h.details = JSON.parse(hotel?.details || "{}");

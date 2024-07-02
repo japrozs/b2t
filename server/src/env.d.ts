@@ -8,6 +8,7 @@ declare global {
       CORS_ORIGIN: string;
       IOLX_API_PASSWORD: string;
       IOLX_API_CODE: string;
+      STRIPE_SECRET_KEY: string;
     }
   }
 }

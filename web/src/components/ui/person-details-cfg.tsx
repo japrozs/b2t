@@ -19,7 +19,14 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
     const [title, setTitle] = useState("Mr");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [age, setAge] = useState(childAge?.toString() || "");
+    // const [age, setAge] = useState(childAge?.toString() || "");
+    const [age, setAge] = useState(() => {
+        if (personType === "Adult") {
+            return "18";
+        } else {
+            return childAge?.toString() || "6";
+        }
+    });
     const [nationality, setNationality] = useState("LON");
     const [gender, setGender] = useState("M");
     console.log(childAge);
@@ -81,6 +88,40 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                     className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
                     value={age}
                     onChange={(e) => {
+                        const newAge = parseInt(e.target.value);
+                        if (personType === "Adult") {
+                            if (newAge >= 18) {
+                                setAge(e.target.value);
+                            }
+                        } else {
+                            if (newAge >= 1 && newAge <= 17) {
+                                setAge(e.target.value);
+                            }
+                        }
+                    }}
+                    onKeyPress={(event) => {
+                        const charCode = event.which
+                            ? event.which
+                            : event.keyCode;
+                        if (
+                            charCode !== 46 &&
+                            charCode > 31 &&
+                            (charCode < 48 || charCode > 57)
+                        ) {
+                            event.preventDefault();
+                        }
+                    }}
+                    type="number"
+                    min={personType === "Adult" ? 18 : 1}
+                    max={personType === "Adult" ? 120 : 17}
+                    placeholder={
+                        personType === "Adult" ? "Age (18+)" : "Age (1-17)"
+                    }
+                />
+                {/* <input
+                    className="w-full border border-gray-200 rounded-md text-sm py-1 px-2"
+                    value={age}
+                    onChange={(e) => {
                         setAge(e.target.value);
                     }}
                     onKeyPress={(event) => {
@@ -97,7 +138,7 @@ export const PersonDetailsCfg: React.FC<PersonDetailsProps> = ({
                     }}
                     type="number"
                     placeholder="Age"
-                />
+                /> */}
                 <DropDown
                     options={countryList}
                     // label="Nationality"

@@ -208,7 +208,7 @@ const Bookings: React.FC<BookingsProps> = ({}) => {
                                         onChange={(e) =>
                                             setFilterHotelName(e.target.value)
                                         }
-                                        className={`font-medium w-full text-gray-700 shadow-sm transition-all text-smol border placeholder-gray-300 py-1 px-3 mt-2 mb-1.5 bg-white rounded-md outline-none focus:ring-2 focus:ring-border-blue-100`}
+                                        className={`menlo font-medium w-full text-gray-700 shadow-sm transition-all text-smol border placeholder-gray-300 py-1 px-3 mt-2 mb-1.5 bg-white rounded-md outline-none focus:ring-2 focus:ring-border-blue-100`}
                                         placeholder={"Booking reference number"}
                                     />
                                 </div>

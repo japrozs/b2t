@@ -41,8 +41,19 @@ import { Checkbox } from "@headlessui/react";
 import { GrCheckmark } from "react-icons/gr";
 import { Hotel } from "@/generated/graphql";
 import moment from "moment";
+import {
+    CardElement,
+    Elements,
+    useElements,
+    useStripe,
+} from "@stripe/react-stripe-js";
+import { StripeCardElement, loadStripe } from "@stripe/stripe-js";
+import { PaymentForm } from "@/components/ui/payment-form";
 
 interface CheckoutProps {}
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+
 const Checkout: React.FC<CheckoutProps> = ({}) => {
     useIsAuth();
     const { hotel, room, cfg } = useCheckoutStore((state) => state);
@@ -55,7 +66,10 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
     });
     const [adultsData, setAdultsData] = useState<any[]>([]);
     const [childrenData, setChildrenData] = useState<any[]>([]);
+    const [clientSecret, setClientSecret] = useState("");
     const router = useRouter();
+    const stripe = useStripe();
+    const elements = useElements();
 
     console.log("zustand.hotel :: ", hotel);
     console.log("zustand.room :: ", room);
@@ -89,8 +103,25 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
         console.log(childrenData, adultsData);
     };
 
-    const createBooking = () => {
+    const createBooking = async () => {
         setCreateBookingLoading(true);
+
+        // ******************** STRIPE STUFF INIT ********************
+        const cardElement = elements?.getElement("card");
+        if (!stripe || !elements) return null;
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: "card",
+            card: cardElement as StripeCardElement,
+        });
+
+        if (error) {
+            console.log("stripe error :: ", error);
+        } else {
+            console.log("stripe paymentMethod :: ", paymentMethod);
+        }
+        // ******************** STRIPE STUFF END  ********************
+
         console.log("create.booking.loading – ", createBookingLoading);
         axios
             .post("/create-booking", {
@@ -103,6 +134,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                 Rate: (room as RoomDetailType).Rate,
                 adultsData,
                 childrenData,
+                roomDetails: JSON.stringify(room as RoomDetailType),
             })
             .then((response) => {
                 console.log(response.data);
@@ -160,145 +192,202 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                 console.error("Error fetching latest hotel price:", error);
                 setIsLoading(false);
             });
+
+        axios
+            .post("/create-payment-intent", {
+                amount: 6999,
+            })
+            .then((response) => {
+                if (response.data.client_secret) {
+                    console.log("clientSecret before :: ", clientSecret);
+                    setClientSecret(response.data.client_secret);
+                    console.log("clientSecret after :: ", clientSecret);
+                }
+            })
+            .catch((err) => {
+                console.log("error fetching client secret for stripe -> ", err);
+            });
+        console.log("STRIPE :: ", stripePromise, clientSecret);
     }, [hotel, room, cfg]);
 
     return (
         <div>
             <Navbar />
-            {isLoading ||
-            (latestHotel.ErrorMessage?.Error.Messages.length as any) > 0 ||
-            latestHotel.Hotels.Hotel.length === 0 ? (
+            {isLoading || !clientSecret || !stripePromise ? (
+                // {isLoading ||
+                // (latestHotel.ErrorMessage?.Error.Messages.length as any) > 0 ||
+                // latestHotel.Hotels.Hotel.length === 0 ? (
                 <div className="h-screen">
                     <Spinner />
                 </div>
             ) : (
-                <div className="mt-3 mb-10">
-                    <div className="flex items-start max-w-[76rem] mx-auto space-x-10">
-                        <div className="w-9/12 p-2.5">
-                            {/* <p className="text-2xl font-semibold my-3">
+                <div>
+                    <Elements
+                        stripe={stripePromise}
+                        // options={{ clientSecret }}
+                    >
+                        {latestHotel.Hotels.Hotel.length !== 0 ? (
+                            <div className="mt-3 mb-10">
+                                <div className="flex items-start max-w-[76rem] mx-auto space-x-10">
+                                    <div className="w-9/12 p-2.5">
+                                        {/* <p className="text-2xl font-semibold my-3">
                                 {latestHotel.Hotels.Hotel[0].HotelName}
                             </p>
                             <hr className="mt-1.5 mb-4" /> */}
-                            <p className="text-2xl font-semibold mb-0">
-                                Room details
-                            </p>
-                            {(cfg as RoomCfgType).rooms.map(
-                                (cfgRoom, roomIndex) => (
-                                    <div
-                                        key={roomIndex}
-                                        className="bg-gray-50 border border-gray-200 p-5 rounded-lg mt-3  mb-5"
-                                    >
-                                        <p className="text-lg font-medium g-sans">
-                                            {(room as RoomDetailType).RoomType}{" "}
-                                            –{" "}
-                                            <span className="text-gray-500 font-normal text-md">
-                                                {FORMAT_GRAMMAR(
-                                                    cfgRoom.adults,
-                                                    "adult"
-                                                )}{" "}
-                                                &{" "}
-                                                {FORMAT_GRAMMAR(
-                                                    cfgRoom.adults,
-                                                    "child",
-                                                    "children"
-                                                )}
-                                            </span>
+                                        <p className="text-2xl font-semibold mb-0">
+                                            Room details
                                         </p>
-                                        <hr className="mt-2 mb-3" />
-                                        <div className="bg-blue-50 border border-blue-400 rounded-lg py-2 px-3 mb-2">
-                                            <div className="flex items-center mb-1">
-                                                {(
-                                                    room as RoomDetailType
-                                                ).MealPlan.toLowerCase() ===
-                                                "breakfast" ? (
-                                                    <>
-                                                        <MdOutlineCheck className="text-lg text-emerald-600 mr-1.5" />
-                                                        <p className="text-sm text-gray-800 font-medium">
-                                                            Breakfast included
-                                                        </p>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <RxCross2 className="text-lg text-red-500 mr-1.5" />
-                                                        <p className="text-sm text-gray-800 font-medium">
-                                                            Breakfast not
-                                                            included (Room only)
-                                                        </p>
-                                                    </>
-                                                )}
-                                            </div>
-                                            {(room as RoomDetailType)
-                                                .NonRefundable === "N" ? (
-                                                <div className="flex items-center mt-0">
-                                                    <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
-                                                    <p className="flex items-center font-medium text-sm text-emerald-600">
-                                                        Free cancellation before{" "}
-                                                        {moment(
-                                                            parseDate(
-                                                                (
-                                                                    room as RoomDetailType
-                                                                ).CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                                            )
-                                                        ).format(
-                                                            "D MMMM, YYYY"
+                                        {(cfg as RoomCfgType).rooms.map(
+                                            (cfgRoom, roomIndex) => (
+                                                <div
+                                                    key={roomIndex}
+                                                    className="bg-gray-50 border border-gray-200 p-5 rounded-lg mt-3  mb-5"
+                                                >
+                                                    <p className="text-lg font-medium g-sans">
+                                                        {
+                                                            (
+                                                                room as RoomDetailType
+                                                            ).RoomType
+                                                        }{" "}
+                                                        –{" "}
+                                                        <span className="text-gray-500 font-normal text-md">
+                                                            {FORMAT_GRAMMAR(
+                                                                cfgRoom.adults,
+                                                                "adult"
+                                                            )}{" "}
+                                                            &{" "}
+                                                            {FORMAT_GRAMMAR(
+                                                                cfgRoom.adults,
+                                                                "child",
+                                                                "children"
+                                                            )}
+                                                        </span>
+                                                    </p>
+                                                    <hr className="mt-2 mb-3" />
+                                                    <div className="bg-blue-50 border border-blue-400 rounded-lg py-2 px-3 mb-2">
+                                                        <div className="flex items-center mb-1">
+                                                            {(
+                                                                room as RoomDetailType
+                                                            ).MealPlan.toLowerCase() ===
+                                                            "breakfast" ? (
+                                                                <>
+                                                                    <MdOutlineCheck className="text-lg text-emerald-600 mr-1.5" />
+                                                                    <p className="text-sm text-gray-800 font-medium">
+                                                                        Breakfast
+                                                                        included
+                                                                    </p>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <RxCross2 className="text-lg text-red-500 mr-1.5" />
+                                                                    <p className="text-sm text-gray-800 font-medium">
+                                                                        Breakfast
+                                                                        not
+                                                                        included
+                                                                        (Room
+                                                                        only)
+                                                                    </p>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                        {(
+                                                            room as RoomDetailType
+                                                        ).NonRefundable ===
+                                                        "N" ? (
+                                                            <div className="flex items-center mt-0">
+                                                                <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
+                                                                <p className="flex items-center font-medium text-sm text-emerald-600">
+                                                                    Free
+                                                                    cancellation
+                                                                    before{" "}
+                                                                    {moment(
+                                                                        parseDate(
+                                                                            (
+                                                                                room as RoomDetailType
+                                                                            ).CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                                        )
+                                                                    ).format(
+                                                                        "D MMMM, YYYY"
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex items-center mt-0">
+                                                                <span className="ml-1 mr-3">
+                                                                    •
+                                                                </span>
+                                                                <p className="font-medium text-gray-700 text-sm">
+                                                                    Non-refundable
+                                                                </p>
+                                                            </div>
                                                         )}
-                                                    </p>
-                                                </div>
-                                            ) : (
-                                                <div className="flex items-center mt-0">
-                                                    <span className="ml-1 mr-3">
-                                                        •
-                                                    </span>
-                                                    <p className="font-medium text-gray-700 text-sm">
-                                                        Non-refundable
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                        {Array(cfgRoom.adults)
-                                            .fill(0)
-                                            .map((_, adultIndex) => (
-                                                <PersonDetailsCfg
-                                                    key={`adult-${roomIndex}-${adultIndex}`}
-                                                    personType="Adult"
-                                                    personIndex={adultIndex}
-                                                    onDataChange={(data) =>
-                                                        handleAdultDataChange(
-                                                            data,
-                                                            roomIndex,
-                                                            adultIndex
+                                                    </div>
+                                                    {Array(cfgRoom.adults)
+                                                        .fill(0)
+                                                        .map(
+                                                            (_, adultIndex) => (
+                                                                <PersonDetailsCfg
+                                                                    key={`adult-${roomIndex}-${adultIndex}`}
+                                                                    personType="Adult"
+                                                                    personIndex={
+                                                                        adultIndex
+                                                                    }
+                                                                    onDataChange={(
+                                                                        data
+                                                                    ) =>
+                                                                        handleAdultDataChange(
+                                                                            data,
+                                                                            roomIndex,
+                                                                            adultIndex
+                                                                        )
+                                                                    }
+                                                                />
+                                                            )
+                                                        )}
+                                                    {cfgRoom.children.map(
+                                                        (child, childIndex) => (
+                                                            <PersonDetailsCfg
+                                                                key={`child-${roomIndex}-${childIndex}`}
+                                                                personType="Child"
+                                                                personIndex={
+                                                                    childIndex
+                                                                }
+                                                                childAge={
+                                                                    child.age
+                                                                }
+                                                                onDataChange={(
+                                                                    data
+                                                                ) =>
+                                                                    handleChildDataChange(
+                                                                        data,
+                                                                        roomIndex,
+                                                                        childIndex
+                                                                    )
+                                                                }
+                                                            />
                                                         )
-                                                    }
-                                                />
-                                            ))}
-                                        {cfgRoom.children.map(
-                                            (child, childIndex) => (
-                                                <PersonDetailsCfg
-                                                    key={`child-${roomIndex}-${childIndex}`}
-                                                    personType="Child"
-                                                    personIndex={childIndex}
-                                                    childAge={child.age}
-                                                    onDataChange={(data) =>
-                                                        handleChildDataChange(
-                                                            data,
-                                                            roomIndex,
-                                                            childIndex
-                                                        )
-                                                    }
-                                                />
+                                                    )}
+                                                </div>
                                             )
                                         )}
-                                    </div>
-                                )
-                            )}
-                            <hr className="my-3" />
-                            <p className="text-2xl font-semibold mb-4">
-                                Credit card
-                            </p>
-                            <p className="text-sm text-gray-400 menlo">
-                                {"<-- PUT THE STRIPE STUFF HERE -->"}
-                            </p>
-                            {/* <div className="flex items-start">
+                                        <hr className="my-3" />
+                                        <p className="text-2xl font-semibold mb-4">
+                                            Payment details
+                                        </p>
+                                        <CardElement />
+                                        {/* {clientSecret && stripePromise && (
+                                        <div>
+                                            <Elements
+                                                stripe={stripePromise}
+                                                // options={{ clientSecret }}
+                                            >
+                                                <PaymentForm
+                                                    clientSecret={clientSecret}
+                                                />
+                                            </Elements>
+                                        </div>
+                                    )} */}
+                                        {/* <div className="flex items-start">
                                 <Checkbox
                                     checked={TandC}
                                     onChange={() => setTandC(!TandC)}
@@ -310,221 +399,256 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
 
                                 </p>
                             </div> */}
-                        </div>
-                        <div className="w-3/12 m-2.5 mx-0 py-2.5 sticky top-0">
-                            <p className="text-2xl font-semibold">
-                                {latestHotel.Hotels.Hotel[0].HotelName}
+                                    </div>
+                                    <div className="w-3/12 m-2.5 mx-0 py-2.5 sticky top-0">
+                                        <p className="text-2xl font-semibold">
+                                            {
+                                                latestHotel.Hotels.Hotel[0]
+                                                    .HotelName
+                                            }
+                                        </p>
+                                        <p className="mt-1.5 flex items-center text-sm text-gray-500 font-medium">
+                                            <IoLocationOutline className="mr-1.5" />
+                                            {latestHotel.Hotels.Hotel[0].details.Details[0].HotelAddress.split(
+                                                ","
+                                            )
+                                                .slice(0, 2)
+                                                .join(", ") ||
+                                                latestHotel.Hotels.Hotel[0]
+                                                    .Chain}
+                                        </p>
+                                        <hr className="pb-0 my-2" />
+                                        <div className="mt-3 mb-1 flex items-center">
+                                            <div className="w-full">
+                                                <p className="text-sm font-medium text-gray-500">
+                                                    Check-in
+                                                </p>
+                                                <p className="text-base text-gray-800 font-semibold">
+                                                    {parseDate(
+                                                        latestHotel.Hotels.Hotel[0].StartDate.toString()
+                                                    ).toLocaleDateString(
+                                                        "en-us",
+                                                        {
+                                                            weekday: "short",
+                                                            month: "short",
+                                                            day: "numeric",
+                                                        }
+                                                    )}
+                                                </p>
+                                            </div>
+                                            <div className="w-full mx-auto">
+                                                <LuMoon className="text-gray-800 mx-auto text-lg" />
+                                                <p className="text-center text-xs font-semibold text-gray-600 mt-1">
+                                                    {FORMAT_GRAMMAR(
+                                                        nightsBetween(
+                                                            parseDate(
+                                                                latestHotel.Hotels.Hotel[0].StartDate.toString()
+                                                            ),
+                                                            parseDate(
+                                                                latestHotel.Hotels.Hotel[0].EndDate.toString()
+                                                            )
+                                                        ),
+                                                        "night"
+                                                    )}
+                                                </p>
+                                            </div>
+                                            <div className="w-full ml-auto mr-0">
+                                                <p className="text-sm font-medium text-gray-500 text-right">
+                                                    Check-out
+                                                </p>
+                                                <p className="text-right ml-auto mr-0 text-base text-gray-800 font-semibold">
+                                                    {parseDate(
+                                                        latestHotel.Hotels.Hotel[0].EndDate.toString()
+                                                    ).toLocaleDateString(
+                                                        "en-us",
+                                                        {
+                                                            weekday: "short",
+                                                            month: "short",
+                                                            day: "numeric",
+                                                        }
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="mb-1 flex items-center ">
+                                            <p className="w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
+                                                From{" "}
+                                                {
+                                                    latestHotel.Hotels.Hotel[0]
+                                                        .details.Details[0]
+                                                        .CheckInTime
+                                                }{" "}
+                                                hrs
+                                            </p>
+                                            <p className="ml-auto mr-0 w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
+                                                Until{" "}
+                                                {
+                                                    latestHotel.Hotels.Hotel[0]
+                                                        .details.Details[0]
+                                                        .CheckOutTime
+                                                }{" "}
+                                                hrs
+                                            </p>
+                                        </div>
+                                        <hr className="pb-0 mt-4 mb-3" />
+                                        <div className="my-2 flex items-center">
+                                            <div>
+                                                <p className="text-sm text-gray-500 font-medium">
+                                                    Room & persons
+                                                </p>
+                                                <p className="text-base text-gray-800 font-semibold">
+                                                    {FORMAT_GRAMMAR(
+                                                        (
+                                                            cfg as RoomCfgType
+                                                        ).rooms
+                                                            .flatMap(
+                                                                (room) =>
+                                                                    room.adults +
+                                                                    room
+                                                                        .children
+                                                                        .length
+                                                            )
+                                                            .reduce(
+                                                                (a, b) => a + b
+                                                            ),
+                                                        "person"
+                                                    )}{" "}
+                                                    (
+                                                    {FORMAT_GRAMMAR(
+                                                        (cfg as RoomCfgType)
+                                                            .rooms.length,
+                                                        "room"
+                                                    )}
+                                                    )
+                                                </p>
+                                            </div>
+                                            <div className="ml-auto mr-0 text-right">
+                                                <p className="text-sm text-gray-500 font-medium">
+                                                    Price per night/room
+                                                </p>
+                                                <p className="text-base font-semibold">
+                                                    $
+                                                    {getPricePerNightPerRoomCheckout(
+                                                        latestHotel.Hotels.Hotel[0].RoomTypeDetails.Rooms.Room.filter(
+                                                            (r) =>
+                                                                r.RoomTypeCode ===
+                                                                    (
+                                                                        room as RoomDetailType
+                                                                    )
+                                                                        .RoomTypeCode &&
+                                                                r.RoomType ===
+                                                                    (
+                                                                        room as RoomDetailType
+                                                                    ).RoomType
+                                                        )[0],
+                                                        latestHotel.Hotels
+                                                            .Hotel[0].StartDate,
+                                                        latestHotel.Hotels
+                                                            .Hotel[0].EndDate
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <hr className="my-4" />
+                                        <div>
+                                            <div className="flex items-center">
+                                                <p className="text-md font-semibold menlo text-gray-700">
+                                                    VAT:
+                                                </p>
+                                                <p className="ml-auto mr-0 menlo text-sm text-gray-500">
+                                                    INCLUDED
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <p className="text-md font-semibold menlo text-gray-700">
+                                                    SERVICE TAX:
+                                                </p>
+                                                <p className="ml-auto mr-0 menlo text-sm text-gray-500">
+                                                    INCLUDED
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <p className="text-md font-semibold menlo text-gray-700">
+                                                    OTHER TAXES:
+                                                </p>
+                                                <p className="ml-auto mr-0 menlo text-sm text-gray-500">
+                                                    INCLUDED
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-3">
+                                            <p className="text-right text-gray-500 font-medium text-sm">
+                                                Total price
+                                            </p>
+                                            <p className="text-right text-3xl g-sans font-medium mb-1.5 pb-1.5">
+                                                $
+                                                {getTotalPriceCheckout(
+                                                    latestHotel.Hotels.Hotel[0].RoomTypeDetails.Rooms.Room.filter(
+                                                        (r) =>
+                                                            r.RoomTypeCode ===
+                                                                (
+                                                                    room as RoomDetailType
+                                                                )
+                                                                    .RoomTypeCode &&
+                                                            r.RoomType ===
+                                                                (
+                                                                    room as RoomDetailType
+                                                                ).RoomType
+                                                    )[0],
+                                                    (cfg as RoomCfgType).rooms
+                                                        .length
+                                                )}
+                                            </p>
+                                        </div>
+                                        <hr className="mb-4" />
+                                        <button
+                                            disabled={
+                                                submitButtonDisabledFn(
+                                                    childrenData,
+                                                    adultsData
+                                                ) || createBookingLoading
+                                            }
+                                            className={`flex g-sans items-center ml-auto mr-0 mb-7 ${
+                                                submitButtonDisabledFn(
+                                                    childrenData,
+                                                    adultsData
+                                                ) || createBookingLoading
+                                                    ? "cursor-not-allowed bg-gray-200 text-gray-400"
+                                                    : "bg-[#00395D] text-[#00AEEF] hover:bg-opacity-[0.98]"
+                                            } rounded-md py-2 px-10 font-medium text-md w-full justify-center`}
+                                            onClick={createBooking}
+                                        >
+                                            Book now
+                                        </button>
+                                        <p className="text-center text-xs px-2 text-gray-500 font-medium">
+                                            By making your booking you agree to
+                                            the{" "}
+                                            <span className="underline font-semibold text-gray-700">
+                                                Noble Travels General Terms And
+                                                Conditions
+                                            </span>{" "}
+                                            as well as the{" "}
+                                            <span className="underline font-semibold text-gray-700">
+                                                Noble Travels data protection
+                                                policy
+                                            </span>
+                                            . With this click your booking
+                                            becomes binding.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <p>
+                                errors –
+                                {latestHotel.ErrorMessage?.Error.Messages.join(
+                                    ", "
+                                )}
                             </p>
-                            <p className="mt-1.5 flex items-center text-sm text-gray-500 font-medium">
-                                <IoLocationOutline className="mr-1.5" />
-                                {latestHotel.Hotels.Hotel[0].details.Details[0].HotelAddress.split(
-                                    ","
-                                )
-                                    .slice(0, 2)
-                                    .join(", ") ||
-                                    latestHotel.Hotels.Hotel[0].Chain}
-                            </p>
-                            <hr className="pb-0 my-2" />
-                            <div className="mt-3 mb-1 flex items-center">
-                                <div className="w-full">
-                                    <p className="text-sm font-medium text-gray-500">
-                                        Check-in
-                                    </p>
-                                    <p className="text-base text-gray-800 font-semibold">
-                                        {parseDate(
-                                            latestHotel.Hotels.Hotel[0].StartDate.toString()
-                                        ).toLocaleDateString("en-us", {
-                                            weekday: "short",
-                                            month: "short",
-                                            day: "numeric",
-                                        })}
-                                    </p>
-                                </div>
-                                <div className="w-full mx-auto">
-                                    <LuMoon className="text-gray-800 mx-auto text-lg" />
-                                    <p className="text-center text-xs font-semibold text-gray-600 mt-1">
-                                        {FORMAT_GRAMMAR(
-                                            nightsBetween(
-                                                parseDate(
-                                                    latestHotel.Hotels.Hotel[0].StartDate.toString()
-                                                ),
-                                                parseDate(
-                                                    latestHotel.Hotels.Hotel[0].EndDate.toString()
-                                                )
-                                            ),
-                                            "night"
-                                        )}
-                                    </p>
-                                </div>
-                                <div className="w-full ml-auto mr-0">
-                                    <p className="text-sm font-medium text-gray-500 text-right">
-                                        Check-out
-                                    </p>
-                                    <p className="text-right ml-auto mr-0 text-base text-gray-800 font-semibold">
-                                        {parseDate(
-                                            latestHotel.Hotels.Hotel[0].EndDate.toString()
-                                        ).toLocaleDateString("en-us", {
-                                            weekday: "short",
-                                            month: "short",
-                                            day: "numeric",
-                                        })}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="mb-1 flex items-center ">
-                                <p className="w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
-                                    From{" "}
-                                    {
-                                        latestHotel.Hotels.Hotel[0].details
-                                            .Details[0].CheckInTime
-                                    }{" "}
-                                    hrs
-                                </p>
-                                <p className="ml-auto mr-0 w-max text-pink-500 text-center bg-pink-50 rounded-md g-sans text-sm py-0.5 font-medium px-1.5">
-                                    Until{" "}
-                                    {
-                                        latestHotel.Hotels.Hotel[0].details
-                                            .Details[0].CheckOutTime
-                                    }{" "}
-                                    hrs
-                                </p>
-                            </div>
-                            <hr className="pb-0 mt-4 mb-3" />
-                            <div className="my-2 flex items-center">
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">
-                                        Room & persons
-                                    </p>
-                                    <p className="text-base text-gray-800 font-semibold">
-                                        {FORMAT_GRAMMAR(
-                                            (cfg as RoomCfgType).rooms
-                                                .flatMap(
-                                                    (room) =>
-                                                        room.adults +
-                                                        room.children.length
-                                                )
-                                                .reduce((a, b) => a + b),
-                                            "person"
-                                        )}{" "}
-                                        (
-                                        {FORMAT_GRAMMAR(
-                                            (cfg as RoomCfgType).rooms.length,
-                                            "room"
-                                        )}
-                                        )
-                                    </p>
-                                </div>
-                                <div className="ml-auto mr-0 text-right">
-                                    <p className="text-sm text-gray-500 font-medium">
-                                        Price per night/room
-                                    </p>
-                                    <p className="text-base font-semibold">
-                                        $
-                                        {getPricePerNightPerRoomCheckout(
-                                            latestHotel.Hotels.Hotel[0].RoomTypeDetails.Rooms.Room.filter(
-                                                (r) =>
-                                                    r.RoomTypeCode ===
-                                                        (room as RoomDetailType)
-                                                            .RoomTypeCode &&
-                                                    r.RoomType ===
-                                                        (room as RoomDetailType)
-                                                            .RoomType
-                                            )[0],
-                                            latestHotel.Hotels.Hotel[0]
-                                                .StartDate,
-                                            latestHotel.Hotels.Hotel[0].EndDate
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                            <hr className="my-4" />
-                            <div>
-                                <div className="flex items-center">
-                                    <p className="text-md font-semibold menlo text-gray-700">
-                                        VAT:
-                                    </p>
-                                    <p className="ml-auto mr-0 menlo text-sm text-gray-500">
-                                        INCLUDED
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <p className="text-md font-semibold menlo text-gray-700">
-                                        SERVICE TAX:
-                                    </p>
-                                    <p className="ml-auto mr-0 menlo text-sm text-gray-500">
-                                        INCLUDED
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <p className="text-md font-semibold menlo text-gray-700">
-                                        OTHER TAXES:
-                                    </p>
-                                    <p className="ml-auto mr-0 menlo text-sm text-gray-500">
-                                        INCLUDED
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="mt-3">
-                                <p className="text-right text-gray-500 font-medium text-sm">
-                                    Total price
-                                </p>
-                                <p className="text-right text-3xl g-sans font-medium mb-1.5 pb-1.5">
-                                    $
-                                    {getTotalPriceCheckout(
-                                        latestHotel.Hotels.Hotel[0].RoomTypeDetails.Rooms.Room.filter(
-                                            (r) =>
-                                                r.RoomTypeCode ===
-                                                    (room as RoomDetailType)
-                                                        .RoomTypeCode &&
-                                                r.RoomType ===
-                                                    (room as RoomDetailType)
-                                                        .RoomType
-                                        )[0],
-                                        (cfg as RoomCfgType).rooms.length
-                                    )}
-                                </p>
-                            </div>
-                            <hr className="mb-4" />
-                            <button
-                                disabled={
-                                    submitButtonDisabledFn(
-                                        childrenData,
-                                        adultsData
-                                    ) || createBookingLoading
-                                }
-                                className={`flex g-sans items-center ml-auto mr-0 mb-7 ${
-                                    submitButtonDisabledFn(
-                                        childrenData,
-                                        adultsData
-                                    ) || createBookingLoading
-                                        ? "cursor-not-allowed bg-gray-200 text-gray-400"
-                                        : "bg-[#00395D] text-[#00AEEF] hover:bg-opacity-[0.98]"
-                                } rounded-md py-2 px-10 font-medium text-md w-full justify-center`}
-                                onClick={createBooking}
-                            >
-                                Book now
-                            </button>
-                            <p className="text-center text-xs px-2 text-gray-500 font-medium">
-                                By making your booking you agree to the{" "}
-                                <span className="underline font-semibold text-gray-700">
-                                    Noble Travels General Terms And Conditions
-                                </span>{" "}
-                                as well as the{" "}
-                                <span className="underline font-semibold text-gray-700">
-                                    Noble Travels data protection policy
-                                </span>
-                                . With this click your booking becomes binding.
-                            </p>
-                        </div>
-                    </div>
+                        )}
+                    </Elements>
                 </div>
             )}
-            {/* {latestHotel.ErrorMessage?.Error.Messages.length != 0 && (
-                <p>
-                    errors – 
-                    {latestHotel.ErrorMessage?.Error.Messages.join(", ")}
-                </p>
-            )} */}
             <Footer />
         </div>
     );

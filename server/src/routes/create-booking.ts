@@ -117,6 +117,7 @@ export const createBooking = async (req: Request, res: Response) => {
                     { id: booking.id },
                     {
                         details: JSON.stringify(response.data),
+                        roomDetails: validatedBody.roomDetails,
                     }
                 );
                 res.status(200).json({ status: "OK", ...response.data });

@@ -24,6 +24,7 @@ import { Booking } from "./entities/booking";
 import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
 import { refreshHotelDetails } from "./utils/refresh-details";
 import { BookingResolver } from "./resolvers/booking-resolver";
+import { createPaymentIntent, pay } from "./routes/create-payment-intent";
 
 const main = async () => {
     const conn = await createConnection({
@@ -107,6 +108,8 @@ const main = async () => {
     app.post("/api/search-hotel", expressIsAuth, searchHotel);
     app.post("/api/check-availability", expressIsAuth, checkAvailability);
     app.post("/api/create-booking", expressIsAuth, createBooking);
+    app.post("/api/create-payment-intent", expressIsAuth, createPaymentIntent);
+    app.post("/api/pay", expressIsAuth, pay);
 
     app.listen(parseInt(process.env.PORT), () => {
         console.log(`🚀 Server started on localhost:${process.env.PORT}`);

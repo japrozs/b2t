@@ -3,6 +3,7 @@ import {
     useCancelBookingMutation,
 } from "@/generated/graphql";
 import { BookingDetailType } from "@/types";
+import { useApolloClient } from "@apollo/client";
 import { Transition, Dialog, DialogPanel } from "@headlessui/react";
 import React, {
     Dispatch,
@@ -29,6 +30,7 @@ export const CancelBookingModal: React.FC<CancelBookingModalProps> = ({
 }) => {
     const [bookingNumberInput, setBookingNumberInput] = useState("");
     const [cancelBookingMut, { loading }] = useCancelBookingMutation();
+    const client = useApolloClient();
 
     const cancelBooking = async () => {
         const obj = {
@@ -45,6 +47,7 @@ export const CancelBookingModal: React.FC<CancelBookingModalProps> = ({
         });
         if (resp.data?.cancelBooking === true) {
             toast.success("Booking cancelled successfully");
+            await client.resetStore();
         } else {
             // TODO: do something here;
             toast.error("An error occured. Please try again later.");

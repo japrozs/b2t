@@ -27,6 +27,10 @@ export class Booking extends BaseEntity {
     @Column({ default: false })
     cancelled: boolean;
 
+    @Field()
+    @Column({ default: "{}" })
+    roomDetails: string;
+
     @Field(() => User)
     @ManyToOne(() => User, (user) => user.bookings)
     creator: User;

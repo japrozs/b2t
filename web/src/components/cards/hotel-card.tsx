@@ -58,6 +58,11 @@ export const HotelCard: React.FC<HotelCardProps> = ({
     //     hotel.details.Details[0]
     // );
 
+    console.log(
+        "cheapestRoom :: ",
+        getCheapestRoom(hotel.RoomTypeDetails.Rooms.Room)
+    );
+
     return (
         <div className="border border-gray-200 mb-5">
             <div className="p-[0.875rem] flex items-start">
@@ -148,14 +153,24 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                                             <MdOutlineCheck className="text-md mr-2 text-emerald-600" />
                                             <p className="flex items-center font-medium text-sm text-emerald-600">
                                                 Free cancellation before{" "}
-                                                {moment(
-                                                    parseDate(
-                                                        r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
-                                                    )
-                                                ).format("D MMMM, YYYY")}
-                                                <CancellationPolicyHover
-                                                    room={r}
-                                                />
+                                                {r.CancellationPolicyDetails
+                                                    .Cancellation.length !==
+                                                    0 && (
+                                                    <>
+                                                        <p className="ml-1">
+                                                            {moment(
+                                                                parseDate(
+                                                                    r.CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                                                                )
+                                                            ).format(
+                                                                "D MMMM, YYYY"
+                                                            )}
+                                                        </p>
+                                                        <CancellationPolicyHover
+                                                            room={r}
+                                                        />
+                                                    </>
+                                                )}
                                             </p>
                                         </div>
                                     ) : (

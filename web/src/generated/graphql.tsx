@@ -27,6 +27,7 @@ export type Booking = {
   hotel: Hotel;
   hotelId: Scalars['Float']['output'];
   id: Scalars['Float']['output'];
+  roomDetails: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
 };
 
@@ -160,7 +161,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type RegularBookingFragment = { __typename: 'Booking', id: number, details: string, creatorId: number, cancelled: boolean, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
+export type RegularBookingFragment = { __typename: 'Booking', id: number, details: string, creatorId: number, cancelled: boolean, roomDetails: string, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } };
 
 export type RegularCityFragment = { __typename: 'City', id: number, code: string, name: string, countryName: string, countryCode: string, createdAt: string, updatedAt: string };
 
@@ -210,7 +211,7 @@ export type GetAllCitiesQuery = { __typename?: 'Query', getAllCities: Array<{ __
 export type GetBookingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: number, details: string, creatorId: number, cancelled: boolean, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
+export type GetBookingsQuery = { __typename?: 'Query', getBookings: Array<{ __typename: 'Booking', id: number, details: string, creatorId: number, cancelled: boolean, roomDetails: string, hotelId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, firstName: string, lastName: string, companyName: string, number: string, PANNumber: string, PANName: string, GSTNumber: string, address: string, country: string, state: string, city: string, pinCode: string, email: string, createdAt: string, updatedAt: string }, hotel: { __typename: 'Hotel', id: number, code: string, name: string, body: string, details: string, cityId: number, createdAt: string, updatedAt: string } }> };
 
 export type GetCityQueryVariables = Exact<{
   code: Scalars['String']['input'];
@@ -264,6 +265,7 @@ export const RegularBookingFragmentDoc = gql`
   details
   creatorId
   cancelled
+  roomDetails
   creator {
     ...RegularUser
   }

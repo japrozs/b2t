@@ -24,6 +24,7 @@
 -   [ ] show rooms in hotel card in ascending order
 -   [ ] make sure the migrations work
 -   [ ] add stripe public keys and secret keys as env variables in vercel dashboard
+-   [ ] i think the whats included field needs to be parsed. show it as such
 
 ### `later on`
 

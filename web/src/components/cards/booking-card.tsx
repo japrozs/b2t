@@ -1,4 +1,4 @@
-import { BookingDetailType, HotelDetailType } from "@/types";
+import { BookingDetailType, HotelDetailType, RoomDetailType } from "@/types";
 import { convertStatusToString, parseDate } from "@/utils";
 import moment from "moment";
 import React, { useState } from "react";
@@ -29,9 +29,18 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 }) => {
     const [cancelBookingModalOpen, setCancelBookingModalOpen] = useState(false);
 
-    console.log("booking :: ", bookingDetails);
+    console.log("bookingDetails :: ", bookingDetails);
+    console.log(
+        "cancellationPolicy :: ",
+        (JSON.parse(booking.roomDetails) as RoomDetailType)
+            .CancellationPolicyDetails.Cancellation
+    );
     return (
-        <div className="border bg-gray-50 border-gray-200 mb-5 p-[0.875rem]">
+        <div
+            className={`border bg-gray-50 border-gray-200 mb-5 p-[0.875rem] ${
+                booking.cancelled && "select-none"
+            }`}
+        >
             {/* <img
                 className="w-48 h-48 object-cover"
                 src={
@@ -221,9 +230,15 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                 </div>
             </div>
             <hr className="mt-3.5 mb-1.5" />
-            {!booking.cancelled && (
-                <div className="flex items-stretch">
-                    {/* TODO: show this button only if you're within the cancellation period */}
+            <div className="flex items-stretch">
+                {/* TODO: show this button only if you're within the cancellation period */}
+                {!booking.cancelled &&
+                new Date() <
+                    parseDate(
+                        (
+                            JSON.parse(booking.roomDetails) as RoomDetailType
+                        ).CancellationPolicyDetails.Cancellation[0].FromDate.toString()
+                    ) ? (
                     <button
                         onClick={() => setCancelBookingModalOpen(true)}
                         className={`transition-all cursor-pointer ease-soft-spring flex items-center ml-auto mr-2 text-center bg-gray-100 border border-gray-200 hover:bg-red-50 text-red-500 hover:bg-opacity-[0.96] rounded-md py-1.5 px-4 whitespace-nowrap font-medium text-sm`}
@@ -231,13 +246,29 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                         {/* <FiTrash className="mr-2 text-base" /> */}
                         Cancel Booking
                     </button>
+                ) : (
+                    <button
+                        disabled={true}
+                        className={`transition-all ease-soft-spring flex items-center ml-auto mr-2 text-center cursor-not-allowed bg-gray-200 text-gray-400 rounded-md py-1.5 px-4 whitespace-nowrap font-medium text-sm`}
+                    >
+                        {/* <FiTrash className="mr-2 text-base" /> */}
+                        Cancel Booking
+                    </button>
+                )}
+                {booking.cancelled ? (
+                    <button
+                        className={`transition-all ease-soft-spring text-center bg-gray-200 text-gray-400 cursor-not-allowed rounded-md py-1.5 px-10 whitespace-nowrap font-medium text-sm`}
+                    >
+                        Open
+                    </button>
+                ) : (
                     <button
                         className={`transition-all ease-soft-spring cursor-pointer text-center bg-blue-500 text-white hover:bg-opacity-[0.98] rounded-md py-1.5 px-10 whitespace-nowrap font-medium text-sm`}
                     >
                         Open
                     </button>
-                </div>
-            )}
+                )}
+            </div>
             <CancelBookingModal
                 open={cancelBookingModalOpen}
                 booking={booking}

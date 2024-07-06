@@ -81,7 +81,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({ clientSecret }) => {
                             break;
                         case "succeeded":
                             console.log(
-                                "payment succeeded :: intent -> ",
+                                "stripe payment succeeded :: intent -> ",
                                 intent
                             );
                             break;

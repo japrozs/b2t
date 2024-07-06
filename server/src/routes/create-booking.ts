@@ -19,6 +19,27 @@ export const createBooking = async (req: Request, res: Response) => {
     try {
         const validatedBody = createBookingSchema.parse(req.body);
 
+        // TODO: complete this
+
+        console.log("paymentMethoId :: ", validatedBody.PaymentMethodId);
+        console.log(
+            "totalAmount to charge from stripe :: ",
+            validatedBody.TotalBookingAmount
+        );
+
+        // res.status(200).json({
+        //     status: "NOT_OK",
+        //     error: {
+        //         Errors: {
+        //             Error: [
+        //                 {
+        //                     Msg: "hi there",
+        //                 },
+        //             ],
+        //         },
+        //     },
+        // });
+
         // TODO: find a way to rewrite this routine
         let paxNumber = 1;
         const passengers = [];

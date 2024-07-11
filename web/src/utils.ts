@@ -195,7 +195,9 @@ export const sortAndFilterHotels = (
     return cpy;
 };
 
-export const getFacilitiesMap = (hotels: HotelSearchItemType[]) => {
+export const getFacilitiesMap = (
+    hotels: HotelSearchItemType[]
+): Record<string, number> => {
     const facilitiesMap: Record<string, number> = {};
 
     hotels.forEach((hotel) => {

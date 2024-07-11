@@ -25,6 +25,8 @@
 -   [ ] make sure the migrations work
 -   [ ] add stripe public keys and secret keys as env variables in vercel dashboard
 -   [ ] i think the whats included field needs to be parsed. show it as such
+-   [ ] send email with booking pdf after booking is confirmed
+-   [ ] setup payment method (initial stuff done)
 
 ### `later on`
 

@@ -213,9 +213,17 @@ const AppHomePage: React.FC<AppHomePageProps> = ({}) => {
                     for your trip and take that long need vacation a bit quicker
                     🚀
                 </p>
-                <button className="transition-all mt-7 bg-purple-900 text-purple-50 flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
-                    Search hotels
-                </button>
+                <a
+                    href={`/app/search?city=${city.value}&in=${
+                        value.startDate
+                    }&out=${value.endDate}&cfg=${JSON.stringify(
+                        roomConfig
+                    )}&name=${city.label}`}
+                >
+                    <button className="transition-all mt-7 bg-purple-900 text-purple-50 flex items-center mx-auto py-2 px-10 rounded-lg  font-medium text-sm hover:bg-opacity-90">
+                        Search hotels
+                    </button>
+                </a>
             </div>
             <div className="p-10">
                 <div className="max-w-6xl mx-auto">

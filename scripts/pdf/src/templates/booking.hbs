@@ -66,9 +66,13 @@
                             class="text-gray-600 g-sans font-medium text-sm"
                         >CONFIRMATION NUMBER</p>
                         <span class="g-sans text-gray-300 mx-3">––</span>
+                        {{! TODO – change this very important }}
                         <p
                             class="text-blue-500 menlo bg-blue-50 py-0.5 text-sm px-2 rounded-md"
-                        >4408.192.927</p>
+                        >56979c4d-5</p>
+                        {{!-- <p
+                            class="text-blue-500 menlo bg-blue-50 py-0.5 text-sm px-2 rounded-md"
+                        >{{bookingDetails.HotelDetails.RoomDetails.0.SupplierResNo}}</p> --}}
                     </div>
                     <div class="flex items-center">
                         <p
@@ -91,26 +95,31 @@
                     />
                     <div class="px-4 flex flex-col">
                         <p
-                            class="text-gray-900 g-sans font-medium text-lg mb-0.5"
-                        >Jumeirah Lowndes London</p>
+                            class="text-gray-900 g-sans font-medium leading-tight text-lg mb-2.5"
+                        >{{hotelDetails.Details.0.HotelName}}</p>
                         <div class="flex items-center my-0.5">
                             <i
                                 class="fas fa-location-dot text-gray-400 text-xs"
                             ></i>
                             <p
                                 class="ml-2.5 text-xs text-gray-800 font-medium"
-                            >59 Boulevard du Montparnasse, 6th arr., 75006
-                                Paris, France</p>
+                            >{{hotel-location
+                                    hotelDetails.Details.0.HotelAddress
+                                    hotel.Chain
+                                }}</p>
                         </div>
                         <div class="flex items-center my-1">
                             <i class="fas fa-phone text-gray-400 text-xs"></i>
-                            <p class="ml-2.5 text-xs menlo text-gray-800">+33 1
-                                4548 9910</p>
+                            <p
+                                class="ml-2.5 text-xs menlo text-gray-800"
+                            >{{hotelDetails.Details.0.HotelPhone}}</p>
                         </div>
                         <div class="flex items-center mt-0.5">
                             <i class="fas fa-globe text-gray-400 text-xs"></i>
                             <p class="ml-2.5 text-xs menlo text-gray-800">N
-                                51.498584, E -0.158432</p>
+                                {{hotelDetails.Details.0.GeoLocation.Latitude}},
+                                E
+                                {{hotelDetails.Details.0.GeoLocation.Longitude}}</p>
                         </div>
                         {{! <div class="mt-auto mb-0">
                             1 room, 3 nights
@@ -122,11 +131,17 @@
                         <p
                             class="uppercase text-gray-600 text-[0.65rem] font-bold"
                         >CHECK-IN</p>
-                        <p class="text-3xl g-sans font-medium">31</p>
-                        <p class="text-xs mt-0.5 g-sans font-medium">AUGUST</p>
+                        <p class="text-3xl g-sans font-medium">{{get-date-day
+                                bookingDetails.HotelDetails.StartDate
+                            }}</p>
                         <p
-                            class="text-xs g-sans text-gray-500 font"
-                        >Saturday</p>
+                            class="text-xs mt-0.5 g-sans font-medium"
+                        >{{get-date-month
+                                bookingDetails.HotelDetails.StartDate
+                            }}</p>
+                        <p class="text-xs g-sans text-gray-500 font">{{get-day
+                                bookingDetails.HotelDetails.StartDate
+                            }}</p>
                         <div
                             class="mt-auto mb-0 flex items-center bg-blue-50 border border-blue-200 rounded-md py-0.5 px-1"
                         >
@@ -144,17 +159,24 @@
                         <p
                             class="uppercase text-gray-600 text-[0.65rem] font-bold"
                         >CHECK-OUT</p>
-                        <p class="text-3xl g-sans font-medium">3</p>
+                        <p class="text-3xl g-sans font-medium">{{get-date-day
+                                bookingDetails.HotelDetails.EndDate
+                            }}</p>
                         <p
                             class="text-xs mt-0.5 g-sans font-medium"
-                        >SEPTEMBER</p>
-                        <p class="text-xs g-sans text-gray-500 font">Tuesday</p>
+                        >{{get-date-month
+                                bookingDetails.HotelDetails.EndDate
+                            }}</p>
+                        <p class="text-xs g-sans text-gray-500 font">{{get-day
+                                bookingDetails.HotelDetails.EndDate
+                            }}</p>
                         <div
                             class="mt-auto mb-0 flex items-center bg-red-50 border border-red-200 rounded-md py-0.5 px-1"
                         >
                             <i
                                 class="fa-regular fa-clock text-red-500 text-xs"
                             ></i>
+                            {{! TODO – ask where to get the check in time from }}
                             <p
                                 class="ml-1.5 text-red-500 g-sans text-xs whitespace-nowrap"
                             >Until 1200</p>
@@ -164,9 +186,14 @@
                         <p
                             class="uppercase text-gray-600 text-[0.65rem] font-bold"
                         >ROOMS</p>
-                        <p class="text-3xl g-sans font-medium">1</p>
+                        <p
+                            class="text-3xl g-sans font-medium"
+                        >{{bookingDetails.HotelDetails.RoomDetails.length}}</p>
                         <hr class="my-auto" />
-                        <p class="text-3xl g-sans font-medium">3</p>
+                        <p class="text-3xl g-sans font-medium">{{nights-between
+                                bookingDetails.HotelDetails.StartDate
+                                bookingDetails.HotelDetails.EndDate
+                            }}</p>
                         <p
                             class="uppercase text-gray-600 text-[0.65rem] font-bold"
                         >NIGHTS</p>

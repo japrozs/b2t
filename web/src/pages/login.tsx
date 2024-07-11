@@ -9,7 +9,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { Logo } from "@/components/ui/logo";
 
 interface LoginProps {}
@@ -17,6 +17,7 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = ({}) => {
     useIsAuth();
     const [loginMut] = useLoginMutation();
+    const [loading, setLoading] = useState(false);
     const client = useApolloClient();
     const router = useRouter();
     return (
@@ -53,6 +54,7 @@ const Login: React.FC<LoginProps> = ({}) => {
                                     router.push(router.query.next);
                                 } else {
                                     // worked
+                                    setLoading(true);
                                     await client.resetStore();
                                     router.push("/app");
                                 }
@@ -75,7 +77,7 @@ const Login: React.FC<LoginProps> = ({}) => {
                                     shadow
                                 />
                                 <Button
-                                    loading={isSubmitting}
+                                    loading={isSubmitting || loading}
                                     type="submit"
                                     label="Log in"
                                     className="mt-5"

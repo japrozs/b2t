@@ -4,6 +4,7 @@ import { City } from "../entities/city";
 import { formatRoomCfg } from "../utils/utils";
 import { searchHotelSchema } from "../schemas/search-hotel-schema";
 import { z } from "zod";
+import { v4 } from "uuid";
 
 export const searchHotel = async (req: Request, res: Response) => {
     try {
@@ -18,7 +19,7 @@ export const searchHotel = async (req: Request, res: Response) => {
             Profile: {
                 Password: process.env.IOLX_API_PASSWORD,
                 Code: process.env.IOLX_API_CODE,
-                TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+                TokenNumber: v4(),
             },
             SearchCriteria: {
                 RoomConfiguration: {

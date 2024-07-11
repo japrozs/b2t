@@ -1,10 +1,8 @@
 import {
-    COMMISSION_RATE,
     HOTEL_FACILITY_FREE_WIFI_KEY,
     HOTEL_FACILITY_FRONT_DESK_KEY,
 } from "@/constants";
 import { HotelSearchItemType, RoomCfgType, RoomDetailType } from "@/types";
-import { Tooltip } from "react-tooltip";
 import {
     FORMAT_GRAMMAR,
     getCheapestRoom,
@@ -21,21 +19,13 @@ import React, { useState } from "react";
 import { FaWifi } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { IoLocationOutline, IoPerson } from "react-icons/io5";
+import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineCheck } from "react-icons/md";
-import { useCheckoutStore } from "../../store/provider";
-import {
-    Popover,
-    PopoverButton,
-    PopoverPanel,
-    Transition,
-} from "@headlessui/react";
-import { Popper } from "../ui/popper";
-import { SlQuestion } from "react-icons/sl";
-import { HotelModal } from "../modals/hotel-modal";
-import { RoomCard } from "./room-card";
-import { CancellationPolicyHover } from "../ui/cancellation-policy-hover";
 import { TbLogin2, TbLogout2 } from "react-icons/tb";
+import { HotelModal } from "../modals/hotel-modal";
+import { CancellationPolicyHover } from "../ui/cancellation-policy-hover";
+import { Popper } from "../ui/popper";
+import { RoomCard } from "./room-card";
 
 interface HotelCardProps {
     hotel: HotelSearchItemType;
@@ -86,7 +76,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                         <Popper
                             button={() => (
                                 <span className="flex cursor-help items-center">
-                                    {Array(hotel.StarRating)
+                                    {Array(Math.max(0, hotel.StarRating))
                                         .fill(0)
                                         .map((_, idx: number) => (
                                             <FaStar

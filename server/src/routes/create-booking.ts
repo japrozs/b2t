@@ -99,31 +99,35 @@ export const createBooking = async (req: Request, res: Response) => {
             hotelId: hotel?.id,
         }).save();
 
+        const obj = {
+            Profile: {
+                Password: process.env.IOLX_API_PASSWORD,
+                Code: process.env.IOLX_API_CODE,
+                TokenNumber: v4(),
+            },
+            Passengers: passengers,
+            HotelDetails: {
+                StartDate: validatedBody.startDate,
+                EndDate: validatedBody.endDate,
+                HotelCode: validatedBody.hotelCode,
+                AgencyRef: booking.id,
+                RoomDetails: {
+                    room: validatedBody.adultsData.map((_, i: number) => ({
+                        roomTypeCode: validatedBody.RoomTypeCode,
+                        contractTokenId: validatedBody.ContractTokenId,
+                        mealPlanCode: validatedBody.MealPlanCode,
+                        roomConfigurationId: i + 1,
+                        rate: validatedBody.Rate,
+                        currencyCode: "USD",
+                    })),
+                },
+            },
+        };
+
+        console.log("create booking body :: ", obj);
+
         axios
-            .post(`https://api.iwtxconnect.com/hotel/book`, {
-                Profile: {
-                    Password: process.env.IOLX_API_PASSWORD,
-                    Code: process.env.IOLX_API_CODE,
-                    TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
-                },
-                Passengers: passengers,
-                HotelDetails: {
-                    StartDate: validatedBody.startDate,
-                    EndDate: validatedBody.endDate,
-                    HotelCode: validatedBody.hotelCode,
-                    AgencyRef: booking.id,
-                    RoomDetails: {
-                        room: validatedBody.adultsData.map((_, i: number) => ({
-                            roomTypeCode: validatedBody.RoomTypeCode,
-                            contractTokenId: validatedBody.ContractTokenId,
-                            mealPlanCode: validatedBody.MealPlanCode,
-                            roomConfigurationId: i + 1,
-                            rate: validatedBody.Rate,
-                            currencyCode: "USD",
-                        })),
-                    },
-                },
-            })
+            .post(`https://api.iwtxconnect.com/hotel/book`, obj)
             .then(async (response) => {
                 if (response.data.ErrorMessage) {
                     await Booking.delete({ id: booking.id });

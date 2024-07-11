@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { Hotel } from "../entities/hotel";
 import { formatRoomCfg } from "../utils/utils";
 import { checkAvailabilitySchema } from "../schemas/check-availability-schema";
+import { v4 } from "uuid";
 
 export const checkAvailability = async (req: Request, res: Response) => {
     try {
@@ -35,7 +36,7 @@ export const checkAvailability = async (req: Request, res: Response) => {
                 Password: process.env.IOLX_API_PASSWORD,
                 Code: process.env.IOLX_API_CODE,
                 // TODO: make this TokenNumber a uuid (first read what TokenNumber's actually supposed to be)
-                TokenNumber: "d97c3531-3103-485a-b13c-4a85130a1fsam7",
+                TokenNumber: v4(),
             },
             SearchCriteria: {
                 RoomConfiguration: {

@@ -99,7 +99,12 @@ export const HotelModal: React.FC<HotelModalProps> = ({
                                                 {hotel.HotelName}
                                             </p>
                                             <span className="flex items-center">
-                                                {Array(hotel.StarRating)
+                                                {Array(
+                                                    Math.max(
+                                                        0,
+                                                        hotel.StarRating
+                                                    )
+                                                )
                                                     .fill(0)
                                                     .map((_, idx: number) => (
                                                         <FaStar

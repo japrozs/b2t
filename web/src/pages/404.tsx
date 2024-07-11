@@ -1,3 +1,4 @@
+import { Logo } from "@/components/ui/logo";
 import Head from "next/head";
 import Image from "next/image";
 import React from "react";
@@ -13,13 +14,7 @@ const FourOhFour: React.FC<FourOhFour> = ({}) => {
             <div className="h-screen">
                 <div className="px-6 py-5 z-10">
                     <a href="/">
-                        <Image
-                            src="/logo.svg"
-                            className="h-8 w-auto"
-                            height={20}
-                            width={20}
-                            alt="logo"
-                        />
+                        <Logo className={`h-9 w-auto text-red-500`} />
                     </a>
                 </div>
                 <div

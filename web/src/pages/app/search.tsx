@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { RoomCfgModal } from "@/components/modals/room-cfg-modal";
 import { Checkbox } from "@headlessui/react";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { IoIosArrowDown } from "react-icons/io";
 
 interface SearchProps {}
 
@@ -199,41 +200,82 @@ const Search: React.FC<SearchProps> = ({}) => {
                                 <p className="font-semibold text-base mb-2">
                                     Popular filters
                                 </p>
-                                {Object.entries(
-                                    getFacilitiesMap(hotels.Hotels.Hotel)
-                                ).map(([key, value], idx: number) => (
-                                    <div
-                                        key={idx}
-                                        className="my-4 flex items-center"
-                                    >
-                                        <Checkbox
-                                            checked={sortFacilities.includes(
-                                                key
+                                {Array(1)
+                                    .fill(getFacilitiesMap(hotels.Hotels.Hotel))
+                                    .map((map: Record<string, number>) => (
+                                        <>
+                                            {Object.entries(map)
+                                                .slice(0, 15)
+                                                .map(
+                                                    (
+                                                        [key, value],
+                                                        idx: number
+                                                    ) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="my-4 flex items-center"
+                                                        >
+                                                            <Checkbox
+                                                                checked={sortFacilities.includes(
+                                                                    key
+                                                                )}
+                                                                onChange={() => {
+                                                                    const cpy =
+                                                                        [
+                                                                            ...sortFacilities,
+                                                                        ];
+                                                                    if (
+                                                                        cpy.includes(
+                                                                            key
+                                                                        )
+                                                                    ) {
+                                                                        cpy.splice(
+                                                                            cpy.indexOf(
+                                                                                key
+                                                                            ),
+                                                                            1
+                                                                        );
+                                                                    } else {
+                                                                        cpy.push(
+                                                                            key
+                                                                        );
+                                                                    }
+                                                                    setSortFacilities(
+                                                                        cpy
+                                                                    );
+                                                                }}
+                                                                className="mr-3 group size-[1.15rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
+                                                            >
+                                                                <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
+                                                            </Checkbox>
+                                                            <p className="text-md font-medium text-gray-700 break-normal">
+                                                                {key}
+                                                            </p>
+                                                            <p className="mx-1 bg-emerald-100 border border-green-500 text-emerald-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
+                                                                {
+                                                                    value as unknown as string
+                                                                }
+                                                            </p>
+                                                        </div>
+                                                    )
+                                                )}
+                                            {Object.keys(map).length > 15 && (
+                                                <>
+                                                    <span
+                                                        // onClick={() =>
+                                                        //     setShowFullDescription(
+                                                        //         !showFullDescription
+                                                        //     )
+                                                        // }
+                                                        className="flex items-center mt-2 text-blue-500 font-medium text-sm hover:bg-blue-50 p-2 rounded-md cursor-pointer"
+                                                    >
+                                                        <IoIosArrowDown /> Show
+                                                        all facilities
+                                                    </span>
+                                                </>
                                             )}
-                                            onChange={() => {
-                                                const cpy = [...sortFacilities];
-                                                if (cpy.includes(key)) {
-                                                    cpy.splice(
-                                                        cpy.indexOf(key),
-                                                        1
-                                                    );
-                                                } else {
-                                                    cpy.push(key);
-                                                }
-                                                setSortFacilities(cpy);
-                                            }}
-                                            className="mr-3 group size-[1.15rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
-                                        >
-                                            <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
-                                        </Checkbox>
-                                        <p className="text-md font-medium text-gray-700 break-normal">
-                                            {key}
-                                        </p>
-                                        <p className="mx-1 bg-emerald-100 border border-green-500 text-emerald-700 font-medium text-xs px-[0.45rem] py-0.5 ml-2.5 rounded-full">
-                                            {value as string}
-                                        </p>
-                                    </div>
-                                ))}
+                                        </>
+                                    ))}
                             </div>
                             <div className="w-9/12 p-2.5">
                                 <div className="flex items-end space-x-4 mb-7">
@@ -405,15 +447,14 @@ const Search: React.FC<SearchProps> = ({}) => {
                                         )}
                                     </>
                                 ) : (
-                                    <>
-                                        <p>
-                                            an error occured –{" "}
+                                    <div className="flex items-center justify-center my-[20vh]">
+                                        <p className="uppercase g-sans text-2xl font-medium text-gray-400">
                                             {
                                                 hotels.ErrorMessage?.Error
                                                     .Messages[0]
                                             }
                                         </p>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>

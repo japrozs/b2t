@@ -67,6 +67,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
     const [adultsData, setAdultsData] = useState<any[]>([]);
     const [childrenData, setChildrenData] = useState<any[]>([]);
     const [clientSecret, setClientSecret] = useState("");
+    const router = useRouter();
 
     console.log("zustand.hotel :: ", hotel);
     console.log("zustand.room :: ", room);
@@ -134,6 +135,17 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                     console.log("room.Rate : ", (room as RoomDetailType).Rate);
                 }
                 console.log("check-avaiability response :: ", response);
+                console.log("here . response :: ", response.data);
+                if (
+                    response.data.Hotels.Hotel.length === 0 &&
+                    response.data.ErrorMessage?.Error.Messages.length !== 0
+                ) {
+                    toast.error(
+                        `An error occured – ${response.data.ErrorMessage?.Error.Messages.join(
+                            ", "
+                        )}`
+                    );
+                }
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -373,12 +385,18 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                                 </div>
                             </div>
                         ) : (
-                            <p>
-                                errors –
-                                {latestHotel.ErrorMessage?.Error.Messages.join(
-                                    ", "
-                                )}
-                            </p>
+                            <div>
+                                <img
+                                    src="/img/404.png"
+                                    className="my-[20vh] flex m-auto"
+                                />
+                                {/* <p>
+                                    errors –
+                                    {latestHotel.ErrorMessage?.Error.Messages.join(
+                                        ", "
+                                    )}
+                                </p> */}
+                            </div>
                         )}
                     </Elements>
                 </div>

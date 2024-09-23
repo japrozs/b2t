@@ -21,7 +21,7 @@ import bodyParser from "body-parser";
 import { checkAvailability } from "./routes/check-availability";
 import { createBooking } from "./routes/create-booking";
 import { Booking } from "./entities/booking";
-import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
+// import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
 import { refreshHotelDetails } from "./utils/refresh-details";
 import { BookingResolver } from "./resolvers/booking-resolver";
 import { createPaymentIntent, pay } from "./routes/create-payment-intent";
@@ -46,6 +46,9 @@ const main = async () => {
 
     // hotels in BOMBAY
     const city = await Hotel.find({ where: { cityId: 171 } });
+
+    console.log(await User.find({ where: { id: 1 } }));
+
     console.log(city.length);
 
     const app = express();
@@ -73,7 +76,7 @@ const main = async () => {
                 httpOnly: true,
                 sameSite: "lax",
                 secure: __prod__,
-                domain: __prod__ ? ".japroz.me" : undefined,
+                domain: __prod__ ? ".bid2travel.com" : undefined,
             },
             saveUninitialized: false,
             secret: process.env.SESSION_SECRET,

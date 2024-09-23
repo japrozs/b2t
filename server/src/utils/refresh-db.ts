@@ -7,7 +7,7 @@ import {
     HotelItemType,
     HotelListType,
     countryList,
-} from "src/types";
+} from "../types";
 
 export const refreshDatabaseWithNewHotels = () => {
     // let hotelCount = 0;

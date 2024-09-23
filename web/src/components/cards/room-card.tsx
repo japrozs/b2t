@@ -93,8 +93,8 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                                     (r) =>
                                         r.RoomTypeCode === room.RoomTypeCode &&
                                         r.RoomType === room.RoomType
-                                ).map((room) => (
-                                    <div className="mb-3">
+                                ).map((room, i: number) => (
+                                    <div key={i} className="mb-3">
                                         <p className="mt-1 font-medium flex items-center text-sm text-gray-700">
                                             <span className="ml-1 mr-3">•</span>
                                             {mini
@@ -106,7 +106,10 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                                             {Array(room.MaxOccPax)
                                                 .fill(0)
                                                 .map((_, idx) => (
-                                                    <IoPerson className="text-md mr-0.5" />
+                                                    <IoPerson
+                                                        key={idx}
+                                                        className="text-md mr-0.5"
+                                                    />
                                                 ))}
                                         </p>
                                     </div>
@@ -120,8 +123,8 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                                 (r) =>
                                     r.RoomTypeCode === room.RoomTypeCode &&
                                     r.RoomType === room.RoomType
-                            ).map((room) => (
-                                <div>
+                            ).map((room, key: number) => (
+                                <div key={key}>
                                     <p className="mt-1 font-medium flex items-center text-sm text-gray-700">
                                         {mini ? "Max" : "Maximum"} Occupancy{" "}
                                         <span className="mx-2 text-gray-400 g-sans">
@@ -130,7 +133,10 @@ export const RoomCard: React.FC<RoomCardProps> = ({
                                         {Array(room.MaxOccPax)
                                             .fill(0)
                                             .map((_, idx) => (
-                                                <IoPerson className="text-md mr-0.5" />
+                                                <IoPerson
+                                                    key={idx}
+                                                    className="text-md mr-0.5"
+                                                />
                                             ))}
                                     </p>
                                 </div>

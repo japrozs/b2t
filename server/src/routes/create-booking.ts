@@ -60,7 +60,8 @@ export const createBooking = async (req: Request, res: Response) => {
                     Age: info?.age,
                     FirstName: info?.firstName,
                     LastName: info?.lastName,
-                    Nationality: info?.nationality,
+                    // TODO: update nationality dropdown items index and change this
+                    Nationality: "IN",
                     Gender: info?.gender,
                 });
                 paxNumber += 1;
@@ -83,7 +84,8 @@ export const createBooking = async (req: Request, res: Response) => {
                     Age: info?.age,
                     FirstName: info?.firstName,
                     LastName: info?.lastName,
-                    Nationality: info?.nationality,
+                    // TODO: update nationality dropdown items index and change this
+                    Nationality: "IN",
                     Gender: info?.gender,
                 });
                 paxNumber += 1;

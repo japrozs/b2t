@@ -53,7 +53,7 @@ export const searchHotel = async (req: Request, res: Response) => {
                         .map((hotel) => hotel.code)
                         .join(", "),
                     // TODO: THIS IS NATIONALITY OF TRAVELLER, probably don't hardcode it
-                    Nationality: "LON",
+                    Nationality: "IN",
                     GroupByRooms: "Y",
                     CancellationPolicy: "Y",
                 },

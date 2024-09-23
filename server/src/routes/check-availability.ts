@@ -46,7 +46,7 @@ export const checkAvailability = async (req: Request, res: Response) => {
                 EndDate: endDate,
                 HotelCode: hotelCode,
                 // TODO: THIS IS NATIONALITY OF TRAVELLER, probably don't hardcode it
-                Nationality: "LON",
+                Nationality: "IN",
                 City: city,
                 GroupByRooms: "Y",
                 CancellationPolicy: "Y",

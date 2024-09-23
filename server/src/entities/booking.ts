@@ -5,12 +5,11 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
-    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { User } from "./user";
 import { Hotel } from "./hotel";
+import { User } from "./user";
 
 @ObjectType()
 @Entity()

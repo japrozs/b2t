@@ -22,7 +22,7 @@ import { checkAvailability } from "./routes/check-availability";
 import { createBooking } from "./routes/create-booking";
 import { Booking } from "./entities/booking";
 // import { refreshDatabaseWithNewHotels } from "./utils/refresh-db";
-import { refreshHotelDetails } from "./utils/refresh-details";
+// import { refreshHotelDetails } from "./utils/refresh-details";
 import { BookingResolver } from "./resolvers/booking-resolver";
 import { createPaymentIntent, pay } from "./routes/create-payment-intent";
 

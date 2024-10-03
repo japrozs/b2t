@@ -54,7 +54,11 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                         {/* <RiHotelLine className="text-gray-300 mr-1.5 text-lg" /> */}
                         <p
                             className={`g-sans text-xl ${
-                                booking.cancelled
+                                booking.cancelled ||
+                                new Date() >=
+                                    parseDate(
+                                        bookingDetails.HotelDetails.StartDate.toString()
+                                    )
                                     ? "text-gray-400 line-through flex items-center"
                                     : "text-blue-main"
                             } font-medium rounded-md`}

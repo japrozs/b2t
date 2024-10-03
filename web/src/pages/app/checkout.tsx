@@ -145,6 +145,7 @@ const Checkout: React.FC<CheckoutProps> = ({}) => {
                             ", "
                         )}`
                     );
+                    router.back();
                 }
                 setIsLoading(false);
             })

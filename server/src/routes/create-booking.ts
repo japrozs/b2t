@@ -112,7 +112,7 @@ export const createBooking = async (req: Request, res: Response) => {
                 StartDate: validatedBody.startDate,
                 EndDate: validatedBody.endDate,
                 HotelCode: validatedBody.hotelCode,
-                AgencyRef: booking.id,
+                AgencyRef: `nt-${booking.id}`,
                 RoomDetails: {
                     room: validatedBody.adultsData.map((_, i: number) => ({
                         roomTypeCode: validatedBody.RoomTypeCode,

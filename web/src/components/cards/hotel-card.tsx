@@ -220,7 +220,7 @@ export const HotelCard: React.FC<HotelCardProps> = ({
                             panelShadow
                             button={({ open }) => (
                                 <p
-                                    className={`transition-all font-medium text-blue-500 text-sm py-1 px-2 rounded-md ${
+                                    className={`transition-all cursor-default font-medium text-blue-500 text-sm py-1 px-2 rounded-md ${
                                         open && "bg-blue-50"
                                     }`}
                                 >

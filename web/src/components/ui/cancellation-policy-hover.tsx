@@ -17,7 +17,7 @@ export const CancellationPolicyHover: React.FC<
         <Popper
             panelShadow
             button={({ open }) => (
-                <LuBadgeInfo className={`text-blue-600 text-md ml-2 mt-1`} />
+                <LuBadgeInfo className={`text-blue-600 text-md ml-2`} />
             )}
             panel={() => (
                 <div className="bg-white w-96 p-4 flex items-start">
@@ -33,7 +33,7 @@ export const CancellationPolicyHover: React.FC<
                                 )
                             ).format("D MMMM, YYYY")}
                         </p>
-                        <p className="text-sm text-gray-700 mt-1">
+                        <p className="text-sm text-gray-700 font-normal mt-1">
                             You may cancel free of charge until{" "}
                             <span className="font-medium">23:59</span> on{" "}
                             <span className="font-medium">

@@ -25,7 +25,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { toast } from "sonner";
 import { RoomCfgModal } from "@/components/modals/room-cfg-modal";
 import { Checkbox } from "@headlessui/react";
-import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { IoCheckmark, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 
 interface SearchProps {}
@@ -246,7 +246,7 @@ const Search: React.FC<SearchProps> = ({}) => {
                                                                 }}
                                                                 className="mr-3 group size-[1.15rem] flex items-center justify-center rounded-md bg-white border border-gray-300 data-[checked]:border-gray-800 data-[checked]:bg-black"
                                                             >
-                                                                <GrCheckmark className="hidden text-white text-xs self-center group-data-[checked]:block" />
+                                                                <IoCheckmark className="hidden text-white text-md self-center group-data-[checked]:block" />
                                                             </Checkbox>
                                                             <p className="text-md font-medium text-gray-700 break-normal">
                                                                 {key}

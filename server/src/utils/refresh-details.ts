@@ -15,8 +15,8 @@ const makeRequest = async (code: string, id: number) => {
                         body: JSON.stringify({
                             OutputFormat: "JSON",
                             Profile: {
-                                Code: "DEV_IWTX",
-                                Password: "D3V_1234",
+                                Code: process.env.IOLX_API_CODE,
+                                Password: process.env.IOLX_API_PASSWORD,
                                 TokenNumber:
                                     "d97c3531-3103-485a-b13c-4a85130a1fsam7",
                             },

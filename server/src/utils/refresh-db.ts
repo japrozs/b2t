@@ -32,8 +32,8 @@ export const refreshDatabaseWithNewHotels = () => {
                     },
                     body: JSON.stringify({
                         Profile: {
-                            Password: "D3V_1234",
-                            Code: "DEV_IWTX",
+                            Password: process.env.IOLX_API_PASSWORD,
+                            Code: process.env.IOLX_API_CODE,
                             TokenNumber:
                                 "d97c3531-3103-485a-b13c-4a85130a1fsam7",
                         },

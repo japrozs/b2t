@@ -105,8 +105,8 @@ const main = async () => {
 
     // TODO: run this function every day instead
     // THESE FIX ARE HIGHLY UNSTABLE AND NEED TO BE FIXED BEFORE SHIPPING TO PRODUCTION
-    // refreshDatabaseWithNewHotels();
-    // refreshHotelDetails();
+    // await refreshDatabaseWithNewHotels();
+    // await refreshHotelDetails();
 
     app.post("/api/search-hotel", expressIsAuth, searchHotel);
     app.post("/api/check-availability", expressIsAuth, checkAvailability);
